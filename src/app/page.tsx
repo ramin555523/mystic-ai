@@ -84,7 +84,12 @@ function ChatSection() {
   }
 
   useEffect(()=>()=>{touts.current.forEach(clearTimeout)},[])
-  useEffect(()=>{scrollRef.current?.scrollIntoView({behavior:'smooth'})},[shown,typing])
+  useEffect(()=>{
+  const el = scrollRef.current
+  if(!el) return
+  const container = el.parentElement
+  if(container) container.scrollTop = container.scrollHeight
+},[shown,typing])
 
   const allMessages=[{role:'ai',text:mod.greeting},...mod.demo]
 
