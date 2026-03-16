@@ -16,8 +16,7 @@ export default function Register() {
     setLoading(true)
     setError('')
     const { error } = await supabase.auth.signUp({
-      email,
-      password,
+      email, password,
       options: {
         data: { full_name: name },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
@@ -37,23 +36,17 @@ export default function Register() {
         .inp:focus{border-color:rgba(201,168,76,0.5)}
         .inp::placeholder{color:rgba(240,235,248,0.3)}
       `}</style>
-
       <div style={{position:'fixed',inset:0,zIndex:0,background:'radial-gradient(ellipse at 50% 0%,rgba(70,30,150,0.2) 0%,transparent 60%)'}}/>
-
       <div style={{position:'relative',zIndex:10,width:'100%',maxWidth:'420px'}}>
         <div style={{textAlign:'center',marginBottom:'40px'}}>
-          <Link href="/" style={{fontFamily:'"Cinzel Decorative",serif',fontSize:'22px',color:'#C9A84C',textDecoration:'none',letterSpacing:'4px',textShadow:'0 0 24px rgba(201,168,76,0.4)'}}>✦ MYSTIC</Link>
+          <Link href="/" style={{fontFamily:'"Cinzel Decorative",serif',fontSize:'22px',color:'#C9A84C',textDecoration:'none',letterSpacing:'4px'}}>✦ MYSTIC</Link>
           <div style={{fontFamily:'"EB Garamond",serif',fontSize:'16px',fontStyle:'italic',color:'rgba(240,235,248,0.35)',marginTop:'8px'}}>Начни свой путь</div>
         </div>
-
         <div style={{background:'rgba(7,4,20,0.95)',border:'1px solid rgba(201,168,76,0.15)',borderRadius:'16px',padding:'40px 36px',position:'relative',overflow:'hidden'}}>
           <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,#C9A84C,#FFF0A0,#C9A84C,transparent)'}}/>
-
           <h1 style={{fontFamily:'"Cinzel",serif',fontSize:'20px',fontWeight:400,color:'#F0EBF8',letterSpacing:'3px',marginBottom:'32px',textAlign:'center'}}>РЕГИСТРАЦИЯ</h1>
-
           {message ? (
             <div style={{padding:'20px',borderRadius:'10px',background:'rgba(100,220,150,0.08)',border:'1px solid rgba(100,220,150,0.3)',textAlign:'center'}}>
-              <div style={{fontSize:'32px',marginBottom:'12px'}}>✉️</div>
               <p style={{fontFamily:'"EB Garamond",serif',fontSize:'16px',lineHeight:1.7,color:'rgba(240,235,248,0.7)'}}>{message}</p>
             </div>
           ) : (
@@ -70,20 +63,14 @@ export default function Register() {
                 <label style={{fontFamily:'"Cinzel",serif',fontSize:'10px',letterSpacing:'2px',color:'rgba(240,235,248,0.4)',textTransform:'uppercase',display:'block',marginBottom:'8px'}}>Пароль</label>
                 <input className="inp" type="password" placeholder="Минимум 6 символов" value={password} onChange={e=>setPassword(e.target.value)} required minLength={6}/>
               </div>
-              {error && (
-                <div style={{padding:'12px 16px',borderRadius:'8px',background:'rgba(220,80,80,0.08)',border:'1px solid rgba(220,80,80,0.3)',fontFamily:'"EB Garamond",serif',fontSize:'14px',color:'rgba(255,120,120,0.9)'}}>
-                  {error}
-                </div>
-              )}
+              {error && <div style={{padding:'12px 16px',borderRadius:'8px',background:'rgba(220,80,80,0.08)',border:'1px solid rgba(220,80,80,0.3)',fontFamily:'"EB Garamond",serif',fontSize:'14px',color:'rgba(255,120,120,0.9)'}}>{error}</div>}
               <button type="submit" disabled={loading} style={{marginTop:'8px',padding:'15px',background:loading?'rgba(201,168,76,0.3)':'linear-gradient(135deg,#8A5A10,#C9A84C,#F8E878,#C9A84C)',border:'none',borderRadius:'8px',fontFamily:'"Cinzel",serif',fontSize:'12px',letterSpacing:'3px',color:'#1A0800',fontWeight:700,cursor:loading?'not-allowed':'pointer'}}>
                 {loading ? 'ОТПРАВЛЯЕМ...' : 'СОЗДАТЬ АККАУНТ'}
               </button>
             </form>
           )}
-
           <div style={{textAlign:'center',marginTop:'24px',fontFamily:'"EB Garamond",serif',fontSize:'14px',color:'rgba(240,235,248,0.35)'}}>
-            Уже есть аккаунт?{' '}
-            <Link href="/auth/login" style={{color:'#C9A84C',textDecoration:'none'}}>Войти</Link>
+            Уже есть аккаунт?{' '}<Link href="/auth/login" style={{color:'#C9A84C',textDecoration:'none'}}>Войти</Link>
           </div>
         </div>
       </div>

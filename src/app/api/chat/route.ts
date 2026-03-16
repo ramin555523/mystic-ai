@@ -23,8 +23,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
     }
 
-    let systemPrompt = SYSTEM_PROMPTS[module as keyof typeof SYSTEM_PROMPTS]
-      || SYSTEM_PROMPTS.general
+    let systemPrompt = SYSTEM_PROMPTS[module as keyof typeof SYSTEM_PROMPTS] || SYSTEM_PROMPTS.general
 
     if (module === 'tarot') {
       const cards = getRandomCards(3)
@@ -35,7 +34,7 @@ export async function POST(req: NextRequest) {
     }
 
     const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-5',
       max_tokens: 1024,
       system: systemPrompt,
       messages: messages.map((m: { role: string; content: string }) => ({
@@ -65,8 +64,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ message: assistantMessage })
 
-  } catch (error) {
-    console.error('Chat API error:', error)
+} catch (error: any) {
+    console.error('FULL ERROR:', error?.message, error?.status, error?.error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
