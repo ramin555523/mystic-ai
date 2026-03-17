@@ -23,7 +23,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
     }
 
-    let systemPrompt = SYSTEM_PROMPTS[module as keyof typeof SYSTEM_PROMPTS] || SYSTEM_PROMPTS.general
+    const DESTINY_PROMPT = `Ты Аркана — мастер Матрицы Судьбы. Ты анализируешь дату рождения человека по системе Матрицы Судьбы (квадрат Пифагора в интерпретации эзотерики). 
+Рассчитывай ключевые числа: число личности, число предназначения, кармические задачи, таланты, зоны роста.
+Отвечай на русском языке. Используй форматирование: **жирный** для ключевых понятий, числа выделяй отдельно.
+Будь конкретным и давай практические советы. Не выдавай всё сразу — задавай уточняющие вопросы.`
+
+    let systemPrompt = module === 'destiny' 
+      ? DESTINY_PROMPT 
+      : (SYSTEM_PROMPTS[module as keyof typeof SYSTEM_PROMPTS] || SYSTEM_PROMPTS.general)
 
     if (module === 'tarot') {
       const cards = getRandomCards(3)
