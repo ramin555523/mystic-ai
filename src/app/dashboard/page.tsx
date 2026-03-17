@@ -432,6 +432,36 @@ export default function Dashboard() {
           )}
         </div>
 
+        {/* Premium Reports Block */}
+        <div style={{marginBottom:'20px'}}>
+          <div style={{fontFamily:'"Playfair Display",serif',fontSize:'10px',letterSpacing:'4px',color:'rgba(255,160,60,0.5)',marginBottom:'14px',textTransform:'uppercase'}}>Премиум Отчёты</div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'12px'}}>
+            {[
+              {icon:'🔯',name:'Матрица Судьбы',desc:'Кармические задачи и предназначение',price:'£34.99',pages:'15-18 стр',color:'rgba(192,112,255,1)'},
+              {icon:'⭐',name:'Натальная Карта',desc:'Полный астрологический портрет',price:'£34.99',pages:'15-18 стр',color:'rgba(100,180,255,1)'},
+              {icon:'🌟',name:'Годовой Прогноз',desc:'Все сферы жизни по месяцам',price:'£89.99',pages:'30-40 стр',color:'rgba(255,160,60,1)'},
+            ].map((r,i)=>(
+              <Link key={i} href="/reports" style={{
+                textDecoration:'none',display:'block',padding:'18px',
+                background:'rgba(255,255,255,0.025)',
+                border:`1px solid ${r.color.replace('1)','0.2)')}`,
+                borderRadius:'12px',transition:'all 0.3s',
+                borderTop:`2px solid ${r.color.replace('1)','0.5)')}`,
+              }}
+              onMouseEnter={e=>{const el=e.currentTarget as HTMLAnchorElement;el.style.transform='translateY(-4px)';el.style.borderColor=r.color.replace('1)','0.4)')}}
+              onMouseLeave={e=>{const el=e.currentTarget as HTMLAnchorElement;el.style.transform='translateY(0)';el.style.borderColor=r.color.replace('1)','0.2)')}}>
+                <div style={{fontSize:'26px',marginBottom:'8px'}}>{r.icon}</div>
+                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:'#EDE8F5',marginBottom:'3px'}}>{r.name}</div>
+                <div style={{fontFamily:'"Lora",serif',fontSize:'11px',fontStyle:'italic',color:'rgba(200,185,240,0.35)',marginBottom:'8px'}}>{r.desc}</div>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:800,color:r.color.replace('1)','0.9)')}}>{r.price}</div>
+                  <div style={{fontFamily:'"Lora",serif',fontSize:'11px',fontStyle:'italic',color:'rgba(200,185,240,0.3)'}}>{r.pages}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* Upgrade banner */}
         {(!isPro || showUpgrade) && (
           <div style={{padding:'24px 28px',borderRadius:'14px',background:'linear-gradient(135deg,rgba(80,30,160,0.18),rgba(40,10,80,0.12))',border:'1px solid rgba(150,100,255,0.2)',display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:'16px'}}>
