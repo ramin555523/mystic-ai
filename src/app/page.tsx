@@ -204,7 +204,7 @@ function ChatSection() {
 
 function ModuleCard({icon,title,subtitle,description,price,color,glow,features,delay}:{
   icon:string;title:string;subtitle:string;description:string
-  price:string;color:string;glow:string;features:string[];delay:number
+  price?:string;color:string;glow:string;features:string[];delay:number
 }) {
   const [hov,setHov]=useState(false)
   return (
