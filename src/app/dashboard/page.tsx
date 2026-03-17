@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -90,25 +90,41 @@ const MODULE_NAMES: Record<string, string> = {
   tarot:'Таро',astrology:'Астрология',numerology:'Нумерология',compatibility:'Совместимость',
 }
 
-function ProLock({ onUpgrade }: { onUpgrade: () => void }) {
+function ProLock({ onUpgrade, description }: { onUpgrade: () => void; description: string }) {
+  const [hov, setHov] = React.useState(false)
   return (
-    <div style={{
-      position:'absolute',inset:0,background:'rgba(8,5,22,0.88)',
-      zIndex:5,borderRadius:'14px',
-      display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
-      gap:'10px', backdropFilter:'blur(3px)',
-    }}>
-      <div style={{fontSize:'24px'}}>🔒</div>
-      <div style={{fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,
-        color:'rgba(200,180,255,0.75)',textAlign:'center',letterSpacing:'0.5px',padding:'0 16px'}}>
-        Только для подписчиков
-      </div>
-      <a href="/#pricing" style={{
-        padding:'7px 18px',borderRadius:'6px',border:'none',cursor:'pointer',
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        position:'absolute',inset:0,background: hov ? 'rgba(8,5,22,0.96)' : 'rgba(8,5,22,0.88)',
+        zIndex:5,borderRadius:'14px',
+        display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
+        gap:'10px', backdropFilter:'blur(3px)',
+        transition:'background 0.3s',
+        padding:'20px',
+      }}>
+      <div style={{fontSize:'24px'}}>{hov ? '✨' : '🔒'}</div>
+      {hov ? (
+        <div style={{textAlign:'center'}}>
+          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',
+            color:'rgba(200,185,240,0.65)',lineHeight:1.7,marginBottom:'14px'}}>
+            {description}
+          </p>
+        </div>
+      ) : (
+        <div style={{fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,
+          color:'rgba(200,180,255,0.75)',textAlign:'center',letterSpacing:'0.5px',padding:'0 16px'}}>
+          Только для подписчиков
+        </div>
+      )}
+      <button onClick={onUpgrade} style={{
+        padding:'8px 20px',borderRadius:'6px',border:'none',cursor:'pointer',
         background:'linear-gradient(135deg,#6030B0,#9060E0)',
         fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,
-        color:'#EDE8F5',letterSpacing:'1px',textDecoration:'none',display:'inline-block',
-      }}>Подписаться →</a>
+        color:'#EDE8F5',letterSpacing:'1px',
+        boxShadow:'0 4px 16px rgba(100,40,200,0.3)',
+      }}>Подписаться →</button>
     </div>
   )
 }
@@ -168,6 +184,40 @@ export default function Dashboard() {
     router.push('/')
   }
 
+  // Upgrade modal
+  const UpgradeModal = () => (
+    <div style={{position:'fixed',inset:0,zIndex:100,background:'rgba(4,2,12,0.95)',display:'flex',alignItems:'center',justifyContent:'center',padding:'24px',animation:'fadeUp 0.3s ease'}}
+      onClick={() => setShowUpgrade(false)}>
+      <div style={{maxWidth:'480px',width:'100%',background:'rgba(12,8,30,0.99)',border:'1px solid rgba(150,100,255,0.25)',borderRadius:'20px',padding:'40px 32px',position:'relative'}}
+        onClick={e => e.stopPropagation()}>
+        <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(150,100,255,0.7),transparent)',borderRadius:'20px 20px 0 0'}}/>
+        <button onClick={() => setShowUpgrade(false)} style={{position:'absolute',top:'16px',right:'16px',background:'none',border:'none',cursor:'pointer',color:'rgba(200,185,240,0.3)',fontSize:'22px'}}>×</button>
+        <div style={{textAlign:'center',marginBottom:'28px'}}>
+          <div style={{fontSize:'48px',marginBottom:'12px'}}>✨</div>
+          <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'24px',fontWeight:900,color:'#EDE8F5',marginBottom:'8px'}}>Разблокируйте всё</h2>
+          <p style={{fontFamily:'"Lora",serif',fontSize:'15px',fontStyle:'italic',color:'rgba(200,185,240,0.5)',lineHeight:1.7}}>Карта дня · Лунный календарь · Гороскоп · Безлимитные консультации</p>
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
+          <a href="/#pricing" style={{display:'block',padding:'18px 24px',borderRadius:'12px',background:'linear-gradient(135deg,rgba(130,100,255,0.2),rgba(100,70,220,0.1))',border:'1px solid rgba(130,100,255,0.35)',textDecoration:'none',transition:'all 0.3s'}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'4px'}}>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:800,color:'rgba(180,150,255,0.95)'}}>Initiate</div>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:800,color:'#EDE8F5'}}>£9.99<span style={{fontSize:'13px',fontWeight:400,color:'rgba(200,185,240,0.4)'}}>/мес</span></div>
+            </div>
+            <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.45)'}}>Безлимит + Карта дня + Луна + Гороскоп</div>
+          </a>
+          <a href="/#pricing" style={{display:'block',padding:'18px 24px',borderRadius:'12px',background:'linear-gradient(135deg,rgba(200,130,255,0.2),rgba(150,80,220,0.1))',border:'1px solid rgba(200,130,255,0.35)',textDecoration:'none',position:'relative',overflow:'hidden'}}>
+            <div style={{position:'absolute',top:'10px',right:'12px',padding:'3px 10px',borderRadius:'4px',background:'rgba(120,200,80,0.15)',border:'1px solid rgba(120,200,80,0.35)',fontFamily:'"Playfair Display",serif',fontSize:'10px',fontWeight:700,color:'rgba(150,230,100,0.9)',letterSpacing:'1px'}}>BEST</div>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'4px'}}>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:800,color:'rgba(220,170,255,0.95)'}}>Oracle Pro</div>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:800,color:'#EDE8F5'}}>£16.99<span style={{fontSize:'13px',fontWeight:400,color:'rgba(200,185,240,0.4)'}}>/мес</span></div>
+            </div>
+            <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.45)'}}>Всё из Initiate + PDF + Human Design + AI-память</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  )
+
   if (loading) return (
     <div style={{minHeight:'100vh',background:'#080510',display:'flex',alignItems:'center',justifyContent:'center'}}>
       <div style={{fontFamily:'"Playfair Display",serif',fontSize:'14px',letterSpacing:'3px',color:'rgba(200,180,255,0.5)'}}>ЗАГРУЗКА...</div>
@@ -202,6 +252,8 @@ export default function Dashboard() {
         ))}
         <div style={{position:'absolute',top:'-20%',left:'20%',width:'70vw',height:'70vw',maxWidth:'700px',borderRadius:'50%',background:'radial-gradient(circle,rgba(60,20,120,0.10) 0%,transparent 70%)',pointerEvents:'none'}}/>
       </div>
+
+      {showUpgrade && <UpgradeModal/>}
 
       <div style={{position:'relative',zIndex:10,maxWidth:'1100px',margin:'0 auto',padding:'32px 28px 80px'}} className="pad">
 
@@ -247,7 +299,7 @@ export default function Dashboard() {
 
           {/* Daily Tarot */}
           <div className="card" style={{animationDelay:'0.1s'}}>
-            {!isPro && <ProLock onUpgrade={() => setShowUpgrade(true)}/>}
+            {!isPro && <ProLock onUpgrade={() => setShowUpgrade(true)} description="Каждое утро новая карта таро с персональным посланием. Помогает настроиться на нужную энергию дня и принимать решения осознанно."/>}
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'12px'}}>
               <div style={{fontFamily:'"Playfair Display",serif',fontSize:'10px',letterSpacing:'3px',color:'rgba(201,168,76,0.6)',textTransform:'uppercase'}}>Карта дня</div>
               <div style={{fontSize:'18px'}}>🃏</div>
@@ -267,7 +319,7 @@ export default function Dashboard() {
 
           {/* Moon */}
           <div className="card" style={{animationDelay:'0.15s'}}>
-            {!isPro && <ProLock onUpgrade={() => setShowUpgrade(true)}/>}
+            {!isPro && <ProLock onUpgrade={() => setShowUpgrade(true)} description="Реальная фаза луны сегодня с описанием энергии дня. Знайте когда начинать новое, когда действовать активно, а когда отдыхать и восстанавливаться."/>}
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'12px'}}>
               <div style={{fontFamily:'"Playfair Display",serif',fontSize:'10px',letterSpacing:'3px',color:'rgba(180,150,255,0.6)',textTransform:'uppercase'}}>Луна сегодня</div>
               <div style={{fontSize:'18px'}}>{moon.icon}</div>
@@ -287,7 +339,7 @@ export default function Dashboard() {
 
           {/* Horoscope */}
           <div className="card" style={{animationDelay:'0.2s'}}>
-            {!isPro && <ProLock onUpgrade={() => setShowUpgrade(true)}/>}
+            {!isPro && <ProLock onUpgrade={() => setShowUpgrade(true)} description="Персональный астрологический прогноз на сегодня по вашему знаку зодиака. Карьера, отношения, энергия дня — всё в одном месте каждый день."/>}
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'12px'}}>
               <div style={{fontFamily:'"Playfair Display",serif',fontSize:'10px',letterSpacing:'3px',color:'rgba(100,180,255,0.6)',textTransform:'uppercase'}}>Гороскоп</div>
               <div style={{fontSize:'18px'}}>⭐</div>
@@ -398,9 +450,9 @@ export default function Dashboard() {
                 ))}
               </div>
             </div>
-            <Link href="/#pricing" style={{padding:'13px 28px',borderRadius:'8px',background:'linear-gradient(135deg,#6030B0,#9060E0,#C080FF)',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'1px',whiteSpace:'nowrap',boxShadow:'0 4px 20px rgba(100,40,200,0.3)'}}>
+            <a href="/#pricing" target="_blank" rel="noreferrer" style={{padding:'13px 28px',borderRadius:'8px',background:'linear-gradient(135deg,#6030B0,#9060E0,#C080FF)',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'1px',whiteSpace:'nowrap',boxShadow:'0 4px 20px rgba(100,40,200,0.3)'}}>
               Подписаться — от £9.99/мес
-            </Link>
+            </a>
           </div>
         )}
       </div>
