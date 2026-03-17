@@ -291,20 +291,28 @@ export default function Home() {
   },[])
 
   const modules=[
-    {icon:'🃏',title:'Таро',subtitle:'Расклад на любой вопрос',description:'Карты откроют что скрыто. Прошлое, настоящее и будущее — три арканы для вашей ситуации.',price:'£3',color:'rgba(201,168,76,1)',glow:'rgba(201,168,76,0.15)',features:['Расклад на 1, 3 или 5 карт','Глубокая интерпретация','Практический совет','78 арканов Rider-Waite'],delay:100},
-    {icon:'⭐',title:'Астрология',subtitle:'Карта небес в день рождения',description:'Планеты не лгут. Натальный чарт, транзиты и прогноз — всё по вашей дате рождения.',price:'£5',color:'rgba(100,180,255,1)',glow:'rgba(100,180,255,0.15)',features:['Натальный чарт','Текущие транзиты','Совместимость знаков','Прогноз на месяц'],delay:200},
-    {icon:'🔢',title:'Нумерология',subtitle:'Числа вашей судьбы',description:'В имени и дате рождения зашифрован ваш путь. Мирра раскроет вибрационный код.',price:'£4',color:'rgba(255,160,80,1)',glow:'rgba(255,160,80,0.15)',features:['Число жизненного пути','Число судьбы по имени','Число души','Прогноз на год'],delay:300},
-    {icon:'💫',title:'Совместимость',subtitle:'Анализ двух людей',description:'Мария и Дмитрий — что связывает вас? Нумерология и астрология пары.',price:'£4',color:'rgba(192,112,255,1)',glow:'rgba(192,112,255,0.15)',features:['Числовая совместимость','Астро-синастрия','Сильные стороны','Зоны роста'],delay:400},
+    {icon:'🃏',title:'Таро',subtitle:'Расклад на любой вопрос',description:'Карты откроют что скрыто. Прошлое, настоящее и будущее — три арканы для вашей ситуации.',color:'rgba(201,168,76,1)',glow:'rgba(201,168,76,0.15)',features:['Расклад на 1, 3 или 5 карт','Глубокая интерпретация','Практический совет','78 арканов Rider-Waite'],delay:100},
+    {icon:'⭐',title:'Астрология',subtitle:'Карта небес в день рождения',description:'Планеты не лгут. Натальный чарт, транзиты и прогноз — всё по вашей дате рождения.',color:'rgba(100,180,255,1)',glow:'rgba(100,180,255,0.15)',features:['Натальный чарт','Текущие транзиты','Совместимость знаков','Прогноз на месяц'],delay:200},
+    {icon:'🔢',title:'Нумерология',subtitle:'Числа вашей судьбы',description:'В имени и дате рождения зашифрован ваш путь. Мирра раскроет вибрационный код.',color:'rgba(255,160,80,1)',glow:'rgba(255,160,80,0.15)',features:['Число жизненного пути','Число судьбы по имени','Число души','Прогноз на год'],delay:300},
+    {icon:'💫',title:'Совместимость',subtitle:'Анализ двух людей',description:'Мария и Дмитрий — что связывает вас? Нумерология и астрология пары.',color:'rgba(192,112,255,1)',glow:'rgba(192,112,255,0.15)',features:['Числовая совместимость','Астро-синастрия','Сильные стороны','Зоны роста'],delay:400},
   ]
 
   const plans=annual?[
-    {name:'Seeker',tagline:'Плати за то что нужно',price:'£3–5',period:'за консультацию',features:['Таро расклад — £3','Нумерология — £4','Совместимость — £4','Астрология — £5','Без подписки'],cta:'Начать бесплатно',color:'rgba(160,130,220,1)'},
-    {name:'Initiate',tagline:'Для практикующих',price:'£7.99',period:'/ мес',note:'£95.88 / год — экономия £24',features:['Безлимитные консультации','Все 4 модуля','История консультаций','Расширенные расклады'],cta:'Выбрать Initiate',color:'rgba(130,160,255,1)',badge:'Годовой'},
-    {name:'Oracle Pro',tagline:'Полное погружение',price:'£13.99',period:'/ мес',note:'£167.88 / год — экономия £36',features:['Всё из Initiate','PDF-отчёты','Human Design полный','Приоритет + AI-память'],cta:'Выбрать Oracle Pro',featured:true,color:'rgba(200,140,255,1)',badge:'Лучший выбор'},
+    {name:'Initiate',tagline:'Для практикующих',price:'£7.99',period:'/ мес',
+      note:'£95.88 / год — экономия £24',
+      features:['Безлимитные консультации','Все 4 модуля','Карта таро дня','Лунный календарь','Гороскоп дня','История консультаций'],
+      cta:'Выбрать Initiate',color:'rgba(130,160,255,1)',badge:'Годовой'},
+    {name:'Oracle Pro',tagline:'Полное погружение',price:'£13.99',period:'/ мес',
+      note:'£167.88 / год — экономия £36',
+      features:['Всё из Initiate','PDF-отчёты по запросу','Human Design полный','Приоритетные ответы','AI-память консультаций','Ранний доступ к новым функциям'],
+      cta:'Выбрать Oracle Pro',featured:true,color:'rgba(200,140,255,1)',badge:'Лучший выбор'},
   ]:[
-    {name:'Seeker',tagline:'Плати за то что нужно',price:'£3–5',period:'за консультацию',features:['Таро расклад — £3','Нумерология — £4','Совместимость — £4','Астрология — £5','Без подписки'],cta:'Начать бесплатно',color:'rgba(160,130,220,1)'},
-    {name:'Initiate',tagline:'Для практикующих',price:'£9.99',period:'/ мес',features:['Безлимитные консультации','Все 4 модуля','История консультаций','Расширенные расклады'],cta:'Выбрать Initiate',color:'rgba(130,160,255,1)'},
-    {name:'Oracle Pro',tagline:'Полное погружение',price:'£16.99',period:'/ мес',features:['Всё из Initiate','PDF-отчёты','Human Design полный','Приоритет + AI-память'],cta:'Выбрать Oracle Pro',featured:true,color:'rgba(200,140,255,1)',badge:'Лучший выбор'},
+    {name:'Initiate',tagline:'Для практикующих',price:'£9.99',period:'/ мес',
+      features:['Безлимитные консультации','Все 4 модуля','Карта таро дня','Лунный календарь','Гороскоп дня','История консультаций'],
+      cta:'Выбрать Initiate',color:'rgba(130,160,255,1)'},
+    {name:'Oracle Pro',tagline:'Полное погружение',price:'£16.99',period:'/ мес',
+      features:['Всё из Initiate','PDF-отчёты по запросу','Human Design полный','Приоритетные ответы','AI-память консультаций','Ранний доступ к новым функциям'],
+      cta:'Выбрать Oracle Pro',featured:true,color:'rgba(200,140,255,1)',badge:'Лучший выбор'},
   ]
 
   const reviews=[
@@ -431,7 +439,7 @@ export default function Home() {
                 </span>
               </div>
             </div>
-            <div className="plans-grid" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'18px'}}>
+            <div className="plans-grid" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'18px'}}>
               {plans.map((p,i)=><PricingCard key={`${i}-${annual}`} {...p}/>)}
             </div>
             <p style={{textAlign:'center',marginTop:'20px',fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(180,160,220,0.3)'}}>Отмена в любой момент · Первая консультация бесплатно · Stripe</p>
@@ -445,7 +453,7 @@ export default function Home() {
               <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(28px,4vw,52px)',fontWeight:900,color:'#FFFFFF',marginBottom:'12px'}}>Говорят те, кто уже спросил</h2>
               <p style={{fontFamily:'"Lora",serif',fontSize:'16px',fontStyle:'italic',color:'rgba(200,180,255,0.4)'}}>Реальные отзывы наших пользователей</p>
             </div>
-            <div className="reviews-grid" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'18px'}}>
+            <div className="reviews-grid" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'18px'}}>
               {reviews.map((r,i)=>(
                 <div key={i} style={{background:'rgba(255,255,255,0.025)',border:'1px solid rgba(255,255,255,0.07)',borderRadius:'14px',padding:'26px'}}>
                   <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'14px'}}>
