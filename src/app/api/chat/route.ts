@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     }
 
     const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-5',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: 1024,
       system: systemPrompt,
       messages: messages.map((m: { role: string; content: string }) => ({
@@ -64,8 +64,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ message: assistantMessage })
 
-} catch (error: any) {
-    console.error('FULL ERROR:', error?.message, error?.status, error?.error)
+  } catch (error) {
+    console.error('Chat API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

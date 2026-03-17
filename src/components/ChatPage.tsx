@@ -7,7 +7,7 @@ import MessageRenderer from '@/components/MessageRenderer'
 
 type Message = { role: 'user' | 'assistant'; content: string }
 
-const FREE_LIMIT = 3
+const FREE_LIMIT = 5
 const FREE_CHAR_LIMIT = 300
 
 const MODULE_CONFIG = {
@@ -90,41 +90,40 @@ function Paywall({ module, cfg, onClose }: { module: string; cfg: typeof MODULE_
 
         {/* Options */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
-          {/* One-time */}
           <Link href="/auth/register" style={{
-            display: 'block', padding: '18px 24px', borderRadius: '12px',
-            background: `linear-gradient(135deg,${cfg.color.replace('1)', '0.2)')},${cfg.color.replace('1)', '0.08)')})`,
-            border: `1px solid ${cfg.color.replace('1)', '0.4)')}`,
-            textDecoration: 'none',
-            transition: 'all 0.3s',
-          }}>
-            <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '18px', fontWeight: 800, color: cfg.color.replace('1)', '0.95)'), marginBottom: '4px' }}>
-              Продолжить консультацию — £3
-            </div>
-            <div style={{ fontFamily: '"Lora",serif', fontSize: '13px', fontStyle: 'italic', color: 'rgba(200,185,240,0.5)' }}>
-              Разовый доступ · Безлимитный чат с {cfg.name} сегодня
-            </div>
-          </Link>
-
-          {/* Subscription */}
-          <Link href="/auth/register" style={{
-            display: 'block', padding: '18px 24px', borderRadius: '12px',
+            display: 'block', padding: '20px 24px', borderRadius: '12px',
             background: 'linear-gradient(135deg,rgba(80,30,160,0.4),rgba(120,60,220,0.2))',
             border: '1px solid rgba(150,100,255,0.5)',
             textDecoration: 'none', position: 'relative', overflow: 'hidden',
           }}>
             <div style={{
-              position: 'absolute', top: '10px', right: '14px',
+              position: 'absolute', top: '12px', right: '14px',
               padding: '3px 10px', borderRadius: '4px',
               background: 'rgba(120,200,80,0.15)', border: '1px solid rgba(120,200,80,0.4)',
               fontFamily: '"Playfair Display",serif', fontSize: '10px', fontWeight: 700,
               color: 'rgba(150,230,100,0.9)', letterSpacing: '1px',
-            }}>ВЫГОДНО</div>
-            <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '18px', fontWeight: 800, color: 'rgba(200,170,255,0.95)', marginBottom: '4px' }}>
-              Подписка — £9.99/мес
+            }}>ЛУЧШИЙ ВЫБОР</div>
+            <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '22px', fontWeight: 800, color: 'rgba(200,170,255,0.95)', marginBottom: '6px' }}>
+              Initiate — £9.99/мес
             </div>
-            <div style={{ fontFamily: '"Lora",serif', fontSize: '13px', fontStyle: 'italic', color: 'rgba(200,185,240,0.5)' }}>
-              Все 4 консультанта · Безлимитно · Отмена в любой момент
+            <div style={{ fontFamily: '"Lora",serif', fontSize: '14px', fontStyle: 'italic', color: 'rgba(200,185,240,0.55)', marginBottom: '4px' }}>
+              Все 4 консультанта · Безлимитно · Карта дня · Луна · Гороскоп
+            </div>
+            <div style={{ fontFamily: '"Lora",serif', fontSize: '13px', fontStyle: 'italic', color: 'rgba(200,185,240,0.35)' }}>
+              Отмена в любой момент
+            </div>
+          </Link>
+          <Link href="/auth/register" style={{
+            display: 'block', padding: '18px 24px', borderRadius: '12px',
+            background: 'linear-gradient(135deg,rgba(200,130,255,0.15),rgba(150,80,220,0.08))',
+            border: '1px solid rgba(200,130,255,0.3)',
+            textDecoration: 'none',
+          }}>
+            <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '18px', fontWeight: 800, color: 'rgba(220,170,255,0.9)', marginBottom: '4px' }}>
+              Oracle Pro — £16.99/мес
+            </div>
+            <div style={{ fontFamily: '"Lora",serif', fontSize: '13px', fontStyle: 'italic', color: 'rgba(200,185,240,0.45)' }}>
+              Всё из Initiate + PDF-отчёты + Human Design + AI-память
             </div>
           </Link>
         </div>
@@ -444,16 +443,16 @@ export default function ChatPage({ module }: { module: ModuleKey }) {
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
                 <Link href="/auth/register" style={{
                   padding: '10px 22px', borderRadius: '8px', textDecoration: 'none',
-                  background: `linear-gradient(135deg,${cfg.color.replace('1)', '0.8)')},${cfg.color.replace('1)', '0.5)')})`,
-                  fontFamily: '"Playfair Display",serif', fontSize: '12px', fontWeight: 700,
-                  color: '#0C0818', letterSpacing: '0.5px',
-                }}>Разовый доступ — £3</Link>
-                <Link href="/auth/register" style={{
-                  padding: '10px 22px', borderRadius: '8px', textDecoration: 'none',
                   background: 'linear-gradient(135deg,rgba(80,30,160,0.8),rgba(120,60,220,0.6))',
                   fontFamily: '"Playfair Display",serif', fontSize: '12px', fontWeight: 700,
                   color: '#EDE8F5', letterSpacing: '0.5px',
-                }}>Подписка — £9.99/мес</Link>
+                }}>Initiate — £9.99/мес</Link>
+                <Link href="/auth/register" style={{
+                  padding: '10px 22px', borderRadius: '8px', textDecoration: 'none',
+                  background: 'linear-gradient(135deg,rgba(150,80,220,0.6),rgba(200,100,255,0.4))',
+                  fontFamily: '"Playfair Display",serif', fontSize: '12px', fontWeight: 700,
+                  color: '#EDE8F5', letterSpacing: '0.5px',
+                }}>Oracle Pro — £16.99/мес</Link>
               </div>
             </div>
           ) : (
