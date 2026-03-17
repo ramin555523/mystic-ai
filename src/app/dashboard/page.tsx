@@ -375,13 +375,12 @@ export default function Dashboard() {
         {/* Modules */}
         <div style={{marginBottom:'20px'}}>
           <div style={{fontFamily:'"Playfair Display",serif',fontSize:'10px',letterSpacing:'4px',color:'rgba(180,150,255,0.4)',marginBottom:'14px',textTransform:'uppercase'}}>Консультации</div>
-          <div className="modules-row" style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:'12px'}}>
+          <div className="modules-row" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'12px'}}>
             {[
               {key:'tarot',title:'Таро',sub:'Расклад на вопрос',desc:'Карты откроют скрытое и подскажут путь',href:'/chat/tarot'},
               {key:'astrology',title:'Астрология',sub:'Натальный чарт',desc:'Планеты расскажут о вашем пути и транзитах',href:'/chat/astrology'},
               {key:'numerology',title:'Нумерология',sub:'Числа судьбы',desc:'Имя и дата рождения хранят код вашей жизни',href:'/chat/numerology'},
               {key:'compatibility',title:'Совместимость',sub:'Анализ пары',desc:'Раскройте тайну связи двух людей',href:'/chat/compatibility'},
-              {key:'destiny',title:'Матрица Судьбы',sub:'Карма и предназначение',desc:'Кармические задачи и таланты по дате рождения',href:'/chat/destiny'},
             ].map((m,i)=>(
               <Link key={i} href={m.href} className="module-btn" style={{borderTop:`2px solid ${MODULE_COLORS[m.key].replace('1)','0.5)')}`}}>
                 <div style={{fontSize:'26px',marginBottom:'10px'}}>{MODULE_ICONS[m.key]}</div>
