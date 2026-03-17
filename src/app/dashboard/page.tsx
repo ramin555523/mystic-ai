@@ -300,6 +300,10 @@ export default function Dashboard() {
           {/* Daily Tarot */}
           <div className="card" style={{animationDelay:'0.1s'}}>
             {!isPro && <ProLock onUpgrade={() => setShowUpgrade(true)} description="Каждое утро новая карта таро с персональным посланием. Помогает настроиться на нужную энергию дня и принимать решения осознанно."/>}
+            <div style={{marginBottom:'10px'}}>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'18px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Карта Таро Дня</div>
+              <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(201,168,76,0.55)'}}>Послание на сегодня от старших арканов</div>
+            </div>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'12px'}}>
               <div style={{fontFamily:'"Playfair Display",serif',fontSize:'10px',letterSpacing:'3px',color:'rgba(201,168,76,0.6)',textTransform:'uppercase'}}>Карта дня</div>
               <div style={{fontSize:'18px'}}>🃏</div>
@@ -320,6 +324,10 @@ export default function Dashboard() {
           {/* Moon */}
           <div className="card" style={{animationDelay:'0.15s'}}>
             {!isPro && <ProLock onUpgrade={() => setShowUpgrade(true)} description="Реальная фаза луны сегодня с описанием энергии дня. Знайте когда начинать новое, когда действовать активно, а когда отдыхать и восстанавливаться."/>}
+            <div style={{marginBottom:'10px'}}>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'18px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Лунный Календарь</div>
+              <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(180,150,255,0.55)'}}>Фаза луны и её влияние на энергию дня</div>
+            </div>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'12px'}}>
               <div style={{fontFamily:'"Playfair Display",serif',fontSize:'10px',letterSpacing:'3px',color:'rgba(180,150,255,0.6)',textTransform:'uppercase'}}>Луна сегодня</div>
               <div style={{fontSize:'18px'}}>{moon.icon}</div>
@@ -340,6 +348,10 @@ export default function Dashboard() {
           {/* Horoscope */}
           <div className="card" style={{animationDelay:'0.2s'}}>
             {!isPro && <ProLock onUpgrade={() => setShowUpgrade(true)} description="Персональный астрологический прогноз на сегодня по вашему знаку зодиака. Карьера, отношения, энергия дня — всё в одном месте каждый день."/>}
+            <div style={{marginBottom:'10px'}}>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'18px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Гороскоп Дня</div>
+              <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(100,180,255,0.55)'}}>Персональный астрологический прогноз</div>
+            </div>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'12px'}}>
               <div style={{fontFamily:'"Playfair Display",serif',fontSize:'10px',letterSpacing:'3px',color:'rgba(100,180,255,0.6)',textTransform:'uppercase'}}>Гороскоп</div>
               <div style={{fontSize:'18px'}}>⭐</div>
