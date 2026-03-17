@@ -103,12 +103,12 @@ function ProLock({ onUpgrade }: { onUpgrade: () => void }) {
         color:'rgba(200,180,255,0.75)',textAlign:'center',letterSpacing:'0.5px',padding:'0 16px'}}>
         Только для подписчиков
       </div>
-      <button onClick={onUpgrade} style={{
+      <a href="/#pricing" style={{
         padding:'7px 18px',borderRadius:'6px',border:'none',cursor:'pointer',
         background:'linear-gradient(135deg,#6030B0,#9060E0)',
         fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,
-        color:'#EDE8F5',letterSpacing:'1px',
-      }}>Подписаться →</button>
+        color:'#EDE8F5',letterSpacing:'1px',textDecoration:'none',display:'inline-block',
+      }}>Подписаться →</a>
     </div>
   )
 }
@@ -325,17 +325,17 @@ export default function Dashboard() {
           <div style={{fontFamily:'"Playfair Display",serif',fontSize:'10px',letterSpacing:'4px',color:'rgba(180,150,255,0.4)',marginBottom:'14px',textTransform:'uppercase'}}>Консультации</div>
           <div className="modules-row" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'12px'}}>
             {[
-              {key:'tarot',title:'Таро',sub:'Расклад на вопрос',desc:'Карты откроют скрытое и подскажут путь',price:'от £9.99/мес',href:'/chat/tarot'},
-              {key:'astrology',title:'Астрология',sub:'Натальный чарт',desc:'Планеты расскажут о вашем пути и транзитах',price:'от £9.99/мес',href:'/chat/astrology'},
-              {key:'numerology',title:'Нумерология',sub:'Числа судьбы',desc:'Имя и дата рождения хранят код вашей жизни',price:'от £9.99/мес',href:'/chat/numerology'},
-              {key:'compatibility',title:'Совместимость',sub:'Анализ пары',desc:'Раскройте тайну связи двух людей',price:'от £9.99/мес',href:'/chat/compatibility'},
+              {key:'tarot',title:'Таро',sub:'Расклад на вопрос',desc:'Карты откроют скрытое и подскажут путь',href:'/chat/tarot'},
+              {key:'astrology',title:'Астрология',sub:'Натальный чарт',desc:'Планеты расскажут о вашем пути и транзитах',href:'/chat/astrology'},
+              {key:'numerology',title:'Нумерология',sub:'Числа судьбы',desc:'Имя и дата рождения хранят код вашей жизни',href:'/chat/numerology'},
+              {key:'compatibility',title:'Совместимость',sub:'Анализ пары',desc:'Раскройте тайну связи двух людей',href:'/chat/compatibility'},
             ].map((m,i)=>(
               <Link key={i} href={m.href} className="module-btn" style={{borderTop:`2px solid ${MODULE_COLORS[m.key].replace('1)','0.5)')}`}}>
                 <div style={{fontSize:'26px',marginBottom:'10px'}}>{MODULE_ICONS[m.key]}</div>
                 <div style={{fontFamily:'"Playfair Display",serif',fontSize:'15px',fontWeight:700,color:MODULE_COLORS[m.key].replace('1)','0.9)'),marginBottom:'3px'}}>{m.title}</div>
                 <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(200,185,240,0.35)',marginBottom:'8px'}}>{m.sub}</div>
                 <p style={{fontFamily:'"Lora",serif',fontSize:'12px',color:'rgba(200,185,240,0.45)',lineHeight:1.5,marginBottom:'12px'}}>{m.desc}</p>
-                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'rgba(200,185,240,0.5)'}}>{m.price}</div>
+                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'rgba(200,185,240,0.5)'}}></div>
               </Link>
             ))}
           </div>

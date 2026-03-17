@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import MessageRenderer from '@/components/MessageRenderer'
 
 type Message = { role: 'user' | 'assistant'; content: string }
 
@@ -391,8 +392,9 @@ export default function ChatPage({ module }: { module: ModuleKey }) {
                 border: msg.role === 'user' ? 'none' : '1px solid rgba(255,255,255,0.08)',
                 fontFamily: '"Lora",serif', fontSize: '15px', lineHeight: 1.75,
                 color: msg.role === 'user' ? 'rgba(255,250,235,0.95)' : 'rgba(230,222,255,0.85)',
-                whiteSpace: 'pre-wrap',
-              }}>{msg.content}</div>
+              }}>
+                {msg.role === 'user' ? msg.content : <MessageRenderer content={msg.content} color={cfg.color} />}
+              </div>
             </div>
           ))}
 
