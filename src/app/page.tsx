@@ -86,795 +86,119 @@ function TypingDots({color}:{color:string}) {
 }
 
 function ChatSection() {
-  const [active,setActive]=useState(0)
-  const [shown,setShown]=useState<number[]>([0])
-  const [typing,setTyping]=useState(false)
-  const [started,setStarted]=useState(false)
-  const scrollRef=useRef<HTMLDivElement>(null)
-  const touts=useRef<ReturnType<typeof setTimeout>[]>([])
-  const mod=CHAT_MODULES[active]
+  const [active, setActive] = React.useState(0)
 
-  const startDemo=(idx:number)=>{
-    touts.current.forEach(clearTimeout)
-    setActive(idx);setShown([0]);setTyping(false);setStarted(true)
-    const demo=CHAT_MODULES[idx].demo
-    let delay=1200
-    demo.forEach((msg,i)=>{
-      if(msg.role==='ai'){
-        touts.current.push(setTimeout(()=>setTyping(true),delay-900))
-        touts.current.push(setTimeout(()=>{setTyping(false);setShown(p=>[...p,i+1])},delay))
-      } else {
-        touts.current.push(setTimeout(()=>setShown(p=>[...p,i+1]),delay))
-      }
-      delay+=msg.role==='ai'?2800:1400
-    })
-  }
+  type Demo = { module: string; icon: string; color: string; bg: string; border: string; expert: string; question: string; paragraphs: string[] }
 
-  useEffect(()=>()=>{touts.current.forEach(clearTimeout)},[])
-  useEffect(()=>{
-  const el = scrollRef.current
-  if(!el) return
-  const container = el.parentElement
-  if(container) container.scrollTop = container.scrollHeight
-},[shown,typing])
+  const demos: Demo[] = [
+    {
+      module: 'Таро', icon: '🃏', color: 'rgba(201,168,76,1)', bg: 'rgba(201,168,76,0.06)', border: 'rgba(201,168,76,0.2)', expert: 'Селена',
+      question: 'Стоит ли мне менять работу? Я уже год думаю об этом.',
+      paragraphs: [
+        '**Три карты:** Смерть (XIII) · Колесо Фортуны (X) · Звезда (XVII)',
+        'Карты говорят чётко — перемены неизбежны и своевременны. **Смерть** здесь не об окончании, а о трансформации: старое место уже отслужило своё.',
+        '**Колесо Фортуны** подтверждает — цикл завершается, судьба поворачивается в вашу сторону. **Звезда** в позиции исхода — знак надежды и нового пути.',
+        'Ответ карт: **да, время пришло.**',
+      ],
+    },
+    {
+      module: 'Астрология', icon: '⭐', color: 'rgba(100,180,255,1)', bg: 'rgba(100,180,255,0.06)', border: 'rgba(100,180,255,0.2)', expert: 'Орион',
+      question: 'Я Скорпион, 15.11.1990. Что меня ждёт в отношениях в этом году?',
+      paragraphs: [
+        '**Скорпион, 35 лет.** Ваша натальная Венера в Стрельце создаёт жажду свободы в любви — вам нужен партнёр-путешественник духом.',
+        '**Транзиты 2026:** Юпитер входит в ваш 7-й дом отношений в марте — один из лучших периодов для новых союзов за 12 лет.',
+        'Если одиноки — встреча возможна между **апрелем и августом.** Если в отношениях — союз выйдет на новый уровень.',
+        'Сатурн требует серьёзности: поверхностное не приживётся. **Ищите глубину.**',
+      ],
+    },
+    {
+      module: 'Нумерология', icon: '🔢', color: 'rgba(255,160,80,1)', bg: 'rgba(255,160,80,0.06)', border: 'rgba(255,160,80,0.2)', expert: 'Мирра',
+      question: 'Меня зовут Анна Петрова, родилась 23.04.1988. Что числа говорят о моей судьбе?',
+      paragraphs: [
+        '**Анна Петрова, 37 лет.** Числа открыты.',
+        '**Число жизненного пути: 9** — вы пришли исцелять и завершать циклы. Девятки — гуманисты и мудрецы.',
+        '**Число судьбы: 6** — ваше предназначение связано с домом, семьёй и заботой о других. **Число души: 11** — мастер-число, тонкая интуиция.',
+        '**Личный год 2026: 5** — год перемен, свободы и новых возможностей.',
+      ],
+    },
+    {
+      module: 'Совместимость', icon: '💫', color: 'rgba(192,112,255,1)', bg: 'rgba(192,112,255,0.06)', border: 'rgba(192,112,255,0.2)', expert: 'Сатья',
+      question: 'Мария (12.03.1995) и Дмитрий (28.07.1991). Насколько мы совместимы?',
+      paragraphs: [
+        '**Мария, 31 год — Рыбы. Дмитрий, 34 года — Лев.**',
+        '**Астрологическая совместимость: 78%.** Рыбы и Лев — союз воды и огня. Дмитрий даёт Марии защиту, Мария дарит Дмитрию глубину которой ему не хватает.',
+        '**Числовая совместимость:** путь Марии — 3 (творчество), Дмитрия — 1 (лидерство). Лидер и вдохновитель — отличное сочетание.',
+        'Главный вызов: Лев требует восхищения, Рыбы — слияния. Давайте друг другу пространство. **Потенциал союза — высокий.**',
+      ],
+    },
+  ]
 
-  const allMessages=[{role:'ai',text:mod.greeting},...mod.demo]
+  const d = demos[active]
 
   return (
-    <section style={{padding:'0 52px 80px',maxWidth:'1100px',margin:'0 auto'}} className="pad">
-      <div style={{display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap',marginBottom:'24px'}}>
-        {CHAT_MODULES.map((m,i)=>(
-          <button key={i} onClick={()=>startDemo(i)} style={{
-            padding:'11px 22px',borderRadius:'50px',cursor:'pointer',
-            background:active===i?m.color.replace('1)','0.18)'):'rgba(255,255,255,0.04)',
-            border:`1px solid ${active===i?m.color.replace('1)','0.5)'):'rgba(255,255,255,0.1)'}`,
-            fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,
-            color:active===i?m.color.replace('1)','0.95)'):'rgba(200,185,240,0.5)',
-            transition:'all 0.3s',
-            boxShadow:active===i?`0 4px 20px ${m.color.replace('1)','0.15)')}`:'none',
-          }}>{m.label}</button>
+    <div style={{maxWidth:'860px',margin:'0 auto',padding:'0 52px'}} className="pad">
+      <div style={{display:'flex',gap:'8px',justifyContent:'center',marginBottom:'28px',flexWrap:'wrap'}}>
+        {demos.map((dm, i) => (
+          <button key={i} onClick={() => setActive(i)} style={{
+            padding:'8px 20px', borderRadius:'24px', cursor:'pointer',
+            fontFamily:'"Playfair Display",serif', fontSize:'13px', fontWeight:700,
+            border:`1px solid ${i===active ? dm.color.replace('1)','0.5)') : 'rgba(255,255,255,0.1)'}`,
+            background: i===active ? dm.color.replace('1)','0.12)') : 'transparent',
+            color: i===active ? dm.color.replace('1)','0.95)') : 'rgba(200,185,240,0.4)',
+            transition:'all 0.25s',
+          }}>
+            {dm.icon} {dm.module}
+          </button>
         ))}
       </div>
-      <div style={{
-        background:'#0C0818',
-        border:`1px solid ${mod.color.replace('1)','0.2)')}`,
-        borderRadius:'20px',overflow:'hidden',
-        boxShadow:`0 20px 60px ${mod.color.replace('1)','0.08)')}`,
-        transition:'border-color 0.4s,box-shadow 0.4s',
-      }}>
-        <div style={{
-          padding:'16px 22px',background:'rgba(255,255,255,0.03)',
-          borderBottom:'1px solid rgba(255,255,255,0.06)',
-          display:'flex',alignItems:'center',gap:'12px',
-        }}>
-          <div style={{
-            width:'44px',height:'44px',borderRadius:'50%',flexShrink:0,
-            background:`linear-gradient(135deg,rgba(40,20,80,1),${mod.color.replace('1)','0.6)')})`,
-            display:'flex',alignItems:'center',justifyContent:'center',fontSize:'20px',
-            boxShadow:`0 0 16px ${mod.color.replace('1)','0.3)')}`,
-          }}>{mod.label.split(' ')[0]}</div>
+
+      <div style={{background:'rgba(8,5,22,0.95)',border:`1px solid ${d.border}`,borderRadius:'16px',overflow:'hidden',boxShadow:'0 20px 60px rgba(0,0,0,0.4)'}}>
+        <div style={{padding:'14px 20px',display:'flex',alignItems:'center',gap:'12px',borderBottom:'1px solid rgba(255,255,255,0.06)',background:`linear-gradient(135deg,rgba(8,5,22,1),${d.bg})`}}>
+          <div style={{width:'38px',height:'38px',borderRadius:'50%',flexShrink:0,background:d.color.replace('1)','0.15)'),border:`1px solid ${d.color.replace('1)','0.3)')}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px'}}>{d.icon}</div>
           <div>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:700,color:'#F0EBF8'}}>{mod.consultant}</div>
-            <div style={{fontSize:'12px',display:'flex',alignItems:'center',gap:'5px',color:'rgba(120,220,120,0.85)'}}>
-              <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#78DC78',display:'inline-block'}}/>
-              онлайн · {mod.role}
+            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'15px',fontWeight:700,color:'#EDE8F5'}}>{d.expert}</div>
+            <div style={{display:'flex',alignItems:'center',gap:'5px',fontFamily:'"Lora",serif',fontSize:'12px',color:'rgba(100,220,100,0.8)'}}>
+              <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#64DC64',display:'inline-block'}}/>
+              онлайн · {d.module}
             </div>
           </div>
-          <div style={{marginLeft:'auto'}}>
-            <div style={{
-              padding:'4px 12px',borderRadius:'4px',
-              background:mod.color.replace('1)','0.12)'),
-              border:`1px solid ${mod.color.replace('1)','0.25)')}`,
-              fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,
-              color:mod.color.replace('1)','0.85)'),letterSpacing:'1px',
-            }}>{mod.label.split(' ').slice(1).join(' ').toUpperCase()}</div>
+          <div style={{marginLeft:'auto',padding:'4px 12px',borderRadius:'20px',background:d.color.replace('1)','0.1)'),border:`1px solid ${d.color.replace('1)','0.2)')}`,fontFamily:'"Lora",serif',fontSize:'11px',fontStyle:'italic',color:d.color.replace('1)','0.7)')}}>
+            пример диалога
           </div>
         </div>
-        <div style={{height:'300px',overflowY:'auto',padding:'20px 18px',display:'flex',flexDirection:'column',gap:'12px'}}>
-          {allMessages.map((msg,i)=>shown.includes(i)&&(
-            <div key={`${active}-${i}`} style={{
-              display:'flex',justifyContent:msg.role==='user'?'flex-end':'flex-start',
-              animation:'msgSlide 0.4s cubic-bezier(0.16,1,0.3,1)',
-            }}>
-              <div style={{
-                maxWidth:'78%',padding:'12px 16px',
-                borderRadius:msg.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',
-                background:msg.role==='user'
-                  ?`linear-gradient(135deg,${mod.color.replace('1)','0.7)')},${mod.color.replace('1)','0.45)')})`
-                  :'rgba(255,255,255,0.07)',
-                border:msg.role==='user'?'none':'1px solid rgba(255,255,255,0.08)',
-                fontFamily:'"Lora",serif',fontSize:'14.5px',lineHeight:1.7,
-                color:msg.role==='user'?'rgba(255,250,235,0.95)':'rgba(230,222,255,0.82)',
-              }}>{msg.text}</div>
+
+        <div style={{padding:'24px 20px',display:'flex',flexDirection:'column',gap:'16px'}}>
+          <div style={{display:'flex',justifyContent:'flex-end'}}>
+            <div style={{maxWidth:'70%',padding:'12px 16px',borderRadius:'18px 18px 4px 18px',background:`linear-gradient(135deg,${d.color.replace('1)','0.7)')},${d.color.replace('1)','0.45)')})`,fontFamily:'"Lora",serif',fontSize:'14px',lineHeight:1.7,color:'rgba(255,250,235,0.95)'}}>
+              {d.question}
             </div>
-          ))}
-          {typing&&(
-            <div style={{display:'flex',animation:'msgSlide 0.3s ease'}}>
-              <div style={{padding:'12px 16px',borderRadius:'16px 16px 16px 4px',background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.08)'}}>
-                <TypingDots color={mod.color.replace('1)','0.7)')}/>
-              </div>
-            </div>
-          )}
-          <div ref={scrollRef}/>
-        </div>
-        <div style={{padding:'14px 18px',borderTop:'1px solid rgba(255,255,255,0.06)',background:'rgba(255,255,255,0.02)',display:'flex',gap:'10px',alignItems:'center'}}>
-          {!started?(
-            <button onClick={()=>startDemo(active)} style={{
-              flex:1,padding:'12px 18px',borderRadius:'10px',cursor:'pointer',
-              background:mod.color.replace('1)','0.1)'),border:`1px solid ${mod.color.replace('1)','0.3)')}`,
-              fontFamily:'"Lora",serif',fontSize:'14px',fontStyle:'italic',
-              color:mod.color.replace('1)','0.7)'),textAlign:'left',transition:'all 0.3s',
-            }}>Нажмите чтобы увидеть демонстрацию...</button>
-          ):(
-            <div style={{
-              flex:1,padding:'12px 16px',borderRadius:'10px',
-              background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.09)',
-              fontFamily:'"Lora",serif',fontSize:'14px',fontStyle:'italic',
-              color:'rgba(200,190,240,0.35)',
-            }}>Задайте ваш вопрос {mod.consultant.toLowerCase()}у...</div>
-          )}
-          <Link href="/auth/register" style={{
-            padding:'12px 24px',borderRadius:'10px',flexShrink:0,
-            background:`linear-gradient(135deg,${mod.color.replace('1)','0.85)')},${mod.color.replace('1)','0.6)')})`,
-            fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,
-            color:'#0C0818',textDecoration:'none',whiteSpace:'nowrap',
-            boxShadow:`0 4px 16px ${mod.color.replace('1)','0.25)')}`,
-          }}>Начать →</Link>
-        </div>
-      </div>
-      <p style={{textAlign:'center',marginTop:'12px',fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(180,160,240,0.25)'}}>
-        Демонстрация · Зарегистрируйтесь для полного доступа · Первая консультация бесплатно
-      </p>
-    </section>
-  )
-}
-
-function ModuleCard({icon,title,subtitle,description,price,color,glow,features,delay}:{
-  icon:string;title:string;subtitle:string;description:string
-  price?:string;color:string;glow:string;features:string[];delay:number
-}) {
-  const [hov,setHov]=useState(false)
-  return (
-    <Link href="/auth/register" style={{textDecoration:'none'}}
-      onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>
-      <div style={{
-        background:hov?'rgba(255,255,255,0.06)':'rgba(255,255,255,0.03)',
-        border:`1px solid ${hov?color.replace('1)','0.4)'):'rgba(255,255,255,0.08)'}`,
-        borderRadius:'16px',padding:'28px 22px',cursor:'pointer',
-        transition:'all 0.35s cubic-bezier(0.16,1,0.3,1)',
-        transform:hov?'translateY(-8px) scale(1.02)':'translateY(0) scale(1)',
-        boxShadow:hov?`0 24px 60px ${glow}`:'0 4px 20px rgba(0,0,0,0.3)',
-        animation:`fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms both`,
-        position:'relative',overflow:'hidden',
-      }}>
-        <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:`linear-gradient(90deg,transparent,${color.replace('1)','0.8)')},transparent)`,opacity:hov?1:0.4,transition:'opacity 0.3s'}}/>
-        <div style={{fontSize:'40px',marginBottom:'14px',lineHeight:1,filter:hov?`drop-shadow(0 0 14px ${color.replace('1)','0.6()')})`:'none',transform:hov?'scale(1.1)':'scale(1)',transition:'all 0.3s'}}>{icon}</div>
-        <div style={{fontFamily:'"Playfair Display",serif',fontSize:'21px',fontWeight:800,color:hov?'#FFFFFF':'#EDE8F5',marginBottom:'4px',transition:'color 0.3s'}}>{title}</div>
-        <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:hov?color.replace('1)','0.9)'):'rgba(200,180,255,0.45)',marginBottom:'12px',transition:'color 0.3s'}}>{subtitle}</div>
-        <p style={{fontFamily:'"Lora",serif',fontSize:'13.5px',lineHeight:1.7,color:'rgba(210,200,240,0.55)',marginBottom:'16px'}}>{description}</p>
-        <div style={{marginBottom:'18px'}}>
-          {features.map((f,i)=>(
-            <div key={i} style={{display:'flex',alignItems:'center',gap:'8px',padding:'5px 0',fontFamily:'"Lora",serif',fontSize:'13px',color:'rgba(200,185,240,0.5)',borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
-              <span style={{color:color.replace('1)','0.7)'),fontSize:'8px',flexShrink:0}}>◆</span>{f}
-            </div>
-          ))}
-        </div>
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',paddingTop:'14px',borderTop:'1px solid rgba(255,255,255,0.06)'}}>
-          <div>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'24px',fontWeight:800,color:'#FFFFFF',lineHeight:1}}>{price}</div>
-            <div style={{fontFamily:'"Lora",serif',fontSize:'11px',fontStyle:'italic',color:'rgba(200,180,255,0.35)',marginTop:'2px'}}>за консультацию</div>
           </div>
-          <div style={{padding:'9px 18px',borderRadius:'8px',background:hov?`linear-gradient(135deg,${color.replace('1)','0.9)')},${color.replace('1)','0.6)')})`:'rgba(255,255,255,0.06)',fontFamily:'"Playfair Display",serif',fontSize:'12px',fontWeight:700,color:hov?'#0C0818':'rgba(220,210,255,0.5)',transition:'all 0.3s'}}>Начать →</div>
-        </div>
-      </div>
-    </Link>
-  )
-}
 
-function PricingCard({name,tagline,price,period,note,features,cta,featured,color,badge}:{
-  name:string;tagline:string;price:string;period:string;note?:string
-  features:string[];cta:string;featured?:boolean;color:string;badge?:string
-}) {
-  const [hov,setHov]=useState(false)
-  return (
-    <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} style={{
-      background:featured?'rgba(80,40,140,0.20)':'rgba(255,255,255,0.025)',
-      border:`1px solid ${hov||featured?color.replace('1)','0.4)'):'rgba(255,255,255,0.07)'}`,
-      borderRadius:'14px',padding:'32px 26px',position:'relative',overflow:'hidden',
-      transition:'all 0.4s cubic-bezier(0.16,1,0.3,1)',
-      transform:hov?'translateY(-6px)':'translateY(0)',
-      boxShadow:hov||featured?`0 20px 60px ${color.replace('1)','0.12)')}`:'none',
-    }}>
-      {featured&&<div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:`linear-gradient(90deg,transparent,${color.replace('1)','0.8)')},transparent)`}}/>}
-      {badge&&<div style={{position:'absolute',top:'14px',right:'14px',padding:'4px 12px',borderRadius:'4px',background:color.replace('1)','0.15)'),border:`1px solid ${color.replace('1)','0.35)')}`,fontFamily:'"Playfair Display",serif',fontSize:'10px',fontWeight:700,color:color.replace('1)','0.9)'),letterSpacing:'1px'}}>{badge}</div>}
-      <div style={{fontFamily:'"Playfair Display",serif',fontSize:'12px',fontWeight:700,letterSpacing:'3px',color:'rgba(200,180,255,0.45)',marginBottom:'8px',textTransform:'uppercase'}}>{name}</div>
-      <div style={{fontFamily:'"Lora",serif',fontSize:'15px',fontStyle:'italic',color:'rgba(220,210,255,0.5)',marginBottom:'20px'}}>{tagline}</div>
-      <div style={{marginBottom:'6px'}}>
-        <span style={{fontFamily:'"Playfair Display",serif',fontSize:'48px',fontWeight:800,color:'#FFFFFF',lineHeight:1}}>{price}</span>
-        <span style={{fontFamily:'"Lora",serif',fontSize:'14px',color:'rgba(200,180,255,0.4)',marginLeft:'8px'}}>{period}</span>
-      </div>
-      {note&&<div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:color.replace('1)','0.8)'),marginBottom:'24px'}}>{note}</div>}
-      <div style={{height:'1px',background:'rgba(255,255,255,0.06)',margin:'20px 0'}}/>
-      <ul style={{listStyle:'none',marginBottom:'28px',display:'flex',flexDirection:'column',gap:'10px'}}>
-        {features.map((f,i)=>(
-          <li key={i} style={{display:'flex',alignItems:'flex-start',gap:'10px',fontFamily:'"Lora",serif',fontSize:'15px',lineHeight:1.6,color:'rgba(220,210,255,0.65)'}}>
-            <span style={{color:color.replace('1)','0.7)'),fontSize:'10px',flexShrink:0,marginTop:'4px'}}>◆</span>{f}
-          </li>
-        ))}
-      </ul>
-      <Link href="/auth/register" style={{display:'block',padding:'14px',textAlign:'center',borderRadius:'8px',textDecoration:'none',background:featured?`linear-gradient(135deg,${color.replace('1)','0.9)')},${color.replace('1)','0.6(')})`:'transparent',border:featured?'none':'1px solid rgba(255,255,255,0.15)',fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:featured?'#0C0818':'rgba(220,210,255,0.7)',transition:'all 0.3s'}}>{cta}</Link>
-    </div>
-  )
-}
-
-
-function DailyPreview() {
-  const moon = getLandingMoonPhase()
-  const today = new Date()
-  const cardIdx = (today.getDate() + today.getMonth() * 31) % LANDING_CARDS.length
-  const card = LANDING_CARDS[cardIdx]
-  const [zodiac, setZodiac] = useState('')
-  const [showZodiac, setShowZodiac] = useState(false)
-
-  const HOROSCOPES: Record<string,string> = {
-    'Овен':'Марс energizes вас. Смелые шаги в карьере принесут плоды сегодня.',
-    'Телец':'Венера подчёркивает творчество. Финансовая интуиция обострена.',
-    'Близнецы':'Меркурий обостряет ум. Один разговор сегодня изменит многое.',
-    'Рак':'Луна приносит ясность. Прислушайтесь к интуиции в важных делах.',
-    'Лев':'Солнце освещает вашу магнетичность. Шагайте вперёд уверенно.',
-    'Дева':'Точность и анализ — ваши союзники. Решение давней проблемы близко.',
-    'Весы':'Венера гармонизирует отношения. Переговоры в вашу пользу.',
-    'Скорпион':'Плутон углубляет восприятие. Скрытое выходит на поверхность.',
-    'Стрелец':'Юпитер расширяет горизонты. Новая возможность стучится в дверь.',
-    'Козерог':'Сатурн вознаграждает дисциплину. Признание в карьере возможно.',
-    'Водолей':'Уран зажигает оригинальность. Нестандартный подход победит.',
-    'Рыбы':'Нептун углубляет интуицию. Духовные занятия благословлены.',
-  }
-  const ZODIAC_SIGNS = ['Овен','Телец','Близнецы','Рак','Лев','Дева','Весы','Скорпион','Стрелец','Козерог','Водолей','Рыбы']
-
-  const cardStyle = {
-    borderRadius:'16px' as const,
-    padding:'26px 22px',
-    position:'relative' as const,
-    overflow:'hidden' as const,
-    display:'flex' as const,
-    flexDirection:'column' as const,
-  }
-
-  return (
-    <section style={{padding:'0 52px 60px',maxWidth:'1200px',margin:'0 auto'}} className="pad">
-      <div style={{textAlign:'center',marginBottom:'32px'}}>
-        <Ornament/>
-        <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(24px,3.5vw,44px)',fontWeight:900,color:'#FFFFFF',marginTop:'32px',marginBottom:'10px'}}>
-          Что говорят звёзды сегодня
-        </h2>
-        <p style={{fontFamily:'"Lora",serif',fontSize:'15px',fontStyle:'italic',color:'rgba(200,180,255,0.4)'}}>
-          Доступны подписчикам каждый день
-        </p>
-      </div>
-
-      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'16px',marginBottom:'16px'}}>
-
-        {/* Card of day */}
-        <div style={{...cardStyle,background:'rgba(201,168,76,0.04)',border:'1px solid rgba(201,168,76,0.15)'}}>
-          <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(201,168,76,0.6),transparent)'}}/>
-          <div style={{marginBottom:'16px'}}>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Карта Таро Дня</div>
-            <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(201,168,76,0.55)'}}>Послание на сегодня</div>
-          </div>
-          <div style={{textAlign:'center',marginBottom:'14px'}}>
-            <div style={{fontSize:'36px',marginBottom:'8px'}}>🃏</div>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:900,color:'#C9A84C'}}>{card.name}</div>
-            <div style={{fontFamily:'"Lora",serif',fontSize:'11px',fontStyle:'italic',color:'rgba(201,168,76,0.45)',marginTop:'2px'}}>Аркан {card.number}</div>
-          </div>
-          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',flex:1,marginBottom:'16px'}}>{card.meaning}</p>
-          <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(201,168,76,0.1)',border:'1px solid rgba(201,168,76,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(201,168,76,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
-            Получить доступ →
-          </Link>
-        </div>
-
-        {/* Moon */}
-        <div style={{...cardStyle,background:'rgba(150,100,255,0.04)',border:'1px solid rgba(150,100,255,0.15)'}}>
-          <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(150,100,255,0.6),transparent)'}}/>
-          <div style={{marginBottom:'16px'}}>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Лунный Календарь</div>
-            <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(150,100,255,0.55)'}}>Фаза луны и энергия дня</div>
-          </div>
-          <div style={{textAlign:'center',marginBottom:'14px'}}>
-            <div style={{fontSize:'42px',marginBottom:'8px'}}>{moon.icon}</div>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'18px',fontWeight:900,color:'#EDE8F5'}}>{moon.name}</div>
-          </div>
-          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',flex:1,marginBottom:'16px'}}>{moon.tip}</p>
-          <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(150,100,255,0.1)',border:'1px solid rgba(150,100,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(180,140,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
-            Получить доступ →
-          </Link>
-        </div>
-
-        {/* Horoscope */}
-        <div style={{...cardStyle,background:'rgba(100,180,255,0.04)',border:'1px solid rgba(100,180,255,0.15)'}}>
-          <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(100,180,255,0.6),transparent)'}}/>
-          <div style={{marginBottom:'16px'}}>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Гороскоп Дня</div>
-            <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(100,180,255,0.55)'}}>Персональный астропрогноз</div>
-          </div>
-          {!showZodiac ? (
-            <div style={{flex:1,display:'flex',flexDirection:'column',justifyContent:'center'}}>
-              <div style={{textAlign:'center',marginBottom:'16px'}}>
-                <div style={{fontSize:'36px',marginBottom:'8px'}}>⭐</div>
-                <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.55)',lineHeight:1.7}}>
-                  Ежедневный прогноз по вашему знаку зодиака — карьера, любовь, энергия дня
+          <div style={{display:'flex',gap:'10px',alignItems:'flex-start'}}>
+            <div style={{width:'32px',height:'32px',borderRadius:'50%',flexShrink:0,background:d.color.replace('1)','0.15)'),border:`1px solid ${d.color.replace('1)','0.3)')}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px'}}>{d.icon}</div>
+            <div style={{maxWidth:'80%',padding:'14px 18px',borderRadius:'4px 18px 18px 18px',background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.08)'}}>
+              {d.paragraphs.map((para, i) => (
+                <p key={i} style={{fontFamily:'"Lora",serif',fontSize:'14px',lineHeight:1.8,color:'rgba(230,222,255,0.88)',marginBottom:i<d.paragraphs.length-1?'10px':'0'}}>
+                  {para.split(/(\*\*[^*]+\*\*)/).map((part, j) =>
+                    part.startsWith('**') && part.endsWith('**')
+                      ? <strong key={j} style={{color:'#FFFFFF',fontFamily:'"Playfair Display",serif',fontWeight:800}}>{part.slice(2,-2)}</strong>
+                      : <span key={j}>{part}</span>
+                  )}
                 </p>
-              </div>
-              <button onClick={()=>setShowZodiac(true)} style={{width:'100%',padding:'10px',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.8)',cursor:'pointer',letterSpacing:'1px',marginBottom:'8px'}}>
-                Попробовать →
-              </button>
+              ))}
             </div>
-          ) : !zodiac ? (
-            <div style={{flex:1,display:'flex',flexDirection:'column',justifyContent:'space-between'}}>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.5)',marginBottom:'12px',lineHeight:1.6}}>Выберите ваш знак зодиака:</p>
-              <select value={zodiac} onChange={e=>setZodiac(e.target.value)} style={{width:'100%',padding:'11px 14px',background:'rgba(255,255,255,0.06)',border:'1px solid rgba(100,180,255,0.25)',borderRadius:'8px',color:'#EDE8F5',fontFamily:'"Lora",serif',fontSize:'14px',outline:'none',cursor:'pointer',marginBottom:'16px',flex:1}}>
-                <option value="">— Выбрать знак —</option>
-                {ZODIAC_SIGNS.map(s=><option key={s} value={s} style={{background:'#1A0F3A'}}>{s}</option>)}
-              </select>
-              <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
-                Полный прогноз →
-              </Link>
-            </div>
-          ) : (
-            <div style={{flex:1,display:'flex',flexDirection:'column'}}>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'10px'}}>
-                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:700,color:'#64B4FF'}}>{zodiac}</div>
-                <button onClick={()=>setZodiac('')} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(200,185,240,0.3)',fontSize:'18px'}}>×</button>
-              </div>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',flex:1,marginBottom:'12px'}}>{HOROSCOPES[zodiac]}</p>
-              <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
-                Полный прогноз →
-              </Link>
-            </div>
-          )}
+          </div>
         </div>
-      </div>
 
-      {/* Premium reports mini row */}
-
-      <p style={{textAlign:'center',fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(180,160,220,0.25)'}}>
-        ✦ Карта дня · Лунный календарь · Гороскоп — доступны каждый день с подпиской Initiate от £9.99/мес
-      </p>
-    </section>
-  )
-}
-
-
-function PremiumReportsSection() {
-  return (
-    <section id="premium-reports" style={{padding:'80px 52px 100px'}} className="pad">
-      <div style={{maxWidth:'1100px',margin:'0 auto'}}>
-        <div style={{textAlign:'center',marginBottom:'20px'}}><Ornament/></div>
-        <div style={{textAlign:'center',margin:'40px 0 52px'}}>
-          <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',letterSpacing:'3px',color:'rgba(180,150,255,0.45)',marginBottom:'14px',textTransform:'uppercase'}}>Премиум</div>
-          <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(28px,4vw,52px)',fontWeight:900,color:'#FFFFFF',marginBottom:'14px'}}>
-            Персональные Отчёты
-          </h2>
-          <p style={{fontFamily:'"Lora",serif',fontSize:'17px',fontStyle:'italic',color:'rgba(200,180,255,0.45)',maxWidth:'540px',margin:'0 auto',lineHeight:1.8}}>
-            Глубокий анализ на 15–40 страниц. AI составляет отчёт за 5–10 минут по вашим данным — имя, дата рождения.
+        <div style={{padding:'16px 20px',borderTop:'1px solid rgba(255,255,255,0.06)',background:'rgba(255,255,255,0.02)',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'16px',flexWrap:'wrap'}}>
+          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.4)'}}>
+            Первые 5 сообщений — бесплатно
           </p>
-        </div>
-
-        <div style={{display:'flex',flexDirection:'column',gap:'24px'}}>
-
-          {/* Destiny Matrix */}
-          <div style={{background:'rgba(192,112,255,0.04)',border:'1px solid rgba(192,112,255,0.18)',borderRadius:'16px',overflow:'hidden',display:'grid',gridTemplateColumns:'1fr 1fr',transition:'all 0.3s'}}
-            onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(192,112,255,0.35)';(e.currentTarget as HTMLDivElement).style.boxShadow='0 20px 60px rgba(192,112,255,0.08)'}}
-            onMouseLeave={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(192,112,255,0.18)';(e.currentTarget as HTMLDivElement).style.boxShadow='none'}}>
-            <div style={{padding:'36px 40px',borderRight:'1px solid rgba(255,255,255,0.06)'}}>
-              <div style={{display:'flex',alignItems:'center',gap:'14px',marginBottom:'16px'}}>
-                <div style={{fontSize:'40px',filter:'drop-shadow(0 0 16px rgba(192,112,255,0.5))'}}>🔯</div>
-                <div>
-                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'24px',fontWeight:900,color:'#EDE8F5'}}>Матрица Судьбы</div>
-                  <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(192,112,255,0.65)'}}>15–18 страниц · 3–5 минут</div>
-                </div>
-              </div>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'15px',lineHeight:1.85,color:'rgba(210,200,240,0.65)',marginBottom:'20px'}}>
-                Система Матрицы Судьбы раскрывает кармические задачи, скрытые таланты и главное предназначение через цифровой код вашей даты рождения. Каждое число — это ключ к пониманию себя.
-              </p>
-              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',paddingTop:'20px',borderTop:'1px solid rgba(255,255,255,0.06)'}}>
-                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'36px',fontWeight:900,color:'#EDE8F5'}}>£34.99</div>
-                <Link href="/auth/register" style={{padding:'12px 24px',borderRadius:'8px',background:'linear-gradient(135deg,rgba(150,70,230,0.8),rgba(192,112,255,0.6))',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 20px rgba(150,70,230,0.3)'}}>Заказать →</Link>
-              </div>
-            </div>
-            <div style={{padding:'36px 40px'}}>
-              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'12px',letterSpacing:'3px',color:'rgba(192,112,255,0.5)',textTransform:'uppercase',marginBottom:'16px'}}>Что входит в отчёт</div>
-              {['Центральное число — главная жизненная миссия','Кармические задачи: что нужно проработать','Природные таланты и скрытые ресурсы','Паттерны в любви и отношениях','Финансовый поток и путь к достатку','Карьера: где вы можете преуспеть','Персональные аффирмации и практики'].map((item,i)=>(
-                <div key={i} style={{display:'flex',gap:'10px',padding:'8px 0',borderBottom:'1px solid rgba(255,255,255,0.04)',fontFamily:'"Lora",serif',fontSize:'14px',color:'rgba(210,200,240,0.6)'}}>
-                  <span style={{color:'rgba(192,112,255,0.7)',fontSize:'8px',flexShrink:0,marginTop:'5px'}}>◆</span>{item}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Natal Chart */}
-          <div style={{background:'rgba(100,180,255,0.04)',border:'1px solid rgba(100,180,255,0.18)',borderRadius:'16px',overflow:'hidden',display:'grid',gridTemplateColumns:'1fr 1fr',transition:'all 0.3s'}}
-            onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(100,180,255,0.35)';(e.currentTarget as HTMLDivElement).style.boxShadow='0 20px 60px rgba(100,180,255,0.08)'}}
-            onMouseLeave={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(100,180,255,0.18)';(e.currentTarget as HTMLDivElement).style.boxShadow='none'}}>
-            <div style={{padding:'36px 40px',borderRight:'1px solid rgba(255,255,255,0.06)'}}>
-              <div style={{display:'flex',alignItems:'center',gap:'14px',marginBottom:'16px'}}>
-                <div style={{fontSize:'40px',filter:'drop-shadow(0 0 16px rgba(100,180,255,0.5))'}}>⭐</div>
-                <div>
-                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'24px',fontWeight:900,color:'#EDE8F5'}}>Натальная Карта</div>
-                  <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(100,180,255,0.65)'}}>15–18 страниц · 3–5 минут</div>
-                </div>
-              </div>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'15px',lineHeight:1.85,color:'rgba(210,200,240,0.65)',marginBottom:'20px'}}>
-                Положение планет в момент вашего рождения раскрывает характер, эмоциональную природу, любовные паттерны и кармическую миссию. Полный астрологический портрет личности.
-              </p>
-              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',paddingTop:'20px',borderTop:'1px solid rgba(255,255,255,0.06)'}}>
-                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'36px',fontWeight:900,color:'#EDE8F5'}}>£34.99</div>
-                <Link href="/auth/register" style={{padding:'12px 24px',borderRadius:'8px',background:'linear-gradient(135deg,rgba(60,130,220,0.8),rgba(100,180,255,0.6))',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 20px rgba(60,130,220,0.3)'}}>Заказать →</Link>
-              </div>
-            </div>
-            <div style={{padding:'36px 40px'}}>
-              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'12px',letterSpacing:'3px',color:'rgba(100,180,255,0.5)',textTransform:'uppercase',marginBottom:'16px'}}>Что входит в отчёт</div>
-              {['Солнечный знак — ядро характера и жизненная сила','Лунный знак — эмоциональная природа и подсознание','Венера и Марс — любовь, сексуальность, деньги','Юпитер и Сатурн — зоны удачи и кармические уроки','Кармические узлы — жизненная миссия','Текущие транзиты и их влияние сейчас','Рекомендации по всем сферам жизни'].map((item,i)=>(
-                <div key={i} style={{display:'flex',gap:'10px',padding:'8px 0',borderBottom:'1px solid rgba(255,255,255,0.04)',fontFamily:'"Lora",serif',fontSize:'14px',color:'rgba(210,200,240,0.6)'}}>
-                  <span style={{color:'rgba(100,180,255,0.7)',fontSize:'8px',flexShrink:0,marginTop:'5px'}}>◆</span>{item}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Yearly Forecast */}
-          <div style={{background:'rgba(255,160,60,0.04)',border:'1px solid rgba(255,160,60,0.22)',borderRadius:'16px',overflow:'hidden',display:'grid',gridTemplateColumns:'1fr 1fr',position:'relative',transition:'all 0.3s'}}
-            onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(255,160,60,0.4)';(e.currentTarget as HTMLDivElement).style.boxShadow='0 20px 60px rgba(255,160,60,0.08)'}}
-            onMouseLeave={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(255,160,60,0.22)';(e.currentTarget as HTMLDivElement).style.boxShadow='none'}}>
-            <div style={{position:'absolute',top:'14px',right:'14px',padding:'4px 14px',borderRadius:'4px',background:'rgba(255,160,40,0.15)',border:'1px solid rgba(255,160,40,0.4)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(255,180,80,0.95)',letterSpacing:'1px'}}>ULTRA PREMIUM</div>
-            <div style={{padding:'36px 40px',borderRight:'1px solid rgba(255,255,255,0.06)'}}>
-              <div style={{display:'flex',alignItems:'center',gap:'14px',marginBottom:'16px'}}>
-                <div style={{fontSize:'40px',filter:'drop-shadow(0 0 16px rgba(255,160,60,0.5))'}}>🌟</div>
-                <div>
-                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'24px',fontWeight:900,color:'#EDE8F5'}}>Годовой Прогноз</div>
-                  <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(255,160,60,0.65)'}}>30–40 страниц · 7–10 минут</div>
-                </div>
-              </div>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'15px',lineHeight:1.85,color:'rgba(210,200,240,0.65)',marginBottom:'20px'}}>
-                Самый полный отчёт: астрология + нумерология + Матрица Судьбы. Подробный прогноз по каждому месяцу года для всех сфер жизни. Это не гороскоп — это ваш личный навигатор на год.
-              </p>
-              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',paddingTop:'20px',borderTop:'1px solid rgba(255,255,255,0.06)'}}>
-                <div>
-                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'36px',fontWeight:900,color:'#EDE8F5'}}>£89.99</div>
-                  <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(200,185,240,0.3)',marginTop:'2px'}}>вместо £159.97 за три отчёта</div>
-                </div>
-                <Link href="/auth/register" style={{padding:'12px 24px',borderRadius:'8px',background:'linear-gradient(135deg,rgba(200,100,20,0.8),rgba(255,160,60,0.7))',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#0C0818',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 20px rgba(255,140,30,0.3)'}}>Заказать →</Link>
-              </div>
-            </div>
-            <div style={{padding:'36px 40px'}}>
-              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'12px',letterSpacing:'3px',color:'rgba(255,160,60,0.5)',textTransform:'uppercase',marginBottom:'16px'}}>Что входит в отчёт</div>
-              {['Общая энергия и тема года','Любовь и отношения — прогноз и рекомендации','Карьера, финансы и лучшее время для действий','Здоровье и жизненная энергия по сезонам','Прогноз по каждому из 12 месяцев','Матрица Судьбы в контексте этого года','Нумерологический годовой цикл','Духовные практики и аффирмации на год'].map((item,i)=>(
-                <div key={i} style={{display:'flex',gap:'10px',padding:'8px 0',borderBottom:'1px solid rgba(255,255,255,0.04)',fontFamily:'"Lora",serif',fontSize:'14px',color:'rgba(210,200,240,0.6)'}}>
-                  <span style={{color:'rgba(255,160,60,0.7)',fontSize:'8px',flexShrink:0,marginTop:'5px'}}>◆</span>{item}
-                </div>
-              ))}
-            </div>
-          </div>
-
+          <Link href="/auth/register" style={{padding:'10px 24px',borderRadius:'8px',textDecoration:'none',background:`linear-gradient(135deg,${d.color.replace('1)','0.85)')},${d.color.replace('1)','0.6)')})`,fontFamily:'"Playfair Display",serif',fontSize:'12px',fontWeight:700,color:'#0C0818',letterSpacing:'0.5px'}}>
+            Начать бесплатно
+          </Link>
         </div>
       </div>
-    </section>
-  )
-}
-
-
-function PremiumDropdown() {
-  const [open, setOpen] = React.useState(false)
-  const ref = React.useRef<HTMLDivElement>(null)
-
-  React.useEffect(() => {
-    const fn = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
-    document.addEventListener('mousedown', fn)
-    return () => document.removeEventListener('mousedown', fn)
-  }, [])
-
-  const items = [
-    { icon: '🔯', name: 'Матрица Судьбы', desc: 'Кармические задачи и предназначение', price: '£34.99', color: 'rgba(192,112,255,1)' },
-    { icon: '⭐', name: 'Натальная Карта', desc: 'Полный астрологический портрет', price: '£34.99', color: 'rgba(100,180,255,1)' },
-    { icon: '🌟', name: 'Годовой Прогноз', desc: 'Прогноз по всем сферам на год', price: '£89.99', color: 'rgba(255,160,60,1)' },
-  ]
-
-  return (
-    <div ref={ref} style={{ position: 'relative' }}>
-      <button onClick={() => setOpen(p => !p)} style={{
-        background: open ? 'rgba(150,80,255,0.15)' : 'rgba(150,80,255,0.08)',
-        border: `1px solid ${open ? 'rgba(150,80,255,0.5)' : 'rgba(150,80,255,0.2)'}`,
-        borderRadius: '6px', padding: '6px 14px', cursor: 'pointer',
-        fontFamily: '"Playfair Display",serif', fontSize: '13px', fontWeight: 700,
-        color: 'rgba(200,160,255,0.9)', letterSpacing: '0.3px',
-        display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s',
-      }}>
-        ✦ Премиум отчёты
-        <span style={{ fontSize: '10px', transition: 'transform 0.2s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>▾</span>
-      </button>
-      {open && (
-        <div style={{
-          position: 'absolute', top: 'calc(100% + 10px)', left: '50%',
-          transform: 'translateX(-50%)', width: '340px',
-          background: 'rgba(10,6,24,0.98)', border: '1px solid rgba(150,80,255,0.2)',
-          borderRadius: '14px', overflow: 'hidden',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.6)', zIndex: 200,
-        }}>
-          <div style={{ padding: '14px 16px 10px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '11px', letterSpacing: '3px', color: 'rgba(180,140,255,0.5)', textTransform: 'uppercase' }}>Персональные PDF-отчёты</div>
-          </div>
-          {items.map((item, i) => (
-            <Link key={i} href="#premium-reports" onClick={() => setOpen(false)} style={{
-              display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 16px',
-              borderBottom: i < items.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
-              textDecoration: 'none', background: 'transparent', transition: 'background 0.2s',
-            }}
-            onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.04)'}
-            onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0, background: item.color.replace('1)', '0.12)'), border: `1px solid ${item.color.replace('1)', '0.25)')}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>{item.icon}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '14px', fontWeight: 700, color: '#EDE8F5', marginBottom: '2px' }}>{item.name}</div>
-                <div style={{ fontFamily: '"Lora",serif', fontSize: '12px', fontStyle: 'italic', color: 'rgba(200,185,240,0.4)' }}>{item.desc}</div>
-              </div>
-              <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '14px', fontWeight: 800, color: item.color.replace('1)', '0.9)'), flexShrink: 0 }}>{item.price}</div>
-            </Link>
-          ))}
-          <div style={{ padding: '12px 16px', background: 'rgba(150,80,255,0.05)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <Link href="#premium-reports" onClick={() => setOpen(false)} style={{ display: 'block', textAlign: 'center', padding: '10px', borderRadius: '8px', background: 'linear-gradient(135deg,rgba(120,60,220,0.8),rgba(180,100,255,0.6))', fontFamily: '"Playfair Display",serif', fontSize: '12px', fontWeight: 700, color: '#EDE8F5', textDecoration: 'none', letterSpacing: '1px' }}>Подробнее →</Link>
-          </div>
-        </div>
-      )}
     </div>
-  )
-}
-
-
-export default function Home() {
-  const [scrolled,setScrolled]=useState(false)
-  const [annual,setAnnual]=useState(false)
-
-  useEffect(()=>{
-    const fn=()=>setScrolled(window.scrollY>50)
-    window.addEventListener('scroll',fn,{passive:true})
-    return()=>window.removeEventListener('scroll',fn)
-  },[])
-
-  const modules=[
-    {icon:'🃏',title:'Таро',subtitle:'Расклад на любой вопрос',description:'Карты откроют что скрыто. Прошлое, настоящее и будущее — три арканы для вашей ситуации.',color:'rgba(201,168,76,1)',glow:'rgba(201,168,76,0.15)',features:['Расклад на 1, 3 или 5 карт','Глубокая интерпретация','Практический совет','78 арканов Rider-Waite'],delay:100},
-    {icon:'⭐',title:'Астрология',subtitle:'Карта небес в день рождения',description:'Планеты не лгут. Натальный чарт, транзиты и прогноз — всё по вашей дате рождения.',color:'rgba(100,180,255,1)',glow:'rgba(100,180,255,0.15)',features:['Натальный чарт','Текущие транзиты','Совместимость знаков','Прогноз на месяц'],delay:200},
-    {icon:'🔢',title:'Нумерология',subtitle:'Числа вашей судьбы',description:'В имени и дате рождения зашифрован ваш путь. Мирра раскроет вибрационный код.',color:'rgba(255,160,80,1)',glow:'rgba(255,160,80,0.15)',features:['Число жизненного пути','Число судьбы по имени','Число души','Прогноз на год'],delay:300},
-    {icon:'💫',title:'Совместимость',subtitle:'Анализ двух людей',description:'Мария и Дмитрий — что связывает вас? Нумерология и астрология пары.',color:'rgba(192,112,255,1)',glow:'rgba(192,112,255,0.15)',features:['Числовая совместимость','Астро-синастрия','Сильные стороны','Зоны роста'],delay:400},
-  ]
-
-  const plans=annual?[
-    {name:'Initiate',tagline:'Для практикующих',price:'£7.99',period:'/ мес',
-      note:'£95.88 / год — экономия £24',
-      features:['Безлимитные консультации','Все 4 модуля','Карта таро дня','Лунный календарь','Гороскоп дня','История консультаций'],
-      cta:'Выбрать Initiate',color:'rgba(130,160,255,1)',badge:'Годовой'},
-    {name:'Oracle Pro',tagline:'Полное погружение',price:'£13.99',period:'/ мес',
-      note:'£167.88 / год — экономия £36',
-      features:['Всё из Initiate','PDF-отчёты по запросу','Human Design полный','Приоритетные ответы','AI-память консультаций','Ранний доступ к новым функциям'],
-      cta:'Выбрать Oracle Pro',featured:true,color:'rgba(200,140,255,1)',badge:'Лучший выбор'},
-  ]:[
-    {name:'Initiate',tagline:'Для практикующих',price:'£9.99',period:'/ мес',
-      features:['Безлимитные консультации','Все 4 модуля','Карта таро дня','Лунный календарь','Гороскоп дня','История консультаций'],
-      cta:'Выбрать Initiate',color:'rgba(130,160,255,1)'},
-    {name:'Oracle Pro',tagline:'Полное погружение',price:'£16.99',period:'/ мес',
-      features:['Всё из Initiate','PDF-отчёты по запросу','Human Design полный','Приоритетные ответы','AI-память консультаций','Ранний доступ к новым функциям'],
-      cta:'Выбрать Oracle Pro',featured:true,color:'rgba(200,140,255,1)',badge:'Лучший выбор'},
-  ]
-
-  const reviews=[
-    {text:'"Расклад таро попал точно в суть. Я сделала то что карты показали — и не пожалела."',name:'Анна К.',city:'Лондон',stars:5,module:'Таро'},
-    {text:'"Нумерологический портрет оказался точнее чем ожидала. Поняла почему решения давались так тяжело."',name:'Виктория М.',city:'Манчестер',stars:5,module:'Нумерология'},
-    {text:'"Проверила совместимость с мужем — всё как будто с нас написано. Показала ему — он тоже был в шоке."',name:'Елена Р.',city:'Бирмингем',stars:5,module:'Совместимость'},
-    {text:'"Астрологический прогноз на месяц сбылся почти полностью. Теперь захожу каждый месяц."',name:'Наталья С.',city:'Эдинбург',stars:5,module:'Астрология'},
-    {text:'"Первый расклад был бесплатным — я не ожидала такого качества. Сразу купила подписку."',name:'Марина Л.',city:'Лидс',stars:5,module:'Таро'},
-    {text:'"Human Design изменил моё отношение к себе. Наконец-то понимаю почему я такая."',name:'Ольга П.',city:'Бристоль',stars:5,module:'Oracle Pro'},
-    {text:'"Заказала Матрицу Судьбы — это было откровение. 35 страниц про меня, точно в точку. Сразу поняла почему в жизни повторяются одни и те же ситуации."',name:'Карина М.',city:'Бирмингем',stars:5,module:'Матрица Судьбы'},
-    {text:'"Совместимость с мужем показала наши слабые места. Мы оба были в шоке насколько точно. Теперь понимаем друг друга гораздо лучше."',name:'Наталья Р.',city:'Лидс',stars:5,module:'Совместимость'},
-    {text:'"Нумерология объяснила почему я всегда чувствую себя не на своём месте в карьере. Число жизненного пути указало совсем другое направление."',name:'Светлана П.',city:'Глазго',stars:5,module:'Нумерология'},
-    {text:'"Годовой прогноз купила скептически. Прошло 3 месяца — всё что было написано про январь и февраль сбылось. Теперь читаю каждый месяц как инструкцию."',name:'Ольга Д.',city:'Эдинбург',stars:5,module:'Годовой Прогноз'},
-  ]
-
-  return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,800;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html{scroll-behavior:smooth}
-        body{background:#080510;color:#EDE8F5;overflow-x:hidden;font-family:'Lora',serif}
-        ::-webkit-scrollbar{width:3px}
-        ::-webkit-scrollbar-track{background:#080510}
-        ::-webkit-scrollbar-thumb{background:rgba(150,100,255,0.3);border-radius:2px}
-        body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes twinkle{0%,100%{opacity:.1}50%{opacity:.6}}
-        @keyframes breathe{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.8;transform:scale(1.03)}}
-        @keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
-        @keyframes pulse{0%,100%{box-shadow:0 8px 32px rgba(140,80,240,0.35),0 0 0 0 rgba(140,80,255,0.4)}50%{box-shadow:0 8px 32px rgba(140,80,240,0.35),0 0 0 10px rgba(140,80,255,0)}}
-        @keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-4px);opacity:1}}
-        @keyframes msgSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-        .shimmer{background:linear-gradient(90deg,#EDE8F5 0%,#C8B8FF 25%,#FFFFFF 50%,#C8B8FF 75%,#EDE8F5 100%);background-size:200% auto;animation:shimmer 4s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-        .primary-btn{display:inline-block;padding:16px 44px;border-radius:8px;font-family:'Playfair Display',serif;font-size:15px;font-weight:800;color:#0C0818;text-decoration:none;letter-spacing:0.5px;background:linear-gradient(135deg,#9060E0,#C080FF,#9060E0);background-size:200% 200%;animation:pulse 3s ease-in-out infinite;transition:transform .3s}
-        .primary-btn:hover{transform:translateY(-3px) scale(1.02)}
-        .ghost-btn{display:inline-block;padding:16px 36px;border:1px solid rgba(255,255,255,0.2);border-radius:8px;font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:rgba(220,210,255,0.75);text-decoration:none;transition:all .3s;background:transparent;cursor:pointer}
-        .ghost-btn:hover{border-color:rgba(180,140,255,0.5);color:rgba(230,220,255,0.95);background:rgba(120,80,200,0.1)}
-        .nav-a{font-family:'Playfair Display',serif;font-size:14px;font-weight:500;color:rgba(210,200,240,0.5);text-decoration:none;transition:color .25s}
-        .nav-a:hover{color:rgba(220,210,255,0.9)}
-        .free-badge{display:inline-block;padding:8px 20px;border-radius:50px;background:linear-gradient(135deg,rgba(100,220,120,0.15),rgba(60,180,80,0.1));border:1px solid rgba(100,220,120,0.35);font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:rgba(120,230,140,0.9);letter-spacing:1px}
-        details summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-        details summary::-webkit-details-marker{display:none}
-        @media(max-width:900px){.modules-grid{grid-template-columns:1fr 1fr!important}.plans-grid{grid-template-columns:1fr!important}.reviews-grid{grid-template-columns:1fr!important}.hnav{display:none!important}.pad{padding-left:20px!important;padding-right:20px!important}}
-        @media(max-width:600px){.modules-grid{grid-template-columns:1fr!important}}
-      `}</style>
-
-      <div style={{position:'fixed',inset:0,zIndex:0,pointerEvents:'none',overflow:'hidden'}}>
-        {Array.from({length:100}).map((_,i)=>(
-          <div key={i} style={{position:'absolute',left:`${(i*41+17)%100}%`,top:`${(i*67+9)%100}%`,width:`${i%9===0?2:1}px`,height:`${i%9===0?2:1}px`,borderRadius:'50%',background:'rgba(230,220,255,0.9)',animation:`twinkle ${2.5+i%6}s ease-in-out infinite`,animationDelay:`${(i*0.22)%5}s`}}/>
-        ))}
-        <div style={{position:'absolute',top:'-20%',left:'10%',width:'80vw',height:'80vw',maxWidth:'900px',borderRadius:'50%',animation:'breathe 8s ease-in-out infinite',background:'radial-gradient(circle,rgba(80,30,160,0.13) 0%,rgba(40,10,80,0.06) 50%,transparent 70%)'}}/>
-      </div>
-
-      <div style={{position:'relative',zIndex:10}}>
-
-        <header style={{position:'fixed',top:0,left:0,right:0,zIndex:100,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'15px 52px',background:scrolled?'rgba(8,5,16,0.97)':'transparent',borderBottom:scrolled?'1px solid rgba(255,255,255,0.06)':'1px solid transparent',transition:'all 0.4s'}}>
-          <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:900,color:'#EDE8F5',letterSpacing:'1px'}}>MYSTIC<span style={{color:'rgba(170,120,255,0.7)',fontSize:'13px',fontWeight:400,verticalAlign:'super',marginLeft:'3px'}}>AI</span></div>
-          <nav className="hnav" style={{display:'flex',gap:'32px'}}>
-            <a href="#chat" className="nav-a">Консультации</a>
-            <a href="#pricing" className="nav-a">Тарифы</a>
-            <a href="#reviews" className="nav-a">Отзывы</a>
-            <a href="#faq" className="nav-a">Вопросы</a>
-            <PremiumDropdown />
-          </nav>
-          <div style={{display:'flex',gap:'12px',alignItems:'center'}}>
-            <Link href="/auth/login" className="nav-a">Войти</Link>
-            <Link href="/auth/register" className="ghost-btn" style={{padding:'9px 22px',fontSize:'13px'}}>Начать</Link>
-          </div>
-        </header>
-
-        <section style={{padding:'130px 52px 60px',textAlign:'center',maxWidth:'900px',margin:'0 auto'}} className="pad">
-          <div style={{marginBottom:'24px',animation:'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s both',opacity:0}}>
-            <span className="free-badge">✦ Первый расклад — бесплатно ✦</span>
-          </div>
-          <h1 className="shimmer" style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(48px,7vw,96px)',fontWeight:900,lineHeight:1.05,marginBottom:'20px',letterSpacing:'-1px',animation:'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.2s both'}}>Тайны раскрываются</h1>
-          <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(26px,3.5vw,48px)',fontWeight:400,color:'rgba(200,180,255,0.65)',marginBottom:'24px',fontStyle:'italic',lineHeight:1.2,animation:'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.3s both',opacity:0}}>тем кто осмеливается спросить</h2>
-          <p style={{fontFamily:'"Lora",serif',fontSize:'18px',lineHeight:1.85,color:'rgba(210,200,240,0.55)',marginBottom:'36px',maxWidth:'540px',margin:'0 auto 36px',animation:'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.4s both',opacity:0}}>
-            AI-консультации по Таро, Астрологии, Нумерологии и Совместимости.<br/>Первый расклад — бесплатно. Без карты. Прямо сейчас.
-          </p>
-          <div style={{display:'flex',gap:'16px',justifyContent:'center',flexWrap:'wrap',marginBottom:'44px',animation:'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.5s both',opacity:0}}>
-            <Link href="/auth/register" className="primary-btn">Получить бесплатный расклад</Link>
-            <a href="#chat" className="ghost-btn">Попробовать демо</a>
-          </div>
-          <div style={{display:'flex',gap:'40px',justifyContent:'center',flexWrap:'wrap',paddingTop:'28px',borderTop:'1px solid rgba(255,255,255,0.06)',animation:'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.6s both',opacity:0}}>
-            {[['2 400+','консультаций'],['4.9 ★','средняя оценка'],['£3','минимальная цена'],['24/7','всегда онлайн']].map(([v,l])=>(
-              <div key={l} style={{textAlign:'center'}}>
-                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'26px',fontWeight:800,color:'#FFFFFF'}}>{v}</div>
-                <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,180,255,0.4)',marginTop:'3px'}}>{l}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── DAILY PREVIEW ── */}
-        <DailyPreview />
-
-        {/* ── PREMIUM REPORTS ── */}
-        <PremiumReportsSection />
-
-        <div id="chat" style={{paddingTop:'40px'}}>
-          <div style={{textAlign:'center',marginBottom:'32px',padding:'0 52px'}} className="pad">
-            <Ornament/>
-            <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(28px,4vw,52px)',fontWeight:900,color:'#FFFFFF',marginTop:'36px',marginBottom:'12px'}}>Попробуйте прямо сейчас</h2>
-            <p style={{fontFamily:'"Lora",serif',fontSize:'16px',fontStyle:'italic',color:'rgba(200,180,255,0.45)'}}>Выберите тип консультации и посмотрите как это работает</p>
-          </div>
-          <ChatSection/>
-        </div>
-
-        <section id="modules" style={{padding:'20px 52px 100px'}} className="pad">
-          <div style={{maxWidth:'1200px',margin:'0 auto'}}>
-            <div style={{textAlign:'center',marginBottom:'52px'}}>
-              <Ornament/>
-              <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(30px,4vw,54px)',fontWeight:900,color:'#FFFFFF',marginTop:'36px',marginBottom:'12px'}}>Выберите консультацию</h2>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'16px',fontStyle:'italic',color:'rgba(200,180,255,0.4)'}}>Первая консультация — бесплатно.</p>
-            </div>
-            <div className="modules-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'20px'}}>
-              {modules.map((m,i)=><ModuleCard key={i} {...m}/>)}
-            </div>
-          </div>
-        </section>
-
-        <section id="pricing" style={{padding:'80px 52px 100px',background:'rgba(255,255,255,0.015)'}} className="pad">
-          <div style={{maxWidth:'1050px',margin:'0 auto'}}>
-            <div style={{textAlign:'center',marginBottom:'20px'}}><Ornament/></div>
-            <div style={{textAlign:'center',margin:'40px 0 44px'}}>
-              <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(30px,4vw,54px)',fontWeight:900,color:'#FFFFFF',marginBottom:'32px'}}>Выберите свой путь</h2>
-              <div style={{display:'inline-flex',alignItems:'center',gap:'14px',padding:'10px 22px',borderRadius:'50px',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)'}}>
-                <span onClick={()=>setAnnual(false)} style={{fontFamily:'"Lora",serif',fontSize:'14px',cursor:'pointer',color:annual?'rgba(200,180,255,0.4)':'rgba(200,180,255,0.9)',transition:'color .3s'}}>Помесячно</span>
-                <div onClick={()=>setAnnual(p=>!p)} style={{width:'44px',height:'24px',borderRadius:'12px',cursor:'pointer',background:annual?'rgba(140,80,255,0.8)':'rgba(255,255,255,0.12)',position:'relative',transition:'background .3s',border:'1px solid rgba(255,255,255,0.12)'}}>
-                  <div style={{position:'absolute',top:'3px',left:annual?'22px':'3px',width:'16px',height:'16px',borderRadius:'50%',background:'#EDE8F5',transition:'left .3s'}}/>
-                </div>
-                <span onClick={()=>setAnnual(true)} style={{fontFamily:'"Lora",serif',fontSize:'14px',cursor:'pointer',color:annual?'rgba(200,180,255,0.9)':'rgba(200,180,255,0.4)',transition:'color .3s'}}>
-                  Годовой <span style={{marginLeft:'8px',padding:'2px 8px',borderRadius:'4px',background:'rgba(120,80,200,0.25)',border:'1px solid rgba(150,100,255,0.3)',fontSize:'11px',color:'rgba(190,160,255,0.85)'}}>до −37%</span>
-                </span>
-              </div>
-            </div>
-            <div className="plans-grid" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'18px'}}>
-              {plans.map((p,i)=><PricingCard key={`${i}-${annual}`} {...p}/>)}
-            </div>
-            <p style={{textAlign:'center',marginTop:'20px',fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(180,160,220,0.3)'}}>Отмена в любой момент · Первая консультация бесплатно · Stripe</p>
-          </div>
-        </section>
-
-        <section id="reviews" style={{padding:'80px 52px 100px'}} className="pad">
-          <div style={{maxWidth:'1200px',margin:'0 auto'}}>
-            <div style={{textAlign:'center',marginBottom:'20px'}}><Ornament/></div>
-            <div style={{textAlign:'center',margin:'40px 0 48px'}}>
-              <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(28px,4vw,52px)',fontWeight:900,color:'#FFFFFF',marginBottom:'12px'}}>Говорят те, кто уже спросил</h2>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'16px',fontStyle:'italic',color:'rgba(200,180,255,0.4)'}}>Реальные отзывы наших пользователей</p>
-            </div>
-            <div className="reviews-grid" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'18px'}}>
-              {reviews.map((r,i)=>(
-                <div key={i} style={{background:'rgba(255,255,255,0.025)',border:'1px solid rgba(255,255,255,0.07)',borderRadius:'14px',padding:'26px'}}>
-                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'14px'}}>
-                    <div style={{color:'rgba(200,160,80,0.9)',fontSize:'18px',letterSpacing:'2px'}}>{'★'.repeat(r.stars)}</div>
-                    <div style={{padding:'3px 10px',borderRadius:'4px',background:'rgba(150,100,255,0.12)',border:'1px solid rgba(150,100,255,0.2)',fontFamily:'"Playfair Display",serif',fontSize:'10px',fontWeight:700,color:'rgba(180,150,255,0.7)',letterSpacing:'1px'}}>{r.module}</div>
-                  </div>
-                  <p style={{fontFamily:'"Lora",serif',fontSize:'15px',fontStyle:'italic',lineHeight:1.8,color:'rgba(215,205,245,0.7)',marginBottom:'16px'}}>{r.text}</p>
-                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:'rgba(200,180,255,0.65)'}}>{r.name}</div>
-                  <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(180,160,220,0.35)',marginTop:'2px'}}>{r.city}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="faq" style={{padding:'80px 52px 100px',background:'rgba(255,255,255,0.015)'}} className="pad">
-          <div style={{maxWidth:'680px',margin:'0 auto'}}>
-            <div style={{textAlign:'center',marginBottom:'20px'}}><Ornament/></div>
-            <div style={{textAlign:'center',margin:'40px 0 48px'}}>
-              <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(28px,4vw,50px)',fontWeight:900,color:'#FFFFFF'}}>Частые вопросы</h2>
-            </div>
-            {([
-              ['Как получить бесплатный расклад?','Зарегистрируйтесь — и сразу получите одну бесплатную консультацию. Карта не нужна.'],
-              ['Как работает AI-консультация?','Вы задаёте вопрос в чате — AI-наставник отвечает мгновенно. Для таро карты выбираются случайно из колоды Rider-Waite.'],
-              ['В чём разница между Initiate и Oracle Pro?','Initiate — безлимитный доступ ко всем 4 модулям. Oracle Pro добавляет PDF-отчёты, полный Human Design, приоритет и AI-память.'],
-              ['Можно ли отменить подписку?','Да, в любой момент через личный кабинет. Доступ сохраняется до конца оплаченного периода.'],
-              ['На каком языке консультации?','Полностью на русском языке.'],
-              ['Как работают премиум отчёты?','Вы вводите имя и дату рождения — AI составляет персональный PDF-отчёт за 5-10 минут. Матрица Судьбы и Натальная карта — 15-18 страниц, Годовой прогноз — 30-40 страниц. Оплата разовая, без подписки.'],
-              ['Насколько точны расчёты?','Все числовые расчёты (возраст, знак зодиака, числа нумерологии, матрица судьбы) выполняются программно — без ошибок AI. Наши эксперты интерпретируют уже готовые точные данные.'],
-              ['Есть ли мобильное приложение?','Сайт полностью оптимизирован для мобильных браузеров и работает как приложение. Нативное приложение для iOS и Android в разработке.'],
-              ['Что если я не удовлетворена результатом?','Напишите нам в поддержку — мы разберём ситуацию. Качество каждого отчёта важно для нас, и мы готовы повторить консультацию если что-то пошло не так.'],
-            ] as [string,string][]).map(([q,a],i)=>(
-              <details key={i} style={{marginBottom:'8px',border:'1px solid rgba(255,255,255,0.07)',borderRadius:'12px',background:'rgba(255,255,255,0.025)',overflow:'hidden'}}>
-                <summary style={{padding:'18px 22px',fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:700,color:'rgba(225,215,255,0.85)'}}>
-                  {q}<span style={{color:'rgba(180,140,255,0.6)',fontSize:'24px',fontWeight:300}}>+</span>
-                </summary>
-                <div style={{padding:'0 22px 18px',paddingTop:'14px',fontFamily:'"Lora",serif',fontSize:'15px',lineHeight:1.85,color:'rgba(200,185,240,0.5)',borderTop:'1px solid rgba(255,255,255,0.04)'}}>{a}</div>
-              </details>
-            ))}
-          </div>
-        </section>
-
-        <section style={{padding:'80px 52px 100px',textAlign:'center'}} className="pad">
-          <div style={{maxWidth:'580px',margin:'0 auto'}}>
-            <div style={{marginBottom:'36px'}}><Ornament/></div>
-            <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(32px,5vw,64px)',fontWeight:900,color:'#FFFFFF',marginBottom:'16px',marginTop:'36px',lineHeight:1.05}}>Карты ждут вас</h2>
-            <p style={{fontFamily:'"Lora",serif',fontSize:'18px',fontStyle:'italic',color:'rgba(200,180,255,0.45)',marginBottom:'36px',lineHeight:1.8}}>Первая консультация бесплатно.<br/>Без карты. Без обязательств.</p>
-            <Link href="/auth/register" className="primary-btn" style={{fontSize:'16px',padding:'18px 52px'}}>Получить бесплатный расклад</Link>
-          </div>
-        </section>
-
-        <footer style={{padding:'28px 52px',borderTop:'1px solid rgba(255,255,255,0.05)',display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:'14px'}} className="pad">
-          <div style={{fontFamily:'"Playfair Display",serif',fontSize:'18px',fontWeight:900,color:'rgba(200,180,255,0.35)',letterSpacing:'1px'}}>MYSTIC AI</div>
-          <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(180,160,220,0.2)'}}>© 2025 · United Kingdom</div>
-          <div style={{display:'flex',gap:'20px'}}>
-            {['Privacy','Terms','Support'].map(l=>(
-              <a key={l} href="#" className="nav-a" style={{fontSize:'12px'}}>{l}</a>
-            ))}
-          </div>
-        </footer>
-      </div>
-    </>
   )
 }
