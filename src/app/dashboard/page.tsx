@@ -259,7 +259,7 @@ export default function Dashboard() {
 
         {/* Header */}
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'36px'}}>
-          <Link href="/" style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:900,color:'rgba(200,180,255,0.4)',textDecoration:'none',letterSpacing:'1px'}}>
+          <Link href="/dashboard" style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:900,color:'rgba(200,180,255,0.4)',textDecoration:'none',letterSpacing:'1px'}}>
             MYSTIC<span style={{fontSize:'12px',fontWeight:400,verticalAlign:'super',marginLeft:'2px',color:'rgba(150,100,255,0.4)'}}>AI</span>
           </Link>
           <div style={{display:'flex',gap:'10px',alignItems:'center'}}>

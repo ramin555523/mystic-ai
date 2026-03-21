@@ -86,135 +86,148 @@ function TypingDots({color}:{color:string}) {
 }
 
 function ChatSection() {
-  const [active, setActive] = React.useState(0)
+  const [active,setActive]=useState(0)
+  const [shown,setShown]=useState<number[]>([0])
+  const [typing,setTyping]=useState(false)
+  const [started,setStarted]=useState(false)
+  const scrollRef=useRef<HTMLDivElement>(null)
+  const touts=useRef<ReturnType<typeof setTimeout>[]>([])
+  const mod=CHAT_MODULES[active]
 
-  type Demo = {
-    module: string; icon: string; color: string; bg: string
-    border: string; expert: string; question: string; paragraphs: string[]
+  const startDemo=(idx:number)=>{
+    touts.current.forEach(clearTimeout)
+    setActive(idx);setShown([0]);setTyping(false);setStarted(true)
+    const demo=CHAT_MODULES[idx].demo
+    let delay=1200
+    demo.forEach((msg,i)=>{
+      if(msg.role==='ai'){
+        touts.current.push(setTimeout(()=>setTyping(true),delay-900))
+        touts.current.push(setTimeout(()=>{setTyping(false);setShown(p=>[...p,i+1])},delay))
+      } else {
+        touts.current.push(setTimeout(()=>setShown(p=>[...p,i+1]),delay))
+      }
+      delay+=msg.role==='ai'?2800:1400
+    })
   }
 
-  const demos: Demo[] = [
-    {
-      module: 'Таро', icon: '🃏', color: 'rgba(201,168,76,1)',
-      bg: 'rgba(201,168,76,0.06)', border: 'rgba(201,168,76,0.2)', expert: 'Селена',
-      question: 'Стоит ли мне менять работу? Я уже год думаю об этом.',
-      paragraphs: [
-        '**Три карты:** Смерть (XIII) · Колесо Фортуны (X) · Звезда (XVII)',
-        'Карты говорят чётко — перемены неизбежны. **Смерть** здесь не об окончании, а о трансформации: старое место уже отслужило своё.',
-        '**Колесо Фортуны** подтверждает — цикл завершается, судьба поворачивается в вашу сторону.',
-        'Ответ карт: **да, время пришло.**',
-      ],
-    },
-    {
-      module: 'Астрология', icon: '⭐', color: 'rgba(100,180,255,1)',
-      bg: 'rgba(100,180,255,0.06)', border: 'rgba(100,180,255,0.2)', expert: 'Орион',
-      question: 'Я Скорпион, 15.11.1990. Что меня ждёт в отношениях в этом году?',
-      paragraphs: [
-        '**Скорпион, 35 лет.** Ваша натальная Венера в Стрельце создаёт жажду свободы в любви.',
-        '**Транзиты 2026:** Юпитер входит в ваш 7-й дом отношений в марте — один из лучших периодов за 12 лет.',
-        'Если одиноки — встреча возможна между **апрелем и августом.** Сатурн требует серьёзности.',
-        'Поверхностное не приживётся. **Ищите глубину.**',
-      ],
-    },
-    {
-      module: 'Нумерология', icon: '🔢', color: 'rgba(255,160,80,1)',
-      bg: 'rgba(255,160,80,0.06)', border: 'rgba(255,160,80,0.2)', expert: 'Мирра',
-      question: 'Меня зовут Анна Петрова, родилась 23.04.1988. Что числа говорят о моей судьбе?',
-      paragraphs: [
-        '**Анна Петрова, 37 лет.** Числа открыты.',
-        '**Число жизненного пути: 9** — вы пришли исцелять и завершать циклы. Девятки — гуманисты и мудрецы.',
-        '**Число судьбы: 6** — предназначение связано с домом и заботой. **Число души: 11** — мастер-число, тонкая интуиция.',
-        '**Личный год 2026: 5** — год перемен, свободы и новых возможностей.',
-      ],
-    },
-    {
-      module: 'Совместимость', icon: '💫', color: 'rgba(192,112,255,1)',
-      bg: 'rgba(192,112,255,0.06)', border: 'rgba(192,112,255,0.2)', expert: 'Сатья',
-      question: 'Мария (12.03.1995) и Дмитрий (28.07.1991). Насколько мы совместимы?',
-      paragraphs: [
-        '**Мария, 31 год — Рыбы. Дмитрий, 34 года — Лев.**',
-        '**Астрологическая совместимость: 78%.** Рыбы и Лев — союз воды и огня.',
-        '**Числа:** путь Марии — 3 (творчество), Дмитрия — 1 (лидерство). Отличное сочетание.',
-        'Главный вызов: давайте друг другу пространство. **Потенциал союза — высокий.**',
-      ],
-    },
-  ]
+  useEffect(()=>()=>{touts.current.forEach(clearTimeout)},[])
+  useEffect(()=>{
+  const el = scrollRef.current
+  if(!el) return
+  const container = el.parentElement
+  if(container) container.scrollTop = container.scrollHeight
+},[shown,typing])
 
-  const d = demos[active]
+  const allMessages=[{role:'ai',text:mod.greeting},...mod.demo]
 
   return (
-    <div style={{maxWidth:'860px',margin:'0 auto',padding:'0 52px'}} className="pad">
-      <div style={{display:'flex',gap:'8px',justifyContent:'center',marginBottom:'28px',flexWrap:'wrap'}}>
-        {demos.map((dm, i) => (
-          <button key={i} onClick={() => setActive(i)} style={{
-            padding:'8px 20px',borderRadius:'24px',cursor:'pointer',
-            fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,
-            border:`1px solid ${i===active ? dm.color.replace('1)','0.5)') : 'rgba(255,255,255,0.1)'}`,
-            background:i===active ? dm.color.replace('1)','0.12)') : 'transparent',
-            color:i===active ? dm.color.replace('1)','0.95)') : 'rgba(200,185,240,0.4)',
-            transition:'all 0.25s',
-          }}>
-            {dm.icon} {dm.module}
-          </button>
+    <section style={{padding:'0 52px 80px',maxWidth:'1100px',margin:'0 auto'}} className="pad">
+      <div style={{display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap',marginBottom:'24px'}}>
+        {CHAT_MODULES.map((m,i)=>(
+          <button key={i} onClick={()=>startDemo(i)} style={{
+            padding:'11px 22px',borderRadius:'50px',cursor:'pointer',
+            background:active===i?m.color.replace('1)','0.18)'):'rgba(255,255,255,0.04)',
+            border:`1px solid ${active===i?m.color.replace('1)','0.5)'):'rgba(255,255,255,0.1)'}`,
+            fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,
+            color:active===i?m.color.replace('1)','0.95)'):'rgba(200,185,240,0.5)',
+            transition:'all 0.3s',
+            boxShadow:active===i?`0 4px 20px ${m.color.replace('1)','0.15)')}`:'none',
+          }}>{m.label}</button>
         ))}
       </div>
-
-      <div style={{background:'rgba(8,5,22,0.95)',border:`1px solid ${d.border}`,borderRadius:'16px',overflow:'hidden',boxShadow:'0 20px 60px rgba(0,0,0,0.4)'}}>
-        <div style={{padding:'14px 20px',display:'flex',alignItems:'center',gap:'12px',borderBottom:'1px solid rgba(255,255,255,0.06)',background:`linear-gradient(135deg,rgba(8,5,22,1),${d.bg})`}}>
-          <div style={{width:'38px',height:'38px',borderRadius:'50%',flexShrink:0,background:d.color.replace('1)','0.15)'),border:`1px solid ${d.color.replace('1)','0.3)')}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px'}}>{d.icon}</div>
+      <div style={{
+        background:'#0C0818',
+        border:`1px solid ${mod.color.replace('1)','0.2)')}`,
+        borderRadius:'20px',overflow:'hidden',
+        boxShadow:`0 20px 60px ${mod.color.replace('1)','0.08)')}`,
+        transition:'border-color 0.4s,box-shadow 0.4s',
+      }}>
+        <div style={{
+          padding:'16px 22px',background:'rgba(255,255,255,0.03)',
+          borderBottom:'1px solid rgba(255,255,255,0.06)',
+          display:'flex',alignItems:'center',gap:'12px',
+        }}>
+          <div style={{
+            width:'44px',height:'44px',borderRadius:'50%',flexShrink:0,
+            background:`linear-gradient(135deg,rgba(40,20,80,1),${mod.color.replace('1)','0.6)')})`,
+            display:'flex',alignItems:'center',justifyContent:'center',fontSize:'20px',
+            boxShadow:`0 0 16px ${mod.color.replace('1)','0.3)')}`,
+          }}>{mod.label.split(' ')[0]}</div>
           <div>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'15px',fontWeight:700,color:'#EDE8F5'}}>{d.expert}</div>
-            <div style={{display:'flex',alignItems:'center',gap:'5px',fontFamily:'"Lora",serif',fontSize:'12px',color:'rgba(100,220,100,0.8)'}}>
-              <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#64DC64',display:'inline-block'}}/>
-              онлайн · {d.module}
+            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:700,color:'#F0EBF8'}}>{mod.consultant}</div>
+            <div style={{fontSize:'12px',display:'flex',alignItems:'center',gap:'5px',color:'rgba(120,220,120,0.85)'}}>
+              <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#78DC78',display:'inline-block'}}/>
+              онлайн · {mod.role}
             </div>
           </div>
-          <div style={{marginLeft:'auto',padding:'4px 12px',borderRadius:'20px',background:d.color.replace('1)','0.1)'),border:`1px solid ${d.color.replace('1)','0.2)')}`,fontFamily:'"Lora",serif',fontSize:'11px',fontStyle:'italic',color:d.color.replace('1)','0.7)')}}>
-            пример диалога
+          <div style={{marginLeft:'auto'}}>
+            <div style={{
+              padding:'4px 12px',borderRadius:'4px',
+              background:mod.color.replace('1)','0.12)'),
+              border:`1px solid ${mod.color.replace('1)','0.25)')}`,
+              fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,
+              color:mod.color.replace('1)','0.85)'),letterSpacing:'1px',
+            }}>{mod.label.split(' ').slice(1).join(' ').toUpperCase()}</div>
           </div>
         </div>
-
-        <div style={{padding:'24px 20px',display:'flex',flexDirection:'column',gap:'16px'}}>
-          <div style={{display:'flex',justifyContent:'flex-end'}}>
-            <div style={{maxWidth:'70%',padding:'12px 16px',borderRadius:'18px 18px 4px 18px',background:`linear-gradient(135deg,${d.color.replace('1)','0.7)')},${d.color.replace('1)','0.45)')})`,fontFamily:'"Lora",serif',fontSize:'14px',lineHeight:1.7,color:'rgba(255,250,235,0.95)'}}>
-              {d.question}
+        <div style={{height:'300px',overflowY:'auto',padding:'20px 18px',display:'flex',flexDirection:'column',gap:'12px'}}>
+          {allMessages.map((msg,i)=>shown.includes(i)&&(
+            <div key={`${active}-${i}`} style={{
+              display:'flex',justifyContent:msg.role==='user'?'flex-end':'flex-start',
+              animation:'msgSlide 0.4s cubic-bezier(0.16,1,0.3,1)',
+            }}>
+              <div style={{
+                maxWidth:'78%',padding:'12px 16px',
+                borderRadius:msg.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',
+                background:msg.role==='user'
+                  ?`linear-gradient(135deg,${mod.color.replace('1)','0.7)')},${mod.color.replace('1)','0.45)')})`
+                  :'rgba(255,255,255,0.07)',
+                border:msg.role==='user'?'none':'1px solid rgba(255,255,255,0.08)',
+                fontFamily:'"Lora",serif',fontSize:'14.5px',lineHeight:1.7,
+                color:msg.role==='user'?'rgba(255,250,235,0.95)':'rgba(230,222,255,0.82)',
+              }}>{msg.text}</div>
             </div>
-          </div>
-          <div style={{display:'flex',gap:'10px',alignItems:'flex-start'}}>
-            <div style={{width:'32px',height:'32px',borderRadius:'50%',flexShrink:0,background:d.color.replace('1)','0.15)'),border:`1px solid ${d.color.replace('1)','0.3)')}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px'}}>{d.icon}</div>
-            <div style={{maxWidth:'80%',padding:'14px 18px',borderRadius:'4px 18px 18px 18px',background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.08)'}}>
-              {d.paragraphs.map((para, i) => (
-                <p key={i} style={{fontFamily:'"Lora",serif',fontSize:'14px',lineHeight:1.8,color:'rgba(230,222,255,0.88)',marginBottom:i<d.paragraphs.length-1?'10px':'0'}}>
-                  {para.split(/(\*\*[^*]+\*\*)/).map((part, j) =>
-                    part.startsWith('**') && part.endsWith('**')
-                      ? <strong key={j} style={{color:'#FFFFFF',fontFamily:'"Playfair Display",serif',fontWeight:800}}>{part.slice(2,-2)}</strong>
-                      : <span key={j}>{part}</span>
-                  )}
-                </p>
-              ))}
+          ))}
+          {typing&&(
+            <div style={{display:'flex',animation:'msgSlide 0.3s ease'}}>
+              <div style={{padding:'12px 16px',borderRadius:'16px 16px 16px 4px',background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.08)'}}>
+                <TypingDots color={mod.color.replace('1)','0.7)')}/>
+              </div>
             </div>
-          </div>
+          )}
+          <div ref={scrollRef}/>
         </div>
-
-        <div style={{padding:'16px 20px',borderTop:'1px solid rgba(255,255,255,0.06)',background:'rgba(255,255,255,0.02)',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'16px',flexWrap:'wrap'}}>
-          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.4)'}}>
-            Первые 5 сообщений — бесплатно
-          </p>
+        <div style={{padding:'14px 18px',borderTop:'1px solid rgba(255,255,255,0.06)',background:'rgba(255,255,255,0.02)',display:'flex',gap:'10px',alignItems:'center'}}>
+          {!started?(
+            <button onClick={()=>startDemo(active)} style={{
+              flex:1,padding:'12px 18px',borderRadius:'10px',cursor:'pointer',
+              background:mod.color.replace('1)','0.1)'),border:`1px solid ${mod.color.replace('1)','0.3)')}`,
+              fontFamily:'"Lora",serif',fontSize:'14px',fontStyle:'italic',
+              color:mod.color.replace('1)','0.7)'),textAlign:'left',transition:'all 0.3s',
+            }}>Нажмите чтобы увидеть демонстрацию...</button>
+          ):(
+            <div style={{
+              flex:1,padding:'12px 16px',borderRadius:'10px',
+              background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.09)',
+              fontFamily:'"Lora",serif',fontSize:'14px',fontStyle:'italic',
+              color:'rgba(200,190,240,0.35)',
+            }}>Задайте ваш вопрос {mod.consultant.toLowerCase()}у...</div>
+          )}
           <Link href="/auth/register" style={{
-            padding:'11px 28px',borderRadius:'8px',textDecoration:'none',
-            background:`linear-gradient(135deg,${d.color.replace('1)','0.9)')},${d.color.replace('1)','0.65)')})`,
+            padding:'12px 24px',borderRadius:'10px',flexShrink:0,
+            background:`linear-gradient(135deg,${mod.color.replace('1)','0.85)')},${mod.color.replace('1)','0.6)')})`,
             fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,
-            color:'#0C0818',letterSpacing:'0.5px',
-            boxShadow:`0 4px 24px ${d.color.replace('1)','0.45)')}, 0 0 40px ${d.color.replace('1)','0.15)')}`,
-          }}>
-            ✦ Начать бесплатно
-          </Link>
+            color:'#0C0818',textDecoration:'none',whiteSpace:'nowrap',
+            boxShadow:`0 4px 16px ${mod.color.replace('1)','0.25)')}`,
+          }}>Начать →</Link>
         </div>
       </div>
-    </div>
+      <p style={{textAlign:'center',marginTop:'12px',fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(180,160,240,0.25)'}}>
+        Демонстрация · Зарегистрируйтесь для полного доступа · Первая консультация бесплатно
+      </p>
+    </section>
   )
 }
-
 
 function ModuleCard({icon,title,subtitle,description,price,color,glow,features,delay}:{
   icon:string;title:string;subtitle:string;description:string
@@ -713,7 +726,7 @@ export default function Home() {
             <a href="#chat" className="ghost-btn">Попробовать демо</a>
           </div>
           <div style={{display:'flex',gap:'40px',justifyContent:'center',flexWrap:'wrap',paddingTop:'28px',borderTop:'1px solid rgba(255,255,255,0.06)',animation:'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.6s both',opacity:0}}>
-            {[['2 400+','консультаций'],['4.9 ★','средняя оценка'],['5','бесплатных сообщений'],['24/7','всегда онлайн']].map(([v,l])=>(
+            {[['2 400+','консультаций'],['4.9 ★','средняя оценка'],['£3','минимальная цена'],['24/7','всегда онлайн']].map(([v,l])=>(
               <div key={l} style={{textAlign:'center'}}>
                 <div style={{fontFamily:'"Playfair Display",serif',fontSize:'26px',fontWeight:800,color:'#FFFFFF'}}>{v}</div>
                 <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,180,255,0.4)',marginTop:'3px'}}>{l}</div>
@@ -835,8 +848,13 @@ export default function Home() {
           <div style={{fontFamily:'"Playfair Display",serif',fontSize:'18px',fontWeight:900,color:'rgba(200,180,255,0.35)',letterSpacing:'1px'}}>MYSTIC AI</div>
           <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(180,160,220,0.2)'}}>© 2025 · United Kingdom</div>
           <div style={{display:'flex',gap:'20px'}}>
-            {['Privacy','Terms','Support'].map(l=>(
-              <a key={l} href="#" className="nav-a" style={{fontSize:'12px'}}>{l}</a>
+            {[
+              {label:'Privacy',href:'/privacy'},
+              {label:'Terms',href:'/terms'},
+              {label:'Refund',href:'/refund'},
+              {label:'Support',href:'mailto:support@mystic-ai.app'},
+            ].map(l=>(
+              <a key={l.label} href={l.href} className="nav-a" style={{fontSize:'12px'}}>{l.label}</a>
             ))}
           </div>
         </footer>
