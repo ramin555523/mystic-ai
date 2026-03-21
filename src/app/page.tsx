@@ -86,129 +86,148 @@ function TypingDots({color}:{color:string}) {
 }
 
 function ChatSection() {
-  const [active, setActive] = React.useState(0)
+  const [active,setActive]=useState(0)
+  const [shown,setShown]=useState<number[]>([0])
+  const [typing,setTyping]=useState(false)
+  const [started,setStarted]=useState(false)
+  const scrollRef=useRef<HTMLDivElement>(null)
+  const touts=useRef<ReturnType<typeof setTimeout>[]>([])
+  const mod=CHAT_MODULES[active]
 
-  type Demo = {
-    module: string; icon: string; color: string; bg: string
-    border: string; expert: string; question: string; paragraphs: string[]
+  const startDemo=(idx:number)=>{
+    touts.current.forEach(clearTimeout)
+    setActive(idx);setShown([0]);setTyping(false);setStarted(true)
+    const demo=CHAT_MODULES[idx].demo
+    let delay=1200
+    demo.forEach((msg,i)=>{
+      if(msg.role==='ai'){
+        touts.current.push(setTimeout(()=>setTyping(true),delay-900))
+        touts.current.push(setTimeout(()=>{setTyping(false);setShown(p=>[...p,i+1])},delay))
+      } else {
+        touts.current.push(setTimeout(()=>setShown(p=>[...p,i+1]),delay))
+      }
+      delay+=msg.role==='ai'?2800:1400
+    })
   }
 
-  const demos: Demo[] = [
-    {
-      module: 'Таро', icon: '🃏', color: 'rgba(201,168,76,1)',
-      bg: 'rgba(201,168,76,0.06)', border: 'rgba(201,168,76,0.2)', expert: 'Селена',
-      question: 'Стоит ли мне менять работу? Я уже год думаю об этом.',
-      paragraphs: [
-        '**Три карты:** Смерть (XIII) · Колесо Фортуны (X) · Звезда (XVII)',
-        'Карты говорят чётко — перемены неизбежны. **Смерть** здесь не об окончании, а о трансформации: старое место уже отслужило своё.',
-        '**Колесо Фортуны** подтверждает — цикл завершается, судьба поворачивается в вашу сторону. **Звезда** в позиции исхода — знак надежды и нового пути.',
-        'Ответ карт: **да, время пришло.**',
-      ],
-    },
-    {
-      module: 'Астрология', icon: '⭐', color: 'rgba(100,180,255,1)',
-      bg: 'rgba(100,180,255,0.06)', border: 'rgba(100,180,255,0.2)', expert: 'Орион',
-      question: 'Я Скорпион, 15.11.1990. Что меня ждёт в отношениях в этом году?',
-      paragraphs: [
-        '**Скорпион, 35 лет.** Ваша натальная Венера в Стрельце создаёт жажду свободы в любви.',
-        '**Транзиты 2026:** Юпитер входит в ваш 7-й дом отношений в марте — один из лучших периодов для новых союзов за 12 лет.',
-        'Если одиноки — встреча возможна между **апрелем и августом.** Если в отношениях — союз выйдет на новый уровень.',
-        'Сатурн требует серьёзности: поверхностное не приживётся. **Ищите глубину.**',
-      ],
-    },
-    {
-      module: 'Нумерология', icon: '🔢', color: 'rgba(255,160,80,1)',
-      bg: 'rgba(255,160,80,0.06)', border: 'rgba(255,160,80,0.2)', expert: 'Мирра',
-      question: 'Меня зовут Анна Петрова, родилась 23.04.1988. Что числа говорят о моей судьбе?',
-      paragraphs: [
-        '**Анна Петрова, 37 лет.** Числа открыты.',
-        '**Число жизненного пути: 9** — вы пришли исцелять и завершать циклы. Девятки — гуманисты и мудрецы.',
-        '**Число судьбы: 6** — предназначение связано с домом и заботой. **Число души: 11** — мастер-число, тонкая интуиция.',
-        '**Личный год 2026: 5** — год перемен, свободы и новых возможностей.',
-      ],
-    },
-    {
-      module: 'Совместимость', icon: '💫', color: 'rgba(192,112,255,1)',
-      bg: 'rgba(192,112,255,0.06)', border: 'rgba(192,112,255,0.2)', expert: 'Сатья',
-      question: 'Мария (12.03.1995) и Дмитрий (28.07.1991). Насколько мы совместимы?',
-      paragraphs: [
-        '**Мария, 31 год — Рыбы. Дмитрий, 34 года — Лев.**',
-        '**Астрологическая совместимость: 78%.** Рыбы и Лев — союз воды и огня. Дмитрий даёт Марии защиту, Мария дарит Дмитрию глубину.',
-        '**Числа:** путь Марии — 3 (творчество), Дмитрия — 1 (лидерство). Лидер и вдохновитель — отличное сочетание.',
-        'Главный вызов: давайте друг другу пространство. **Потенциал союза — высокий.**',
-      ],
-    },
-  ]
+  useEffect(()=>()=>{touts.current.forEach(clearTimeout)},[])
+  useEffect(()=>{
+  const el = scrollRef.current
+  if(!el) return
+  const container = el.parentElement
+  if(container) container.scrollTop = container.scrollHeight
+},[shown,typing])
 
-  const d = demos[active]
+  const allMessages=[{role:'ai',text:mod.greeting},...mod.demo]
 
   return (
-    <div style={{maxWidth:'860px',margin:'0 auto',padding:'0 52px'}} className="pad">
-      <div style={{display:'flex',gap:'8px',justifyContent:'center',marginBottom:'28px',flexWrap:'wrap'}}>
-        {demos.map((dm, i) => (
-          <button key={i} onClick={() => setActive(i)} style={{
-            padding:'8px 20px',borderRadius:'24px',cursor:'pointer',
-            fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,
-            border:`1px solid ${i===active ? dm.color.replace('1)','0.5)') : 'rgba(255,255,255,0.1)'}`,
-            background:i===active ? dm.color.replace('1)','0.12)') : 'transparent',
-            color:i===active ? dm.color.replace('1)','0.95)') : 'rgba(200,185,240,0.4)',
-            transition:'all 0.25s',
-          }}>
-            {dm.icon} {dm.module}
-          </button>
+    <section style={{padding:'0 52px 80px',maxWidth:'1100px',margin:'0 auto'}} className="pad">
+      <div style={{display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap',marginBottom:'24px'}}>
+        {CHAT_MODULES.map((m,i)=>(
+          <button key={i} onClick={()=>startDemo(i)} style={{
+            padding:'11px 22px',borderRadius:'50px',cursor:'pointer',
+            background:active===i?m.color.replace('1)','0.18)'):'rgba(255,255,255,0.04)',
+            border:`1px solid ${active===i?m.color.replace('1)','0.5)'):'rgba(255,255,255,0.1)'}`,
+            fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,
+            color:active===i?m.color.replace('1)','0.95)'):'rgba(200,185,240,0.5)',
+            transition:'all 0.3s',
+            boxShadow:active===i?`0 4px 20px ${m.color.replace('1)','0.15)')}`:'none',
+          }}>{m.label}</button>
         ))}
       </div>
-
-      <div style={{background:'rgba(8,5,22,0.95)',border:`1px solid ${d.border}`,borderRadius:'16px',overflow:'hidden',boxShadow:'0 20px 60px rgba(0,0,0,0.4)'}}>
-        <div style={{padding:'14px 20px',display:'flex',alignItems:'center',gap:'12px',borderBottom:'1px solid rgba(255,255,255,0.06)',background:`linear-gradient(135deg,rgba(8,5,22,1),${d.bg})`}}>
-          <div style={{width:'38px',height:'38px',borderRadius:'50%',flexShrink:0,background:d.color.replace('1)','0.15)'),border:`1px solid ${d.color.replace('1)','0.3)')}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px'}}>{d.icon}</div>
+      <div style={{
+        background:'#0C0818',
+        border:`1px solid ${mod.color.replace('1)','0.2)')}`,
+        borderRadius:'20px',overflow:'hidden',
+        boxShadow:`0 20px 60px ${mod.color.replace('1)','0.08)')}`,
+        transition:'border-color 0.4s,box-shadow 0.4s',
+      }}>
+        <div style={{
+          padding:'16px 22px',background:'rgba(255,255,255,0.03)',
+          borderBottom:'1px solid rgba(255,255,255,0.06)',
+          display:'flex',alignItems:'center',gap:'12px',
+        }}>
+          <div style={{
+            width:'44px',height:'44px',borderRadius:'50%',flexShrink:0,
+            background:`linear-gradient(135deg,rgba(40,20,80,1),${mod.color.replace('1)','0.6)')})`,
+            display:'flex',alignItems:'center',justifyContent:'center',fontSize:'20px',
+            boxShadow:`0 0 16px ${mod.color.replace('1)','0.3)')}`,
+          }}>{mod.label.split(' ')[0]}</div>
           <div>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'15px',fontWeight:700,color:'#EDE8F5'}}>{d.expert}</div>
-            <div style={{display:'flex',alignItems:'center',gap:'5px',fontFamily:'"Lora",serif',fontSize:'12px',color:'rgba(100,220,100,0.8)'}}>
-              <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#64DC64',display:'inline-block'}}/>
-              онлайн · {d.module}
+            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:700,color:'#F0EBF8'}}>{mod.consultant}</div>
+            <div style={{fontSize:'12px',display:'flex',alignItems:'center',gap:'5px',color:'rgba(120,220,120,0.85)'}}>
+              <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#78DC78',display:'inline-block'}}/>
+              онлайн · {mod.role}
             </div>
           </div>
-          <div style={{marginLeft:'auto',padding:'4px 12px',borderRadius:'20px',background:d.color.replace('1)','0.1)'),border:`1px solid ${d.color.replace('1)','0.2)')}`,fontFamily:'"Lora",serif',fontSize:'11px',fontStyle:'italic',color:d.color.replace('1)','0.7)')}}>
-            пример диалога
+          <div style={{marginLeft:'auto'}}>
+            <div style={{
+              padding:'4px 12px',borderRadius:'4px',
+              background:mod.color.replace('1)','0.12)'),
+              border:`1px solid ${mod.color.replace('1)','0.25)')}`,
+              fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,
+              color:mod.color.replace('1)','0.85)'),letterSpacing:'1px',
+            }}>{mod.label.split(' ').slice(1).join(' ').toUpperCase()}</div>
           </div>
         </div>
-
-        <div style={{padding:'24px 20px',display:'flex',flexDirection:'column',gap:'16px'}}>
-          <div style={{display:'flex',justifyContent:'flex-end'}}>
-            <div style={{maxWidth:'70%',padding:'12px 16px',borderRadius:'18px 18px 4px 18px',background:`linear-gradient(135deg,${d.color.replace('1)','0.7)')},${d.color.replace('1)','0.45)')})`,fontFamily:'"Lora",serif',fontSize:'14px',lineHeight:1.7,color:'rgba(255,250,235,0.95)'}}>
-              {d.question}
+        <div style={{height:'300px',overflowY:'auto',padding:'20px 18px',display:'flex',flexDirection:'column',gap:'12px'}}>
+          {allMessages.map((msg,i)=>shown.includes(i)&&(
+            <div key={`${active}-${i}`} style={{
+              display:'flex',justifyContent:msg.role==='user'?'flex-end':'flex-start',
+              animation:'msgSlide 0.4s cubic-bezier(0.16,1,0.3,1)',
+            }}>
+              <div style={{
+                maxWidth:'78%',padding:'12px 16px',
+                borderRadius:msg.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',
+                background:msg.role==='user'
+                  ?`linear-gradient(135deg,${mod.color.replace('1)','0.7)')},${mod.color.replace('1)','0.45)')})`
+                  :'rgba(255,255,255,0.07)',
+                border:msg.role==='user'?'none':'1px solid rgba(255,255,255,0.08)',
+                fontFamily:'"Lora",serif',fontSize:'14.5px',lineHeight:1.7,
+                color:msg.role==='user'?'rgba(255,250,235,0.95)':'rgba(230,222,255,0.82)',
+              }}>{msg.text}</div>
             </div>
-          </div>
-          <div style={{display:'flex',gap:'10px',alignItems:'flex-start'}}>
-            <div style={{width:'32px',height:'32px',borderRadius:'50%',flexShrink:0,background:d.color.replace('1)','0.15)'),border:`1px solid ${d.color.replace('1)','0.3)')}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px'}}>{d.icon}</div>
-            <div style={{maxWidth:'80%',padding:'14px 18px',borderRadius:'4px 18px 18px 18px',background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.08)'}}>
-              {d.paragraphs.map((para, i) => (
-                <p key={i} style={{fontFamily:'"Lora",serif',fontSize:'14px',lineHeight:1.8,color:'rgba(230,222,255,0.88)',marginBottom:i<d.paragraphs.length-1?'10px':'0'}}>
-                  {para.split(/(\*\*[^*]+\*\*)/).map((part, j) =>
-                    part.startsWith('**') && part.endsWith('**')
-                      ? <strong key={j} style={{color:'#FFFFFF',fontFamily:'"Playfair Display",serif',fontWeight:800}}>{part.slice(2,-2)}</strong>
-                      : <span key={j}>{part}</span>
-                  )}
-                </p>
-              ))}
+          ))}
+          {typing&&(
+            <div style={{display:'flex',animation:'msgSlide 0.3s ease'}}>
+              <div style={{padding:'12px 16px',borderRadius:'16px 16px 16px 4px',background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.08)'}}>
+                <TypingDots color={mod.color.replace('1)','0.7)')}/>
+              </div>
             </div>
-          </div>
+          )}
+          <div ref={scrollRef}/>
         </div>
-
-        <div style={{padding:'16px 20px',borderTop:'1px solid rgba(255,255,255,0.06)',background:'rgba(255,255,255,0.02)',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'16px',flexWrap:'wrap'}}>
-          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.4)'}}>
-            Первые 5 сообщений — бесплатно
-          </p>
-          <Link href="/auth/register" style={{padding:'10px 24px',borderRadius:'8px',textDecoration:'none',background:`linear-gradient(135deg,${d.color.replace('1)','0.85)')},${d.color.replace('1)','0.6)')})`,fontFamily:'"Playfair Display",serif',fontSize:'12px',fontWeight:700,color:'#0C0818',letterSpacing:'0.5px'}}>
-            Начать бесплатно
-          </Link>
+        <div style={{padding:'14px 18px',borderTop:'1px solid rgba(255,255,255,0.06)',background:'rgba(255,255,255,0.02)',display:'flex',gap:'10px',alignItems:'center'}}>
+          {!started?(
+            <button onClick={()=>startDemo(active)} style={{
+              flex:1,padding:'12px 18px',borderRadius:'10px',cursor:'pointer',
+              background:mod.color.replace('1)','0.1)'),border:`1px solid ${mod.color.replace('1)','0.3)')}`,
+              fontFamily:'"Lora",serif',fontSize:'14px',fontStyle:'italic',
+              color:mod.color.replace('1)','0.7)'),textAlign:'left',transition:'all 0.3s',
+            }}>Нажмите чтобы увидеть демонстрацию...</button>
+          ):(
+            <div style={{
+              flex:1,padding:'12px 16px',borderRadius:'10px',
+              background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.09)',
+              fontFamily:'"Lora",serif',fontSize:'14px',fontStyle:'italic',
+              color:'rgba(200,190,240,0.35)',
+            }}>Задайте ваш вопрос {mod.consultant.toLowerCase()}у...</div>
+          )}
+          <Link href="/auth/register" style={{
+            padding:'12px 24px',borderRadius:'10px',flexShrink:0,
+            background:`linear-gradient(135deg,${mod.color.replace('1)','0.85)')},${mod.color.replace('1)','0.6)')})`,
+            fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,
+            color:'#0C0818',textDecoration:'none',whiteSpace:'nowrap',
+            boxShadow:`0 4px 16px ${mod.color.replace('1)','0.25)')}`,
+          }}>Начать →</Link>
         </div>
       </div>
-    </div>
+      <p style={{textAlign:'center',marginTop:'12px',fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(180,160,240,0.25)'}}>
+        Демонстрация · Зарегистрируйтесь для полного доступа · Первая консультация бесплатно
+      </p>
+    </section>
   )
 }
-
 
 function ModuleCard({icon,title,subtitle,description,price,color,glow,features,delay}:{
   icon:string;title:string;subtitle:string;description:string
@@ -294,11 +313,10 @@ function DailyPreview() {
   const today = new Date()
   const cardIdx = (today.getDate() + today.getMonth() * 31) % LANDING_CARDS.length
   const card = LANDING_CARDS[cardIdx]
-  const [zodiac, setZodiac] = useState('')
-  const [showZodiac, setShowZodiac] = useState(false)
-
+  const [zodiac, setZodiac] = React.useState('')
+  const ZODIAC_SIGNS = ['Овен','Телец','Близнецы','Рак','Лев','Дева','Весы','Скорпион','Стрелец','Козерог','Водолей','Рыбы']
   const HOROSCOPES: Record<string,string> = {
-    'Овен':'Марс energizes вас. Смелые шаги в карьере принесут плоды сегодня.',
+    'Овен':'Марс даёт энергию. Смелые шаги в карьере принесут плоды сегодня.',
     'Телец':'Венера подчёркивает творчество. Финансовая интуиция обострена.',
     'Близнецы':'Меркурий обостряет ум. Один разговор сегодня изменит многое.',
     'Рак':'Луна приносит ясность. Прислушайтесь к интуиции в важных делах.',
@@ -310,16 +328,6 @@ function DailyPreview() {
     'Козерог':'Сатурн вознаграждает дисциплину. Признание в карьере возможно.',
     'Водолей':'Уран зажигает оригинальность. Нестандартный подход победит.',
     'Рыбы':'Нептун углубляет интуицию. Духовные занятия благословлены.',
-  }
-  const ZODIAC_SIGNS = ['Овен','Телец','Близнецы','Рак','Лев','Дева','Весы','Скорпион','Стрелец','Козерог','Водолей','Рыбы']
-
-  const cardStyle = {
-    borderRadius:'16px' as const,
-    padding:'26px 22px',
-    position:'relative' as const,
-    overflow:'hidden' as const,
-    display:'flex' as const,
-    flexDirection:'column' as const,
   }
 
   return (
@@ -334,91 +342,81 @@ function DailyPreview() {
         </p>
       </div>
 
-      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'16px',marginBottom:'16px'}}>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'16px'}}>
 
         {/* Card of day */}
-        <div style={{...cardStyle,background:'rgba(201,168,76,0.04)',border:'1px solid rgba(201,168,76,0.15)'}}>
+        <div style={{background:'rgba(201,168,76,0.04)',border:'1px solid rgba(201,168,76,0.18)',borderRadius:'16px',padding:'28px 24px',position:'relative',overflow:'hidden',display:'flex',flexDirection:'column',minHeight:'340px'}}>
           <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(201,168,76,0.6),transparent)'}}/>
           <div style={{marginBottom:'16px'}}>
             <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Карта Таро Дня</div>
             <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(201,168,76,0.55)'}}>Послание на сегодня</div>
           </div>
-          <div style={{textAlign:'center',marginBottom:'14px'}}>
-            <div style={{fontSize:'36px',marginBottom:'8px'}}>🃏</div>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:900,color:'#C9A84C'}}>{card.name}</div>
-            <div style={{fontFamily:'"Lora",serif',fontSize:'11px',fontStyle:'italic',color:'rgba(201,168,76,0.45)',marginTop:'2px'}}>Аркан {card.number}</div>
+          <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'6px',marginBottom:'16px'}}>
+            <div style={{fontSize:'32px'}}>🃏</div>
+            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:900,color:'#C9A84C',textAlign:'center'}}>{card.name}</div>
+            <div style={{fontFamily:'"Lora",serif',fontSize:'11px',fontStyle:'italic',color:'rgba(201,168,76,0.45)'}}>Аркан {card.number}</div>
+            <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',textAlign:'center',marginTop:'6px'}}>{card.meaning}</p>
           </div>
-          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',flex:1,marginBottom:'16px'}}>{card.meaning}</p>
-          <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(201,168,76,0.1)',border:'1px solid rgba(201,168,76,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(201,168,76,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
+          <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(201,168,76,0.1)',border:'1px solid rgba(201,168,76,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(201,168,76,0.85)',textDecoration:'none',letterSpacing:'1px'}}>
             Получить доступ →
           </Link>
         </div>
 
         {/* Moon */}
-        <div style={{...cardStyle,background:'rgba(150,100,255,0.04)',border:'1px solid rgba(150,100,255,0.15)'}}>
+        <div style={{background:'rgba(150,100,255,0.04)',border:'1px solid rgba(150,100,255,0.18)',borderRadius:'16px',padding:'28px 24px',position:'relative',overflow:'hidden',display:'flex',flexDirection:'column',minHeight:'340px'}}>
           <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(150,100,255,0.6),transparent)'}}/>
           <div style={{marginBottom:'16px'}}>
             <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Лунный Календарь</div>
             <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(150,100,255,0.55)'}}>Фаза луны и энергия дня</div>
           </div>
-          <div style={{textAlign:'center',marginBottom:'14px'}}>
-            <div style={{fontSize:'42px',marginBottom:'8px'}}>{moon.icon}</div>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'18px',fontWeight:900,color:'#EDE8F5'}}>{moon.name}</div>
+          <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'6px',marginBottom:'16px'}}>
+            <div style={{fontSize:'40px'}}>{moon.icon}</div>
+            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:900,color:'#EDE8F5',textAlign:'center'}}>{moon.name}</div>
+            <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',textAlign:'center',marginTop:'6px'}}>{moon.tip}</p>
           </div>
-          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',flex:1,marginBottom:'16px'}}>{moon.tip}</p>
-          <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(150,100,255,0.1)',border:'1px solid rgba(150,100,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(180,140,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
+          <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(150,100,255,0.1)',border:'1px solid rgba(150,100,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(180,140,255,0.85)',textDecoration:'none',letterSpacing:'1px'}}>
             Получить доступ →
           </Link>
         </div>
 
         {/* Horoscope */}
-        <div style={{...cardStyle,background:'rgba(100,180,255,0.04)',border:'1px solid rgba(100,180,255,0.15)'}}>
+        <div style={{background:'rgba(100,180,255,0.04)',border:'1px solid rgba(100,180,255,0.18)',borderRadius:'16px',padding:'28px 24px',position:'relative',overflow:'hidden',display:'flex',flexDirection:'column',minHeight:'340px'}}>
           <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(100,180,255,0.6),transparent)'}}/>
           <div style={{marginBottom:'16px'}}>
             <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Гороскоп Дня</div>
             <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(100,180,255,0.55)'}}>Персональный астропрогноз</div>
           </div>
-          {!showZodiac ? (
-            <div style={{flex:1,display:'flex',flexDirection:'column',justifyContent:'center'}}>
-              <div style={{textAlign:'center',marginBottom:'16px'}}>
-                <div style={{fontSize:'36px',marginBottom:'8px'}}>⭐</div>
-                <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.55)',lineHeight:1.7}}>
-                  Ежедневный прогноз по вашему знаку зодиака — карьера, любовь, энергия дня
-                </p>
-              </div>
-              <button onClick={()=>setShowZodiac(true)} style={{width:'100%',padding:'10px',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.8)',cursor:'pointer',letterSpacing:'1px',marginBottom:'8px'}}>
-                Попробовать →
-              </button>
-            </div>
-          ) : !zodiac ? (
-            <div style={{flex:1,display:'flex',flexDirection:'column',justifyContent:'space-between'}}>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.5)',marginBottom:'12px',lineHeight:1.6}}>Выберите ваш знак зодиака:</p>
-              <select value={zodiac} onChange={e=>setZodiac(e.target.value)} style={{width:'100%',padding:'11px 14px',background:'rgba(255,255,255,0.06)',border:'1px solid rgba(100,180,255,0.25)',borderRadius:'8px',color:'#EDE8F5',fontFamily:'"Lora",serif',fontSize:'14px',outline:'none',cursor:'pointer',marginBottom:'16px',flex:1}}>
-                <option value="">— Выбрать знак —</option>
-                {ZODIAC_SIGNS.map(s=><option key={s} value={s} style={{background:'#1A0F3A'}}>{s}</option>)}
-              </select>
-              <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
-                Полный прогноз →
-              </Link>
-            </div>
-          ) : (
-            <div style={{flex:1,display:'flex',flexDirection:'column'}}>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'10px'}}>
-                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:700,color:'#64B4FF'}}>{zodiac}</div>
-                <button onClick={()=>setZodiac('')} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(200,185,240,0.3)',fontSize:'18px'}}>×</button>
-              </div>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',flex:1,marginBottom:'12px'}}>{HOROSCOPES[zodiac]}</p>
-              <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
-                Полный прогноз →
-              </Link>
-            </div>
-          )}
+          <div style={{flex:1,display:'flex',flexDirection:'column',justifyContent:'center',gap:'10px',marginBottom:'16px'}}>
+            {!zodiac ? (
+              <>
+                <div style={{textAlign:'center'}}>
+                  <div style={{fontSize:'32px',marginBottom:'8px'}}>⭐</div>
+                  <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.5)',lineHeight:1.65}}>
+                    Ежедневный прогноз по вашему знаку зодиака — карьера, любовь, энергия дня
+                  </p>
+                </div>
+                <select value={zodiac} onChange={e=>setZodiac(e.target.value)} style={{width:'100%',padding:'9px 12px',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(100,180,255,0.25)',borderRadius:'8px',color:'#EDE8F5',fontFamily:'"Lora",serif',fontSize:'14px',outline:'none',cursor:'pointer'}}>
+                  <option value="">— Выбрать знак —</option>
+                  {ZODIAC_SIGNS.map(s=><option key={s} value={s} style={{background:'#1A0F3A'}}>{s}</option>)}
+                </select>
+              </>
+            ) : (
+              <>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:700,color:'#64B4FF'}}>{zodiac}</div>
+                  <button onClick={()=>setZodiac('')} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(200,185,240,0.3)',fontSize:'20px',lineHeight:1}}>×</button>
+                </div>
+                <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.65)',fontStyle:'italic'}}>{HOROSCOPES[zodiac]}</p>
+              </>
+            )}
+          </div>
+          <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.85)',textDecoration:'none',letterSpacing:'1px'}}>
+            {zodiac ? 'Полный прогноз →' : 'Попробовать →'}
+          </Link>
         </div>
+
       </div>
-
-      {/* Premium reports mini row */}
-
-      <p style={{textAlign:'center',fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(180,160,220,0.25)'}}>
+      <p style={{textAlign:'center',marginTop:'14px',fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(180,160,220,0.25)'}}>
         ✦ Карта дня · Лунный календарь · Гороскоп — доступны каждый день с подпиской Initiate от £9.99/мес
       </p>
     </section>
