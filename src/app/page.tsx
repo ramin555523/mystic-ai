@@ -416,6 +416,63 @@ function DailyPreview() {
   )
 }
 
+
+function PremiumReportsSection() {
+  return (
+    <section style={{padding:'60px 52px 80px'}} className="pad">
+      <div style={{maxWidth:'1100px',margin:'0 auto'}}>
+        <div style={{textAlign:'center',marginBottom:'20px'}}><Ornament/></div>
+        <div style={{textAlign:'center',margin:'32px 0 40px'}}>
+          <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(26px,4vw,48px)',fontWeight:900,color:'#FFFFFF',marginBottom:'12px'}}>Премиум Отчёты</h2>
+          <p style={{fontFamily:'"Lora",serif',fontSize:'16px',fontStyle:'italic',color:'rgba(200,180,255,0.45)',maxWidth:'500px',margin:'0 auto'}}>
+            Персональные PDF-отчёты на 15-40 страниц. Готовы за 5-10 минут.
+          </p>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'18px'}}>
+          {([
+            {icon:'🔯',name:'Матрица Судьбы',price:'£34.99',pages:'15-18 стр',color:'rgba(192,112,255,1)',
+              desc:'Кармические задачи, таланты и предназначение через числовой код даты рождения.',
+              includes:['Центральное число и главная миссия','Кармические задачи этой жизни','Таланты и природные ресурсы','Любовь, финансы и карьера','Аффирмации и практики']},
+            {icon:'⭐',name:'Натальная Карта',price:'£34.99',pages:'15-18 стр',color:'rgba(100,180,255,1)',
+              desc:'Полный астрологический портрет: характер, эмоции, любовь, карьера и кармическая миссия.',
+              includes:['Солнечный знак — ядро личности','Лунный знак — эмоции','Венера и Марс — любовь','Юпитер и Сатурн — удача','Кармические узлы и миссия']},
+            {icon:'🌟',name:'Годовой Прогноз',price:'£89.99',pages:'30-40 стр',color:'rgba(255,160,60,1)',featured:true,
+              desc:'Астрология + нумерология + матрица судьбы. Прогноз по каждому месяцу года.',
+              includes:['Общая энергия года','Любовь и отношения','Карьера и финансы','Прогноз по 12 месяцам','Матрица судьбы в этом году','Духовные практики']},
+          ] as any[]).map((r,i)=>(
+            <div key={i} style={{
+              background:(r.featured as boolean)?'rgba(255,140,40,0.05)':'rgba(255,255,255,0.025)',
+              border:`1px solid ${(r.color as string).replace('1)','0.2)')}`,
+              borderRadius:'16px',padding:'24px 20px',position:'relative',overflow:'hidden',
+              transition:'all 0.35s',
+            }}
+            onMouseEnter={e=>{const el=e.currentTarget as HTMLDivElement;el.style.transform='translateY(-6px)';el.style.boxShadow=`0 20px 50px ${(r.color as string).replace('1)','0.12)')}`}}
+            onMouseLeave={e=>{const el=e.currentTarget as HTMLDivElement;el.style.transform='translateY(0)';el.style.boxShadow='none'}}>
+              {(r.featured as boolean)&&<div style={{position:'absolute',top:'12px',right:'12px',padding:'3px 10px',borderRadius:'4px',background:'rgba(255,160,40,0.15)',border:'1px solid rgba(255,160,40,0.35)',fontFamily:'"Playfair Display",serif',fontSize:'10px',fontWeight:700,color:'rgba(255,180,80,0.9)',letterSpacing:'1px'}}>PREMIUM</div>}
+              <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:`linear-gradient(90deg,transparent,${(r.color as string).replace('1)','0.7)')},transparent)`}}/>
+              <div style={{fontSize:'36px',marginBottom:'12px'}}>{r.icon as string}</div>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'19px',fontWeight:800,color:'#EDE8F5',marginBottom:'5px'}}>{r.name as string}</div>
+              <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:(r.color as string).replace('1)','0.7)'),marginBottom:'10px'}}>{r.pages as string} · 5-10 мин</div>
+              <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.65,color:'rgba(200,185,240,0.55)',marginBottom:'14px'}}>{r.desc as string}</p>
+              <div style={{marginBottom:'16px'}}>
+                {(r.includes as string[]).map((item,j)=>(
+                  <div key={j} style={{display:'flex',gap:'8px',padding:'3px 0',fontFamily:'"Lora",serif',fontSize:'12px',color:'rgba(200,185,240,0.5)'}}>
+                    <span style={{color:(r.color as string).replace('1)','0.6)'),fontSize:'7px',flexShrink:0,marginTop:'4px'}}>◆</span>{item}
+                  </div>
+                ))}
+              </div>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',paddingTop:'14px',borderTop:'1px solid rgba(255,255,255,0.06)'}}>
+                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:900,color:'#FFFFFF'}}>{r.price as string}</div>
+                <Link href="/auth/register" style={{padding:'8px 16px',borderRadius:'8px',background:(r.color as string).replace('1)','0.15)'),border:`1px solid ${(r.color as string).replace('1)','0.3)')}`,fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:(r.color as string).replace('1)','0.9)'),textDecoration:'none',letterSpacing:'0.5px'}}>Заказать →</Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function Home() {
   const [scrolled,setScrolled]=useState(false)
   const [annual,setAnnual]=useState(false)
@@ -538,6 +595,12 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ── DAILY PREVIEW ── */}
+        <DailyPreview />
+
+        {/* ── PREMIUM REPORTS ── */}
+        <PremiumReportsSection />
+
         <div id="chat" style={{paddingTop:'40px'}}>
           <div style={{textAlign:'center',marginBottom:'32px',padding:'0 52px'}} className="pad">
             <Ornament/>
@@ -552,7 +615,7 @@ export default function Home() {
             <div style={{textAlign:'center',marginBottom:'52px'}}>
               <Ornament/>
               <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(30px,4vw,54px)',fontWeight:900,color:'#FFFFFF',marginTop:'36px',marginBottom:'12px'}}>Выберите консультацию</h2>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'16px',fontStyle:'italic',color:'rgba(200,180,255,0.4)'}}>Первая — бесплатно. Остальные от £3.</p>
+              <p style={{fontFamily:'"Lora",serif',fontSize:'16px',fontStyle:'italic',color:'rgba(200,180,255,0.4)'}}>Первая консультация — бесплатно.</p>
             </div>
             <div className="modules-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'20px'}}>
               {modules.map((m,i)=><ModuleCard key={i} {...m}/>)}
@@ -599,57 +662,6 @@ export default function Home() {
                   <p style={{fontFamily:'"Lora",serif',fontSize:'15px',fontStyle:'italic',lineHeight:1.8,color:'rgba(215,205,245,0.7)',marginBottom:'16px'}}>{r.text}</p>
                   <div style={{fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:'rgba(200,180,255,0.65)'}}>{r.name}</div>
                   <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(180,160,220,0.35)',marginTop:'2px'}}>{r.city}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── PREMIUM REPORTS ── */}
-        <section style={{padding:'80px 52px 100px',background:'rgba(255,255,255,0.012)'}} className="pad">
-          <div style={{maxWidth:'1100px',margin:'0 auto'}}>
-            <div style={{textAlign:'center',marginBottom:'20px'}}><Ornament/></div>
-            <div style={{textAlign:'center',margin:'40px 0 48px'}}>
-              <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(28px,4vw,52px)',fontWeight:900,color:'#FFFFFF',marginBottom:'14px'}}>Премиум Отчёты</h2>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'17px',fontStyle:'italic',color:'rgba(200,180,255,0.45)',maxWidth:'520px',margin:'0 auto'}}>
-                Персональные PDF-отчёты на 15-40 страниц. Готовы за 5-10 минут.
-              </p>
-            </div>
-            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'20px'}}>
-              {([
-                {icon:'🔯',name:'Матрица Судьбы',price:'£34.99',pages:'15-18 стр',color:'rgba(192,112,255,1)',
-                  desc:'Кармические задачи, таланты и предназначение через числовой код даты рождения.',
-                  includes:['Центральное число и главная миссия','Кармические задачи этой жизни','Таланты и природные ресурсы','Любовь, финансы, карьера','Аффирмации и практики']},
-                {icon:'⭐',name:'Натальная Карта',price:'£34.99',pages:'15-18 стр',color:'rgba(100,180,255,1)',
-                  desc:'Полный астрологический портрет: характер, эмоции, любовь, карьера и кармическая миссия.',
-                  includes:['Солнечный знак — ядро личности','Лунный знак — эмоции','Венера и Марс — любовь','Юпитер и Сатурн — удача','Кармические узлы и миссия']},
-                {icon:'🌟',name:'Годовой Прогноз',price:'£89.99',pages:'30-40 стр',color:'rgba(255,160,60,1)',featured:true,
-                  desc:'Ультра-премиум: астрология + нумерология + матрица судьбы. Прогноз по каждому месяцу.',
-                  includes:['Общая энергия года','Любовь и отношения','Карьера и финансы','Прогноз по 12 месяцам','Матрица судьбы в этом году','Духовные практики']},
-              ] as any[]).map((r,i)=>(
-                <div key={i} style={{
-                  background:(r.featured as boolean)?'rgba(255,140,40,0.05)':'rgba(255,255,255,0.025)',
-                  border:`1px solid ${(r.color as string).replace('1)','0.2)')}`,
-                  borderRadius:'16px',padding:'28px 22px',position:'relative',overflow:'hidden',
-                  transition:'all 0.35s',
-                }}>
-                  {(r.featured as boolean)&&<div style={{position:'absolute',top:'12px',right:'12px',padding:'3px 10px',borderRadius:'4px',background:'rgba(255,160,40,0.15)',border:'1px solid rgba(255,160,40,0.35)',fontFamily:'"Playfair Display",serif',fontSize:'10px',fontWeight:700,color:'rgba(255,180,80,0.9)',letterSpacing:'1px'}}>PREMIUM</div>}
-                  <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:`linear-gradient(90deg,transparent,${(r.color as string).replace('1)','0.7)')},transparent)`}}/>
-                  <div style={{fontSize:'40px',marginBottom:'14px'}}>{r.icon as string}</div>
-                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:800,color:'#EDE8F5',marginBottom:'6px'}}>{r.name as string}</div>
-                  <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:(r.color as string).replace('1)','0.7)'),marginBottom:'12px'}}>{r.pages as string} · 5-10 мин</div>
-                  <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(200,185,240,0.55)',marginBottom:'16px'}}>{r.desc as string}</p>
-                  <div style={{marginBottom:'20px'}}>
-                    {(r.includes as string[]).map((item,j)=>(
-                      <div key={j} style={{display:'flex',gap:'8px',padding:'4px 0',fontFamily:'"Lora",serif',fontSize:'12px',color:'rgba(200,185,240,0.5)'}}>
-                        <span style={{color:(r.color as string).replace('1)','0.6)'),fontSize:'7px',flexShrink:0,marginTop:'4px'}}>◆</span>{item}
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',paddingTop:'14px',borderTop:'1px solid rgba(255,255,255,0.06)'}}>
-                    <div style={{fontFamily:'"Playfair Display",serif',fontSize:'24px',fontWeight:900,color:'#FFFFFF'}}>{r.price as string}</div>
-                    <Link href="/auth/register" style={{padding:'9px 18px',borderRadius:'8px',background:(r.color as string).replace('1)','0.15)'),border:`1px solid ${(r.color as string).replace('1)','0.3)')}`,fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:(r.color as string).replace('1)','0.9)'),textDecoration:'none',letterSpacing:'0.5px'}}>Заказать →</Link>
-                  </div>
                 </div>
               ))}
             </div>
