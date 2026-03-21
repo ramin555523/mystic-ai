@@ -313,20 +313,31 @@ function DailyPreview() {
   const cardIdx = (today.getDate() + today.getMonth() * 31) % LANDING_CARDS.length
   const card = LANDING_CARDS[cardIdx]
   const [zodiac, setZodiac] = useState('')
+  const [showZodiac, setShowZodiac] = useState(false)
 
   const HOROSCOPES: Record<string,string> = {
-    'Овен': 'Марс energizes вас. Смелые шаги в карьере принесут плоды сегодня.',
-    'Телец': 'Венера подчёркивает творчество. Финансовая интуиция обострена.',
-    'Близнецы': 'Меркурий обостряет ум. Один разговор сегодня изменит многое.',
-    'Рак': 'Луна приносит ясность. Прислушайтесь к интуиции в важных делах.',
-    'Лев': 'Солнце освещает вашу магнетичность. Шагайте вперёд уверенно.',
-    'Дева': 'Точность и анализ — ваши союзники. Решение давней проблемы близко.',
-    'Весы': 'Венера гармонизирует отношения. Переговоры в вашу пользу.',
-    'Скорпион': 'Плутон углубляет восприятие. Скрытое выходит на поверхность.',
-    'Стрелец': 'Юпитер расширяет горизонты. Новая возможность стучится в дверь.',
-    'Козерог': 'Сатурн вознаграждает дисциплину. Признание в карьере возможно.',
-    'Водолей': 'Уран зажигает оригинальность. Нестандартный подход победит.',
-    'Рыбы': 'Нептун углубляет интуицию. Духовные занятия благословлены.',
+    'Овен':'Марс energizes вас. Смелые шаги в карьере принесут плоды сегодня.',
+    'Телец':'Венера подчёркивает творчество. Финансовая интуиция обострена.',
+    'Близнецы':'Меркурий обостряет ум. Один разговор сегодня изменит многое.',
+    'Рак':'Луна приносит ясность. Прислушайтесь к интуиции в важных делах.',
+    'Лев':'Солнце освещает вашу магнетичность. Шагайте вперёд уверенно.',
+    'Дева':'Точность и анализ — ваши союзники. Решение давней проблемы близко.',
+    'Весы':'Венера гармонизирует отношения. Переговоры в вашу пользу.',
+    'Скорпион':'Плутон углубляет восприятие. Скрытое выходит на поверхность.',
+    'Стрелец':'Юпитер расширяет горизонты. Новая возможность стучится в дверь.',
+    'Козерог':'Сатурн вознаграждает дисциплину. Признание в карьере возможно.',
+    'Водолей':'Уран зажигает оригинальность. Нестандартный подход победит.',
+    'Рыбы':'Нептун углубляет интуицию. Духовные занятия благословлены.',
+  }
+  const ZODIAC_SIGNS = ['Овен','Телец','Близнецы','Рак','Лев','Дева','Весы','Скорпион','Стрелец','Козерог','Водолей','Рыбы']
+
+  const cardStyle = {
+    borderRadius:'16px' as const,
+    padding:'26px 22px',
+    position:'relative' as const,
+    overflow:'hidden' as const,
+    display:'flex' as const,
+    flexDirection:'column' as const,
   }
 
   return (
@@ -337,15 +348,16 @@ function DailyPreview() {
           Что говорят звёзды сегодня
         </h2>
         <p style={{fontFamily:'"Lora",serif',fontSize:'15px',fontStyle:'italic',color:'rgba(200,180,255,0.4)'}}>
-          Эти функции доступны подписчикам каждый день
+          Доступны подписчикам каждый день
         </p>
       </div>
+
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'16px',marginBottom:'16px'}}>
 
         {/* Card of day */}
-        <div style={{background:'rgba(201,168,76,0.04)',border:'1px solid rgba(201,168,76,0.15)',borderRadius:'16px',padding:'28px 24px',position:'relative',overflow:'hidden'}}>
+        <div style={{...cardStyle,background:'rgba(201,168,76,0.04)',border:'1px solid rgba(201,168,76,0.15)'}}>
           <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(201,168,76,0.6),transparent)'}}/>
-          <div style={{marginBottom:'14px'}}>
+          <div style={{marginBottom:'16px'}}>
             <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Карта Таро Дня</div>
             <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(201,168,76,0.55)'}}>Послание на сегодня</div>
           </div>
@@ -354,16 +366,16 @@ function DailyPreview() {
             <div style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:900,color:'#C9A84C'}}>{card.name}</div>
             <div style={{fontFamily:'"Lora",serif',fontSize:'11px',fontStyle:'italic',color:'rgba(201,168,76,0.45)',marginTop:'2px'}}>Аркан {card.number}</div>
           </div>
-          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',marginBottom:'16px'}}>{card.meaning}</p>
-          <Link href="/auth/register" style={{display:'block',padding:'9px',textAlign:'center',borderRadius:'8px',background:'rgba(201,168,76,0.1)',border:'1px solid rgba(201,168,76,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(201,168,76,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
+          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',flex:1,marginBottom:'16px'}}>{card.meaning}</p>
+          <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(201,168,76,0.1)',border:'1px solid rgba(201,168,76,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(201,168,76,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
             Получить доступ →
           </Link>
         </div>
 
         {/* Moon */}
-        <div style={{background:'rgba(150,100,255,0.04)',border:'1px solid rgba(150,100,255,0.15)',borderRadius:'16px',padding:'28px 24px',position:'relative',overflow:'hidden'}}>
+        <div style={{...cardStyle,background:'rgba(150,100,255,0.04)',border:'1px solid rgba(150,100,255,0.15)'}}>
           <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(150,100,255,0.6),transparent)'}}/>
-          <div style={{marginBottom:'14px'}}>
+          <div style={{marginBottom:'16px'}}>
             <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Лунный Календарь</div>
             <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(150,100,255,0.55)'}}>Фаза луны и энергия дня</div>
           </div>
@@ -371,46 +383,85 @@ function DailyPreview() {
             <div style={{fontSize:'42px',marginBottom:'8px'}}>{moon.icon}</div>
             <div style={{fontFamily:'"Playfair Display",serif',fontSize:'18px',fontWeight:900,color:'#EDE8F5'}}>{moon.name}</div>
           </div>
-          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',marginBottom:'16px'}}>{moon.tip}</p>
-          <Link href="/auth/register" style={{display:'block',padding:'9px',textAlign:'center',borderRadius:'8px',background:'rgba(150,100,255,0.1)',border:'1px solid rgba(150,100,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(180,140,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
+          <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',flex:1,marginBottom:'16px'}}>{moon.tip}</p>
+          <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(150,100,255,0.1)',border:'1px solid rgba(150,100,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(180,140,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
             Получить доступ →
           </Link>
         </div>
 
         {/* Horoscope */}
-        <div style={{background:'rgba(100,180,255,0.04)',border:'1px solid rgba(100,180,255,0.15)',borderRadius:'16px',padding:'28px 24px',position:'relative',overflow:'hidden'}}>
+        <div style={{...cardStyle,background:'rgba(100,180,255,0.04)',border:'1px solid rgba(100,180,255,0.15)'}}>
           <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(100,180,255,0.6),transparent)'}}/>
-          <div style={{marginBottom:'14px'}}>
+          <div style={{marginBottom:'16px'}}>
             <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:900,color:'#EDE8F5',marginBottom:'3px'}}>Гороскоп Дня</div>
             <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(100,180,255,0.55)'}}>Персональный астропрогноз</div>
           </div>
-          {!zodiac ? (
-            <div>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.4)',marginBottom:'12px',lineHeight:1.6}}>Выберите ваш знак зодиака чтобы увидеть прогноз на сегодня</p>
-              <select value={zodiac} onChange={e=>setZodiac(e.target.value)} style={{width:'100%',padding:'10px 14px',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'8px',color:'#EDE8F5',fontFamily:'"Lora",serif',fontSize:'14px',outline:'none',cursor:'pointer',marginBottom:'12px'}}>
+          {!showZodiac ? (
+            <div style={{flex:1,display:'flex',flexDirection:'column',justifyContent:'center'}}>
+              <div style={{textAlign:'center',marginBottom:'16px'}}>
+                <div style={{fontSize:'36px',marginBottom:'8px'}}>⭐</div>
+                <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.55)',lineHeight:1.7}}>
+                  Ежедневный прогноз по вашему знаку зодиака — карьера, любовь, энергия дня
+                </p>
+              </div>
+              <button onClick={()=>setShowZodiac(true)} style={{width:'100%',padding:'10px',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.8)',cursor:'pointer',letterSpacing:'1px',marginBottom:'8px'}}>
+                Попробовать →
+              </button>
+            </div>
+          ) : !zodiac ? (
+            <div style={{flex:1,display:'flex',flexDirection:'column',justifyContent:'space-between'}}>
+              <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.5)',marginBottom:'12px',lineHeight:1.6}}>Выберите ваш знак зодиака:</p>
+              <select value={zodiac} onChange={e=>setZodiac(e.target.value)} style={{width:'100%',padding:'11px 14px',background:'rgba(255,255,255,0.06)',border:'1px solid rgba(100,180,255,0.25)',borderRadius:'8px',color:'#EDE8F5',fontFamily:'"Lora",serif',fontSize:'14px',outline:'none',cursor:'pointer',marginBottom:'16px',flex:1}}>
                 <option value="">— Выбрать знак —</option>
-                {['Овен','Телец','Близнецы','Рак','Лев','Дева','Весы','Скорпион','Стрелец','Козерог','Водолей','Рыбы'].map(s=><option key={s} value={s} style={{background:'#1A0F3A'}}>{s}</option>)}
+                {ZODIAC_SIGNS.map(s=><option key={s} value={s} style={{background:'#1A0F3A'}}>{s}</option>)}
               </select>
-              <Link href="/auth/register" style={{display:'block',padding:'9px',textAlign:'center',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
+              <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
                 Полный прогноз →
               </Link>
             </div>
           ) : (
-            <div>
+            <div style={{flex:1,display:'flex',flexDirection:'column'}}>
               <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'10px'}}>
                 <div style={{fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:700,color:'#64B4FF'}}>{zodiac}</div>
                 <button onClick={()=>setZodiac('')} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(200,185,240,0.3)',fontSize:'18px'}}>×</button>
               </div>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',marginBottom:'12px'}}>{HOROSCOPES[zodiac]}</p>
-              <Link href="/auth/register" style={{display:'block',padding:'9px',textAlign:'center',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
+              <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.7,color:'rgba(220,210,245,0.6)',fontStyle:'italic',flex:1,marginBottom:'12px'}}>{HOROSCOPES[zodiac]}</p>
+              <Link href="/auth/register" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'rgba(100,180,255,0.1)',border:'1px solid rgba(100,180,255,0.25)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(100,180,255,0.8)',textDecoration:'none',letterSpacing:'1px'}}>
                 Полный прогноз →
               </Link>
             </div>
           )}
         </div>
       </div>
+
+      {/* Premium reports mini row */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'12px',marginBottom:'12px'}}>
+        {[
+          {icon:'🔯',name:'Матрица Судьбы',price:'£34.99',color:'rgba(192,112,255,1)',desc:'Кармические задачи, таланты и предназначение'},
+          {icon:'⭐',name:'Натальная Карта',price:'£34.99',color:'rgba(100,180,255,1)',desc:'Полный астрологический портрет личности'},
+          {icon:'🌟',name:'Годовой Прогноз',price:'£89.99',color:'rgba(255,160,60,1)',desc:'Прогноз по всем сферам жизни на год'},
+        ].map((r,i)=>(
+          <Link key={i} href="/auth/register" style={{
+            textDecoration:'none',display:'flex',alignItems:'center',gap:'14px',
+            padding:'16px 18px',borderRadius:'12px',
+            background:'rgba(255,255,255,0.02)',
+            border:`1px solid ${r.color.replace('1)','0.15)')}`,
+            transition:'all 0.3s',
+          }}
+          onMouseEnter={e=>{const el=e.currentTarget as HTMLAnchorElement;el.style.background=r.color.replace('1)','0.06)');el.style.borderColor=r.color.replace('1)','0.3)')}}
+          onMouseLeave={e=>{const el=e.currentTarget as HTMLAnchorElement;el.style.background='rgba(255,255,255,0.02)';el.style.borderColor=r.color.replace('1)','0.15)')}}>
+            <div style={{fontSize:'28px',flexShrink:0}}>{r.icon}</div>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:'#EDE8F5',marginBottom:'2px'}}>{r.name}</div>
+              <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(200,185,240,0.4)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{r.desc}</div>
+            </div>
+            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:800,color:r.color.replace('1)','0.9)'),flexShrink:0}}>{r.price}</div>
+          </Link>
+        ))}
+      </div>
+
       <p style={{textAlign:'center',fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(180,160,220,0.25)'}}>
-        ✦ Карта дня · Лунный календарь · Гороскоп — доступны каждый день с подпиской Initiate от £9.99/мес
+        ✦ Карта дня · Лунный календарь · Гороскоп — с подпиской от £9.99/мес · Премиум отчёты — разовая оплата
       </p>
     </section>
   )
