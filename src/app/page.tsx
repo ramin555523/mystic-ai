@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 import Link from 'next/link'
 import { useEffect, useState, useRef } from 'react'
 
@@ -524,6 +525,98 @@ function PremiumReportsSection() {
   )
 }
 
+
+function PremiumDropdown() {
+  const [open, setOpen] = React.useState(false)
+  const ref = React.useRef<HTMLDivElement>(null)
+
+  React.useEffect(() => {
+    const fn = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('mousedown', fn)
+    return () => document.removeEventListener('mousedown', fn)
+  }, [])
+
+  const items = [
+    { icon: '🔯', name: 'Матрица Судьбы', desc: 'Кармические задачи и предназначение', price: '£34.99', color: 'rgba(192,112,255,1)', href: '/reports' },
+    { icon: '⭐', name: 'Натальная Карта', desc: 'Полный астрологический портрет', price: '£34.99', color: 'rgba(100,180,255,1)', href: '/reports' },
+    { icon: '🌟', name: 'Годовой Прогноз', desc: 'Прогноз по всем сферам на год', price: '£89.99', color: 'rgba(255,160,60,1)', href: '/reports' },
+  ]
+
+  return (
+    <div ref={ref} style={{ position: 'relative' }}>
+      <button
+        onClick={() => setOpen(p => !p)}
+        style={{
+          background: open ? 'rgba(150,80,255,0.15)' : 'rgba(150,80,255,0.08)',
+          border: `1px solid ${open ? 'rgba(150,80,255,0.5)' : 'rgba(150,80,255,0.2)'}`,
+          borderRadius: '6px', padding: '6px 14px', cursor: 'pointer',
+          fontFamily: '"Playfair Display",serif', fontSize: '13px', fontWeight: 700,
+          color: 'rgba(200,160,255,0.9)', letterSpacing: '0.3px',
+          display: 'flex', alignItems: 'center', gap: '6px',
+          transition: 'all 0.2s',
+        }}
+      >
+        ✦ Премиум отчёты
+        <span style={{ fontSize: '10px', transition: 'transform 0.2s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>▾</span>
+      </button>
+
+      {open && (
+        <div style={{
+          position: 'absolute', top: 'calc(100% + 10px)', left: '50%',
+          transform: 'translateX(-50%)',
+          width: '340px',
+          background: 'rgba(10,6,24,0.98)',
+          border: '1px solid rgba(150,80,255,0.2)',
+          borderRadius: '14px', overflow: 'hidden',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(150,80,255,0.1)',
+          zIndex: 200,
+          animation: 'fadeUp 0.2s ease',
+        }}>
+          <div style={{ padding: '14px 16px 10px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '11px', letterSpacing: '3px', color: 'rgba(180,140,255,0.5)', textTransform: 'uppercase' }}>
+              Персональные PDF-отчёты
+            </div>
+          </div>
+          {items.map((item, i) => (
+            <Link key={i} href={item.href} onClick={() => setOpen(false)} style={{
+              display: 'flex', alignItems: 'center', gap: '14px',
+              padding: '14px 16px',
+              borderBottom: i < items.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+              textDecoration: 'none',
+              transition: 'background 0.2s',
+              background: 'transparent',
+            }}
+            onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.04)'}
+            onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'}
+            >
+              <div style={{
+                width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0,
+                background: item.color.replace('1)', '0.12)'),
+                border: `1px solid ${item.color.replace('1)', '0.25)')}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '20px',
+              }}>{item.icon}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '14px', fontWeight: 700, color: '#EDE8F5', marginBottom: '2px' }}>{item.name}</div>
+                <div style={{ fontFamily: '"Lora",serif', fontSize: '12px', fontStyle: 'italic', color: 'rgba(200,185,240,0.4)' }}>{item.desc}</div>
+              </div>
+              <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '14px', fontWeight: 800, color: item.color.replace('1)', '0.9)'), flexShrink: 0 }}>{item.price}</div>
+            </Link>
+          ))}
+          <div style={{ padding: '12px 16px', background: 'rgba(150,80,255,0.05)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <Link href="/reports" onClick={() => setOpen(false)} style={{
+              display: 'block', textAlign: 'center', padding: '10px',
+              borderRadius: '8px', background: 'linear-gradient(135deg,rgba(120,60,220,0.8),rgba(180,100,255,0.6))',
+              fontFamily: '"Playfair Display",serif', fontSize: '12px', fontWeight: 700,
+              color: '#EDE8F5', textDecoration: 'none', letterSpacing: '1px',
+            }}>Смотреть все отчёты →</Link>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function Home() {
   const [scrolled,setScrolled]=useState(false)
   const [annual,setAnnual]=useState(false)
@@ -616,6 +709,7 @@ export default function Home() {
             <a href="#pricing" className="nav-a">Тарифы</a>
             <a href="#reviews" className="nav-a">Отзывы</a>
             <a href="#faq" className="nav-a">Вопросы</a>
+            <PremiumDropdown />
           </nav>
           <div style={{display:'flex',gap:'12px',alignItems:'center'}}>
             <Link href="/auth/login" className="nav-a">Войти</Link>
