@@ -436,33 +436,9 @@ function DailyPreview() {
       </div>
 
       {/* Premium reports mini row */}
-      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'12px',marginBottom:'12px'}}>
-        {[
-          {icon:'🔯',name:'Матрица Судьбы',price:'£34.99',color:'rgba(192,112,255,1)',desc:'Кармические задачи, таланты и предназначение'},
-          {icon:'⭐',name:'Натальная Карта',price:'£34.99',color:'rgba(100,180,255,1)',desc:'Полный астрологический портрет личности'},
-          {icon:'🌟',name:'Годовой Прогноз',price:'£89.99',color:'rgba(255,160,60,1)',desc:'Прогноз по всем сферам жизни на год'},
-        ].map((r,i)=>(
-          <Link key={i} href="/auth/register" style={{
-            textDecoration:'none',display:'flex',alignItems:'center',gap:'14px',
-            padding:'16px 18px',borderRadius:'12px',
-            background:'rgba(255,255,255,0.02)',
-            border:`1px solid ${r.color.replace('1)','0.15)')}`,
-            transition:'all 0.3s',
-          }}
-          onMouseEnter={e=>{const el=e.currentTarget as HTMLAnchorElement;el.style.background=r.color.replace('1)','0.06)');el.style.borderColor=r.color.replace('1)','0.3)')}}
-          onMouseLeave={e=>{const el=e.currentTarget as HTMLAnchorElement;el.style.background='rgba(255,255,255,0.02)';el.style.borderColor=r.color.replace('1)','0.15)')}}>
-            <div style={{fontSize:'28px',flexShrink:0}}>{r.icon}</div>
-            <div style={{flex:1,minWidth:0}}>
-              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:'#EDE8F5',marginBottom:'2px'}}>{r.name}</div>
-              <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(200,185,240,0.4)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{r.desc}</div>
-            </div>
-            <div style={{fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:800,color:r.color.replace('1)','0.9)'),flexShrink:0}}>{r.price}</div>
-          </Link>
-        ))}
-      </div>
 
       <p style={{textAlign:'center',fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(180,160,220,0.25)'}}>
-        ✦ Карта дня · Лунный календарь · Гороскоп — с подпиской от £9.99/мес · Премиум отчёты — разовая оплата
+        ✦ Карта дня · Лунный календарь · Гороскоп — доступны каждый день с подпиской Initiate от £9.99/мес
       </p>
     </section>
   )
@@ -471,151 +447,121 @@ function DailyPreview() {
 
 function PremiumReportsSection() {
   return (
-    <section style={{padding:'60px 52px 80px'}} className="pad">
+    <section id="premium-reports" style={{padding:'80px 52px 100px'}} className="pad">
       <div style={{maxWidth:'1100px',margin:'0 auto'}}>
         <div style={{textAlign:'center',marginBottom:'20px'}}><Ornament/></div>
-        <div style={{textAlign:'center',margin:'32px 0 40px'}}>
-          <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(26px,4vw,48px)',fontWeight:900,color:'#FFFFFF',marginBottom:'12px'}}>Премиум Отчёты</h2>
-          <p style={{fontFamily:'"Lora",serif',fontSize:'16px',fontStyle:'italic',color:'rgba(200,180,255,0.45)',maxWidth:'500px',margin:'0 auto'}}>
-            Персональные PDF-отчёты на 15-40 страниц. Готовы за 5-10 минут.
+        <div style={{textAlign:'center',margin:'40px 0 52px'}}>
+          <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',letterSpacing:'3px',color:'rgba(180,150,255,0.45)',marginBottom:'14px',textTransform:'uppercase'}}>Премиум</div>
+          <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(28px,4vw,52px)',fontWeight:900,color:'#FFFFFF',marginBottom:'14px'}}>
+            Персональные Отчёты
+          </h2>
+          <p style={{fontFamily:'"Lora",serif',fontSize:'17px',fontStyle:'italic',color:'rgba(200,180,255,0.45)',maxWidth:'540px',margin:'0 auto',lineHeight:1.8}}>
+            Глубокий анализ на 15–40 страниц. AI составляет отчёт за 5–10 минут по вашим данным — имя, дата рождения.
           </p>
         </div>
-        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'18px'}}>
-          {([
-            {icon:'🔯',name:'Матрица Судьбы',price:'£34.99',pages:'15-18 стр',color:'rgba(192,112,255,1)',
-              desc:'Кармические задачи, таланты и предназначение через числовой код даты рождения.',
-              includes:['Центральное число и главная миссия','Кармические задачи этой жизни','Таланты и природные ресурсы','Любовь, финансы и карьера','Аффирмации и практики']},
-            {icon:'⭐',name:'Натальная Карта',price:'£34.99',pages:'15-18 стр',color:'rgba(100,180,255,1)',
-              desc:'Полный астрологический портрет: характер, эмоции, любовь, карьера и кармическая миссия.',
-              includes:['Солнечный знак — ядро личности','Лунный знак — эмоции','Венера и Марс — любовь','Юпитер и Сатурн — удача','Кармические узлы и миссия']},
-            {icon:'🌟',name:'Годовой Прогноз',price:'£89.99',pages:'30-40 стр',color:'rgba(255,160,60,1)',featured:true,
-              desc:'Астрология + нумерология + матрица судьбы. Прогноз по каждому месяцу года.',
-              includes:['Общая энергия года','Любовь и отношения','Карьера и финансы','Прогноз по 12 месяцам','Матрица судьбы в этом году','Духовные практики']},
-          ] as any[]).map((r,i)=>(
-            <div key={i} style={{
-              background:(r.featured as boolean)?'rgba(255,140,40,0.05)':'rgba(255,255,255,0.025)',
-              border:`1px solid ${(r.color as string).replace('1)','0.2)')}`,
-              borderRadius:'16px',padding:'24px 20px',position:'relative',overflow:'hidden',
-              transition:'all 0.35s',
-            }}
-            onMouseEnter={e=>{const el=e.currentTarget as HTMLDivElement;el.style.transform='translateY(-6px)';el.style.boxShadow=`0 20px 50px ${(r.color as string).replace('1)','0.12)')}`}}
-            onMouseLeave={e=>{const el=e.currentTarget as HTMLDivElement;el.style.transform='translateY(0)';el.style.boxShadow='none'}}>
-              {(r.featured as boolean)&&<div style={{position:'absolute',top:'12px',right:'12px',padding:'3px 10px',borderRadius:'4px',background:'rgba(255,160,40,0.15)',border:'1px solid rgba(255,160,40,0.35)',fontFamily:'"Playfair Display",serif',fontSize:'10px',fontWeight:700,color:'rgba(255,180,80,0.9)',letterSpacing:'1px'}}>PREMIUM</div>}
-              <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:`linear-gradient(90deg,transparent,${(r.color as string).replace('1)','0.7)')},transparent)`}}/>
-              <div style={{fontSize:'36px',marginBottom:'12px'}}>{r.icon as string}</div>
-              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'19px',fontWeight:800,color:'#EDE8F5',marginBottom:'5px'}}>{r.name as string}</div>
-              <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:(r.color as string).replace('1)','0.7)'),marginBottom:'10px'}}>{r.pages as string} · 5-10 мин</div>
-              <p style={{fontFamily:'"Lora",serif',fontSize:'13px',lineHeight:1.65,color:'rgba(200,185,240,0.55)',marginBottom:'14px'}}>{r.desc as string}</p>
-              <div style={{marginBottom:'16px'}}>
-                {(r.includes as string[]).map((item,j)=>(
-                  <div key={j} style={{display:'flex',gap:'8px',padding:'3px 0',fontFamily:'"Lora",serif',fontSize:'12px',color:'rgba(200,185,240,0.5)'}}>
-                    <span style={{color:(r.color as string).replace('1)','0.6)'),fontSize:'7px',flexShrink:0,marginTop:'4px'}}>◆</span>{item}
-                  </div>
-                ))}
+
+        <div style={{display:'flex',flexDirection:'column',gap:'24px'}}>
+
+          {/* Destiny Matrix */}
+          <div style={{background:'rgba(192,112,255,0.04)',border:'1px solid rgba(192,112,255,0.18)',borderRadius:'16px',overflow:'hidden',display:'grid',gridTemplateColumns:'1fr 1fr',transition:'all 0.3s'}}
+            onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(192,112,255,0.35)';(e.currentTarget as HTMLDivElement).style.boxShadow='0 20px 60px rgba(192,112,255,0.08)'}}
+            onMouseLeave={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(192,112,255,0.18)';(e.currentTarget as HTMLDivElement).style.boxShadow='none'}}>
+            <div style={{padding:'36px 40px',borderRight:'1px solid rgba(255,255,255,0.06)'}}>
+              <div style={{display:'flex',alignItems:'center',gap:'14px',marginBottom:'16px'}}>
+                <div style={{fontSize:'40px',filter:'drop-shadow(0 0 16px rgba(192,112,255,0.5))'}}>🔯</div>
+                <div>
+                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'24px',fontWeight:900,color:'#EDE8F5'}}>Матрица Судьбы</div>
+                  <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(192,112,255,0.65)'}}>15–18 страниц · 3–5 минут</div>
+                </div>
               </div>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',paddingTop:'14px',borderTop:'1px solid rgba(255,255,255,0.06)'}}>
-                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:900,color:'#FFFFFF'}}>{r.price as string}</div>
-                <Link href="/auth/register" style={{padding:'8px 16px',borderRadius:'8px',background:(r.color as string).replace('1)','0.15)'),border:`1px solid ${(r.color as string).replace('1)','0.3)')}`,fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:(r.color as string).replace('1)','0.9)'),textDecoration:'none',letterSpacing:'0.5px'}}>Заказать →</Link>
+              <p style={{fontFamily:'"Lora",serif',fontSize:'15px',lineHeight:1.85,color:'rgba(210,200,240,0.65)',marginBottom:'20px'}}>
+                Система Матрицы Судьбы раскрывает кармические задачи, скрытые таланты и главное предназначение через цифровой код вашей даты рождения. Каждое число — это ключ к пониманию себя.
+              </p>
+              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',paddingTop:'20px',borderTop:'1px solid rgba(255,255,255,0.06)'}}>
+                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'36px',fontWeight:900,color:'#EDE8F5'}}>£34.99</div>
+                <Link href="/auth/register" style={{padding:'12px 24px',borderRadius:'8px',background:'linear-gradient(135deg,rgba(150,70,230,0.8),rgba(192,112,255,0.6))',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 20px rgba(150,70,230,0.3)'}}>Заказать →</Link>
               </div>
             </div>
-          ))}
+            <div style={{padding:'36px 40px'}}>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'12px',letterSpacing:'3px',color:'rgba(192,112,255,0.5)',textTransform:'uppercase',marginBottom:'16px'}}>Что входит в отчёт</div>
+              {['Центральное число — главная жизненная миссия','Кармические задачи: что нужно проработать','Природные таланты и скрытые ресурсы','Паттерны в любви и отношениях','Финансовый поток и путь к достатку','Карьера: где вы можете преуспеть','Персональные аффирмации и практики'].map((item,i)=>(
+                <div key={i} style={{display:'flex',gap:'10px',padding:'8px 0',borderBottom:'1px solid rgba(255,255,255,0.04)',fontFamily:'"Lora",serif',fontSize:'14px',color:'rgba(210,200,240,0.6)'}}>
+                  <span style={{color:'rgba(192,112,255,0.7)',fontSize:'8px',flexShrink:0,marginTop:'5px'}}>◆</span>{item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Natal Chart */}
+          <div style={{background:'rgba(100,180,255,0.04)',border:'1px solid rgba(100,180,255,0.18)',borderRadius:'16px',overflow:'hidden',display:'grid',gridTemplateColumns:'1fr 1fr',transition:'all 0.3s'}}
+            onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(100,180,255,0.35)';(e.currentTarget as HTMLDivElement).style.boxShadow='0 20px 60px rgba(100,180,255,0.08)'}}
+            onMouseLeave={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(100,180,255,0.18)';(e.currentTarget as HTMLDivElement).style.boxShadow='none'}}>
+            <div style={{padding:'36px 40px',borderRight:'1px solid rgba(255,255,255,0.06)'}}>
+              <div style={{display:'flex',alignItems:'center',gap:'14px',marginBottom:'16px'}}>
+                <div style={{fontSize:'40px',filter:'drop-shadow(0 0 16px rgba(100,180,255,0.5))'}}>⭐</div>
+                <div>
+                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'24px',fontWeight:900,color:'#EDE8F5'}}>Натальная Карта</div>
+                  <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(100,180,255,0.65)'}}>15–18 страниц · 3–5 минут</div>
+                </div>
+              </div>
+              <p style={{fontFamily:'"Lora",serif',fontSize:'15px',lineHeight:1.85,color:'rgba(210,200,240,0.65)',marginBottom:'20px'}}>
+                Положение планет в момент вашего рождения раскрывает характер, эмоциональную природу, любовные паттерны и кармическую миссию. Полный астрологический портрет личности.
+              </p>
+              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',paddingTop:'20px',borderTop:'1px solid rgba(255,255,255,0.06)'}}>
+                <div style={{fontFamily:'"Playfair Display",serif',fontSize:'36px',fontWeight:900,color:'#EDE8F5'}}>£34.99</div>
+                <Link href="/auth/register" style={{padding:'12px 24px',borderRadius:'8px',background:'linear-gradient(135deg,rgba(60,130,220,0.8),rgba(100,180,255,0.6))',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 20px rgba(60,130,220,0.3)'}}>Заказать →</Link>
+              </div>
+            </div>
+            <div style={{padding:'36px 40px'}}>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'12px',letterSpacing:'3px',color:'rgba(100,180,255,0.5)',textTransform:'uppercase',marginBottom:'16px'}}>Что входит в отчёт</div>
+              {['Солнечный знак — ядро характера и жизненная сила','Лунный знак — эмоциональная природа и подсознание','Венера и Марс — любовь, сексуальность, деньги','Юпитер и Сатурн — зоны удачи и кармические уроки','Кармические узлы — жизненная миссия','Текущие транзиты и их влияние сейчас','Рекомендации по всем сферам жизни'].map((item,i)=>(
+                <div key={i} style={{display:'flex',gap:'10px',padding:'8px 0',borderBottom:'1px solid rgba(255,255,255,0.04)',fontFamily:'"Lora",serif',fontSize:'14px',color:'rgba(210,200,240,0.6)'}}>
+                  <span style={{color:'rgba(100,180,255,0.7)',fontSize:'8px',flexShrink:0,marginTop:'5px'}}>◆</span>{item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Yearly Forecast */}
+          <div style={{background:'rgba(255,160,60,0.04)',border:'1px solid rgba(255,160,60,0.22)',borderRadius:'16px',overflow:'hidden',display:'grid',gridTemplateColumns:'1fr 1fr',position:'relative',transition:'all 0.3s'}}
+            onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(255,160,60,0.4)';(e.currentTarget as HTMLDivElement).style.boxShadow='0 20px 60px rgba(255,160,60,0.08)'}}
+            onMouseLeave={e=>{(e.currentTarget as HTMLDivElement).style.borderColor='rgba(255,160,60,0.22)';(e.currentTarget as HTMLDivElement).style.boxShadow='none'}}>
+            <div style={{position:'absolute',top:'14px',right:'14px',padding:'4px 14px',borderRadius:'4px',background:'rgba(255,160,40,0.15)',border:'1px solid rgba(255,160,40,0.4)',fontFamily:'"Playfair Display",serif',fontSize:'11px',fontWeight:700,color:'rgba(255,180,80,0.95)',letterSpacing:'1px'}}>ULTRA PREMIUM</div>
+            <div style={{padding:'36px 40px',borderRight:'1px solid rgba(255,255,255,0.06)'}}>
+              <div style={{display:'flex',alignItems:'center',gap:'14px',marginBottom:'16px'}}>
+                <div style={{fontSize:'40px',filter:'drop-shadow(0 0 16px rgba(255,160,60,0.5))'}}>🌟</div>
+                <div>
+                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'24px',fontWeight:900,color:'#EDE8F5'}}>Годовой Прогноз</div>
+                  <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(255,160,60,0.65)'}}>30–40 страниц · 7–10 минут</div>
+                </div>
+              </div>
+              <p style={{fontFamily:'"Lora",serif',fontSize:'15px',lineHeight:1.85,color:'rgba(210,200,240,0.65)',marginBottom:'20px'}}>
+                Самый полный отчёт: астрология + нумерология + Матрица Судьбы. Подробный прогноз по каждому месяцу года для всех сфер жизни. Это не гороскоп — это ваш личный навигатор на год.
+              </p>
+              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',paddingTop:'20px',borderTop:'1px solid rgba(255,255,255,0.06)'}}>
+                <div>
+                  <div style={{fontFamily:'"Playfair Display",serif',fontSize:'36px',fontWeight:900,color:'#EDE8F5'}}>£89.99</div>
+                  <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(200,185,240,0.3)',marginTop:'2px'}}>вместо £159.97 за три отчёта</div>
+                </div>
+                <Link href="/auth/register" style={{padding:'12px 24px',borderRadius:'8px',background:'linear-gradient(135deg,rgba(200,100,20,0.8),rgba(255,160,60,0.7))',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#0C0818',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 20px rgba(255,140,30,0.3)'}}>Заказать →</Link>
+              </div>
+            </div>
+            <div style={{padding:'36px 40px'}}>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'12px',letterSpacing:'3px',color:'rgba(255,160,60,0.5)',textTransform:'uppercase',marginBottom:'16px'}}>Что входит в отчёт</div>
+              {['Общая энергия и тема года','Любовь и отношения — прогноз и рекомендации','Карьера, финансы и лучшее время для действий','Здоровье и жизненная энергия по сезонам','Прогноз по каждому из 12 месяцев','Матрица Судьбы в контексте этого года','Нумерологический годовой цикл','Духовные практики и аффирмации на год'].map((item,i)=>(
+                <div key={i} style={{display:'flex',gap:'10px',padding:'8px 0',borderBottom:'1px solid rgba(255,255,255,0.04)',fontFamily:'"Lora",serif',fontSize:'14px',color:'rgba(210,200,240,0.6)'}}>
+                  <span style={{color:'rgba(255,160,60,0.7)',fontSize:'8px',flexShrink:0,marginTop:'5px'}}>◆</span>{item}
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
   )
 }
 
-
-function PremiumDropdown() {
-  const [open, setOpen] = React.useState(false)
-  const ref = React.useRef<HTMLDivElement>(null)
-
-  React.useEffect(() => {
-    const fn = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
-    document.addEventListener('mousedown', fn)
-    return () => document.removeEventListener('mousedown', fn)
-  }, [])
-
-  const items = [
-    { icon: '🔯', name: 'Матрица Судьбы', desc: 'Кармические задачи и предназначение', price: '£34.99', color: 'rgba(192,112,255,1)', href: '/reports' },
-    { icon: '⭐', name: 'Натальная Карта', desc: 'Полный астрологический портрет', price: '£34.99', color: 'rgba(100,180,255,1)', href: '/reports' },
-    { icon: '🌟', name: 'Годовой Прогноз', desc: 'Прогноз по всем сферам на год', price: '£89.99', color: 'rgba(255,160,60,1)', href: '/reports' },
-  ]
-
-  return (
-    <div ref={ref} style={{ position: 'relative' }}>
-      <button
-        onClick={() => setOpen(p => !p)}
-        style={{
-          background: open ? 'rgba(150,80,255,0.15)' : 'rgba(150,80,255,0.08)',
-          border: `1px solid ${open ? 'rgba(150,80,255,0.5)' : 'rgba(150,80,255,0.2)'}`,
-          borderRadius: '6px', padding: '6px 14px', cursor: 'pointer',
-          fontFamily: '"Playfair Display",serif', fontSize: '13px', fontWeight: 700,
-          color: 'rgba(200,160,255,0.9)', letterSpacing: '0.3px',
-          display: 'flex', alignItems: 'center', gap: '6px',
-          transition: 'all 0.2s',
-        }}
-      >
-        ✦ Премиум отчёты
-        <span style={{ fontSize: '10px', transition: 'transform 0.2s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>▾</span>
-      </button>
-
-      {open && (
-        <div style={{
-          position: 'absolute', top: 'calc(100% + 10px)', left: '50%',
-          transform: 'translateX(-50%)',
-          width: '340px',
-          background: 'rgba(10,6,24,0.98)',
-          border: '1px solid rgba(150,80,255,0.2)',
-          borderRadius: '14px', overflow: 'hidden',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(150,80,255,0.1)',
-          zIndex: 200,
-          animation: 'fadeUp 0.2s ease',
-        }}>
-          <div style={{ padding: '14px 16px 10px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '11px', letterSpacing: '3px', color: 'rgba(180,140,255,0.5)', textTransform: 'uppercase' }}>
-              Персональные PDF-отчёты
-            </div>
-          </div>
-          {items.map((item, i) => (
-            <Link key={i} href={item.href} onClick={() => setOpen(false)} style={{
-              display: 'flex', alignItems: 'center', gap: '14px',
-              padding: '14px 16px',
-              borderBottom: i < items.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
-              textDecoration: 'none',
-              transition: 'background 0.2s',
-              background: 'transparent',
-            }}
-            onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.04)'}
-            onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'}
-            >
-              <div style={{
-                width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0,
-                background: item.color.replace('1)', '0.12)'),
-                border: `1px solid ${item.color.replace('1)', '0.25)')}`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '20px',
-              }}>{item.icon}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '14px', fontWeight: 700, color: '#EDE8F5', marginBottom: '2px' }}>{item.name}</div>
-                <div style={{ fontFamily: '"Lora",serif', fontSize: '12px', fontStyle: 'italic', color: 'rgba(200,185,240,0.4)' }}>{item.desc}</div>
-              </div>
-              <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '14px', fontWeight: 800, color: item.color.replace('1)', '0.9)'), flexShrink: 0 }}>{item.price}</div>
-            </Link>
-          ))}
-          <div style={{ padding: '12px 16px', background: 'rgba(150,80,255,0.05)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <Link href="/reports" onClick={() => setOpen(false)} style={{
-              display: 'block', textAlign: 'center', padding: '10px',
-              borderRadius: '8px', background: 'linear-gradient(135deg,rgba(120,60,220,0.8),rgba(180,100,255,0.6))',
-              fontFamily: '"Playfair Display",serif', fontSize: '12px', fontWeight: 700,
-              color: '#EDE8F5', textDecoration: 'none', letterSpacing: '1px',
-            }}>Смотреть все отчёты →</Link>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
 
 export default function Home() {
   const [scrolled,setScrolled]=useState(false)
