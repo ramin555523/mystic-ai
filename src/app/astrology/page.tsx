@@ -60,10 +60,10 @@ export default function AstrologyPage() {
             <div style={{animation:'fadeUp 0.7s ease both'}}>
               <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',letterSpacing:'2px',color:'rgba(100,180,255,0.6)',marginBottom:'16px',textTransform:'uppercase'}}>Консультация с ИИ</div>
               <h1 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(36px,5vw,64px)',fontWeight:900,color:'#FFFFFF',lineHeight:1.1,marginBottom:'20px'}}>
-                Таро<br/><span style={{color:'rgba(100,180,255,0.9)'}}>Расклад</span><br/>на любой вопрос
+                Астрология<br/><span style={{color:'rgba(100,180,255,0.9)'}}>Натальный</span><br/>чарт и транзиты
               </h1>
               <p style={{fontFamily:'"Lora",serif',fontSize:'17px',lineHeight:1.85,color:'rgba(210,200,245,0.65)',marginBottom:'36px'}}>
-                Орион — мастер таро с доступом к 78 арканам колоды Rider-Waite. Задайте любой вопрос о любви, карьере, деньгах или духовном пути — карты откроют скрытое.
+                Орион — астролог с доступом к полной натальной карте по дате рождения. Узнайте о своём характере, транзитах планет и что вас ждёт в ближайшем будущем.
               </p>
               <div style={{display:'flex',gap:'14px',flexWrap:'wrap',marginBottom:'32px'}}>
                 <Link href="/auth/register" style={{padding:'14px 32px',borderRadius:'8px',background:'linear-gradient(135deg,rgba(100,180,255,0.9),rgba(100,180,255,0.65))',fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:'#0C0818',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 24px rgba(100,180,255,0.35)'}}>

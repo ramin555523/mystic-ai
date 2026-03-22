@@ -60,7 +60,7 @@ export default function CompatibilityPage() {
             <div style={{animation:'fadeUp 0.7s ease both'}}>
               <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',letterSpacing:'2px',color:'rgba(192,112,255,0.6)',marginBottom:'16px',textTransform:'uppercase'}}>Консультация с ИИ</div>
               <h1 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(36px,5vw,64px)',fontWeight:900,color:'#FFFFFF',lineHeight:1.1,marginBottom:'20px'}}>
-                Таро<br/><span style={{color:'rgba(192,112,255,0.9)'}}>Расклад</span><br/>на любой вопрос
+                Совместимость<br/><span style={{color:'rgba(192,112,255,0.9)'}}>Анализ</span><br/>двух людей
               </h1>
               <p style={{fontFamily:'"Lora",serif',fontSize:'17px',lineHeight:1.85,color:'rgba(210,200,245,0.65)',marginBottom:'36px'}}>
                 Сатья — мастер таро с доступом к 78 арканам колоды Rider-Waite. Задайте любой вопрос о любви, карьере, деньгах или духовном пути — карты откроют скрытое.
