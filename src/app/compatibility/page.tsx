@@ -47,9 +47,10 @@ export default function CompatibilityPage() {
               <Link key={l} href={h} className="nav-a" style={{color:h==='/compatibility'?'rgba(192,112,255,0.9)':undefined}}>{l}</Link>
             ))}
           </div>
-          <div style={{display:'flex',gap:'12px'}}>
+          <div style={{display:'flex',gap:'12px',alignItems:'center'}}>
+            <Link href="/dashboard" style={{fontFamily:'"Playfair Display",serif',fontSize:'13px',color:'rgba(200,185,240,0.4)',textDecoration:'none'}}>Кабинет</Link>
             <Link href="/auth/login" className="nav-a">Войти</Link>
-            <Link href="/auth/register" style={{padding:'8px 20px',borderRadius:'6px',background:'linear-gradient(135deg,rgba(192,112,255,0.8),rgba(192,112,255,0.5))',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#0C0818',textDecoration:'none',letterSpacing:'0.5px'}}>Начать</Link>
+            <Link href="/auth/register" style={{padding:'8px 20px',borderRadius:'6px',background:'linear-gradient(135deg,#6030B0,#9060E0)',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'0.5px'}}>Начать</Link>
           </div>
         </nav>
 
