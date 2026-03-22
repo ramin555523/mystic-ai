@@ -8,10 +8,10 @@ export default function NumerologyPage() {
   ]
 
   const faqs = [
-    { q: 'Как работает расклад таро с AI?', a: 'Вы задаёте вопрос, AI-консультант Мирра вытягивает карты из колоды Числа вашей судьбы Rider-Waite и даёт персональную интерпретацию именно для вашей ситуации.' },
-    { q: 'Можно задавать любые вопросы?', a: 'Да — о любви, карьере, деньгах, здоровье, семье или духовном пути. Чем конкретнее вопрос, тем точнее расклад.' },
-    { q: 'Сколько карт в раскладе?', a: 'Мирра адаптирует расклад под вопрос: 1 карта для простого ответа, 3 карты для ситуации (прошлое/настоящее/будущее), 5 карт для глубокого анализа.' },
-    { q: 'Насколько точны расклады?', a: 'Таро — это инструмент рефлексии и интуиции. Многие пользователи отмечают высокую точность попаданий. Результат зависит от конкретности вашего вопроса.' },
+    { q: 'Какое имя использовать?', a: 'Полное имя при рождении — именно то что записано в свидетельстве. Это самое важное для точного расчёта.' },
+    { q: 'Что такое число жизненного пути?', a: 'Главное число — рассчитывается из даты рождения. Описывает миссию, сильные стороны и главные уроки жизни.' },
+    { q: 'Можно ли изменить судьбу зная числа?', a: 'Числа не определяют судьбу — они описывают энергии. Зная их, вы можете осознанно работать с ними.' },
+    { q: 'Влияет ли смена имени?', a: 'Да — замужество или официальная смена имени добавляют новые вибрации. Мирра проанализирует оба варианта.' },
   ]
 
   return (
@@ -47,9 +47,10 @@ export default function NumerologyPage() {
               <Link key={l} href={h} className="nav-a" style={{color:h==='/numerology'?'rgba(255,160,80,0.9)':undefined}}>{l}</Link>
             ))}
           </div>
-          <div style={{display:'flex',gap:'12px'}}>
+          <div style={{display:'flex',gap:'12px',alignItems:'center'}}>
+            <Link href="/dashboard" style={{fontFamily:'"Playfair Display",serif',fontSize:'13px',color:'rgba(200,185,240,0.4)',textDecoration:'none'}}>Кабинет</Link>
             <Link href="/auth/login" className="nav-a">Войти</Link>
-            <Link href="/auth/register" style={{padding:'8px 20px',borderRadius:'6px',background:'linear-gradient(135deg,rgba(255,160,80,0.8),rgba(255,160,80,0.5))',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#0C0818',textDecoration:'none',letterSpacing:'0.5px'}}>Начать</Link>
+            <Link href="/auth/register" style={{padding:'8px 20px',borderRadius:'6px',background:'linear-gradient(135deg,#6030B0,#9060E0)',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'0.5px'}}>Начать</Link>
           </div>
         </nav>
 
