@@ -46,6 +46,9 @@ export default function NumerologyPage() {
             {[['Таро','/tarot'],['Астрология','/astrology'],['Нумерология','/numerology'],['Совместимость','/compatibility'],['Премиум','/premium']].map(([l,h])=>(
               <Link key={l} href={h} className="nav-a" style={{color:h==='/numerology'?'rgba(255,160,80,0.9)':undefined}}>{l}</Link>
             ))}
+            <a href="/#pricing" className="nav-a">Тарифы</a>
+            <a href="/#reviews" className="nav-a">Отзывы</a>
+            <a href="/#faq" className="nav-a">Вопросы</a>
           </div>
           <div style={{display:'flex',gap:'12px',alignItems:'center'}}>
             <Link href="/dashboard" style={{fontFamily:'"Playfair Display",serif',fontSize:'13px',color:'rgba(200,185,240,0.4)',textDecoration:'none'}}>Кабинет</Link>

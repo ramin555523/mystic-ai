@@ -203,8 +203,10 @@ export default function Home() {
             <a href="#pricing" className="nav-a">Тарифы</a>
             <a href="#reviews" className="nav-a">Отзывы</a>
             <a href="#faq" className="nav-a">Вопросы</a>
+
           </nav>
           <div style={{display:'flex',gap:'10px',alignItems:'center',flexShrink:0}}>
+            <Link href="/dashboard" style={{fontFamily:'"Playfair Display",serif',fontSize:'13px',color:'rgba(200,185,240,0.4)',textDecoration:'none'}}>Кабинет</Link>
             <Link href="/auth/login" className="nav-a">Войти</Link>
             <Link href="/auth/register" style={{padding:'8px 20px',borderRadius:'6px',background:'linear-gradient(135deg,rgba(120,60,200,0.9),rgba(180,100,255,0.7))',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 16px rgba(120,60,200,0.3)'}}>Начать</Link>
           </div>
