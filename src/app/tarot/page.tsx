@@ -38,7 +38,7 @@ export default function TarotPage() {
 
       <div style={{position:'relative',zIndex:10}}>
         {/* Nav */}
-        <nav style={{padding:'20px 52px',display:'flex',alignItems:'center',justifyContent:'space-between',borderBottom:'1px solid rgba(255,255,255,0.06)'}} className="pad">
+        <nav style={{padding:'16px 52px',display:'flex',alignItems:'center',justifyContent:'space-between',borderBottom:'1px solid rgba(255,255,255,0.07)',background:'rgba(8,5,16,0.97)',backdropFilter:'blur(20px)',position:'sticky',top:0,zIndex:100}} className="pad">
           <Link href="/" style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:900,color:'rgba(200,180,255,0.5)',textDecoration:'none',letterSpacing:'1px'}}>
             MYSTIC<span style={{fontSize:'12px',fontWeight:400,verticalAlign:'super',marginLeft:'2px'}}>AI</span>
           </Link>
@@ -47,9 +47,10 @@ export default function TarotPage() {
               <Link key={l} href={h} className="nav-a" style={{color:h==='/tarot'?'rgba(201,168,76,0.9)':undefined}}>{l}</Link>
             ))}
           </div>
-          <div style={{display:'flex',gap:'12px'}}>
+          <div style={{display:'flex',gap:'12px',alignItems:'center'}}>
+            <Link href="/dashboard" style={{fontFamily:'"Playfair Display",serif',fontSize:'13px',color:'rgba(200,185,240,0.4)',textDecoration:'none'}}>Кабинет</Link>
             <Link href="/auth/login" className="nav-a">Войти</Link>
-            <Link href="/auth/register" style={{padding:'8px 20px',borderRadius:'6px',background:'linear-gradient(135deg,rgba(201,168,76,0.8),rgba(201,168,76,0.5))',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#0C0818',textDecoration:'none',letterSpacing:'0.5px'}}>Начать</Link>
+            <Link href="/auth/register" style={{padding:'8px 20px',borderRadius:'6px',background:'linear-gradient(135deg,#6030B0,#9060E0)',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'0.5px'}}>Начать</Link>
           </div>
         </nav>
 

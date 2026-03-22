@@ -1,17 +1,17 @@
 import Link from 'next/link'
 
-export default function TarotPage() {
+export default function CompatibilityPage() {
   const reviews = [
-    { text: 'Расклад попал точно в суть моей ситуации. Карта Луны описала мои страхи так точно, будто читала мысли.', name: 'Анна К.', city: 'Лондон' },
-    { text: 'Спросила про отношения — три карты дали такой чёткий ответ, что я приняла решение которое откладывала полгода.', name: 'Марина Л.', city: 'Киев' },
-    { text: 'Карты показали что работа не моя стихия. Поменяла профессию — и всё встало на своё место.', name: 'Оксана В.', city: 'Варшава' },
+    { text: 'Сатья описала наши отношения с мужем так точно — сильные стороны и сложности совпали один в один.', name: 'Карина М.', city: 'Київ' },
+    { text: 'Анализ совместимости с деловым партнёром помог понять почему мы так хорошо работаем вместе.', name: 'Оксана Д.', city: 'Варшава' },
+    { text: 'Спросила про отношения с мамой — Сатья объяснила наши конфликты через числа. Стало намного легче.', name: 'Аліна П.', city: 'Лондон' },
   ]
 
   const faqs = [
     { q: 'Как работает расклад таро с AI?', a: 'Вы задаёте вопрос, AI-консультант Сатья вытягивает карты из колоды Анализ двух людей Rider-Waite и даёт персональную интерпретацию именно для вашей ситуации.' },
     { q: 'Можно задавать любые вопросы?', a: 'Да — о любви, карьере, деньгах, здоровье, семье или духовном пути. Чем конкретнее вопрос, тем точнее расклад.' },
     { q: 'Сколько карт в раскладе?', a: 'Сатья адаптирует расклад под вопрос: 1 карта для простого ответа, 3 карты для ситуации (прошлое/настоящее/будущее), 5 карт для глубокого анализа.' },
-    { q: 'Насколько точны расклады?', a: 'Совместимость — это инструмент рефлексии и интуиции. Многие пользователи отмечают высокую точность попаданий. Результат зависит от конкретности вашего вопроса.' },
+    { q: 'Насколько точны расклады?', a: 'Таро — это инструмент рефлексии и интуиции. Многие пользователи отмечают высокую точность попаданий. Результат зависит от конкретности вашего вопроса.' },
   ]
 
   return (
@@ -38,12 +38,12 @@ export default function TarotPage() {
 
       <div style={{position:'relative',zIndex:10}}>
         {/* Nav */}
-        <nav style={{padding:'20px 52px',display:'flex',alignItems:'center',justifyContent:'space-between',borderBottom:'1px solid rgba(255,255,255,0.06)'}} className="pad">
+        <nav style={{padding:'16px 52px',display:'flex',alignItems:'center',justifyContent:'space-between',borderBottom:'1px solid rgba(255,255,255,0.07)',background:'rgba(8,5,16,0.97)',backdropFilter:'blur(20px)',position:'sticky',top:0,zIndex:100}} className="pad">
           <Link href="/" style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:900,color:'rgba(200,180,255,0.5)',textDecoration:'none',letterSpacing:'1px'}}>
             MYSTIC<span style={{fontSize:'12px',fontWeight:400,verticalAlign:'super',marginLeft:'2px'}}>AI</span>
           </Link>
           <div style={{display:'flex',gap:'28px',alignItems:'center'}}>
-            {[['Совместимость','/compatibility'],['Астрология','/astrology'],['Нумерология','/numerology'],['Совместимость','/compatibility'],['Премиум','/premium']].map(([l,h])=>(
+            {[['Таро','/tarot'],['Астрология','/astrology'],['Нумерология','/numerology'],['Совместимость','/compatibility'],['Премиум','/premium']].map(([l,h])=>(
               <Link key={l} href={h} className="nav-a" style={{color:h==='/compatibility'?'rgba(192,112,255,0.9)':undefined}}>{l}</Link>
             ))}
           </div>
@@ -59,10 +59,10 @@ export default function TarotPage() {
             <div style={{animation:'fadeUp 0.7s ease both'}}>
               <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',letterSpacing:'2px',color:'rgba(192,112,255,0.6)',marginBottom:'16px',textTransform:'uppercase'}}>Консультация с ИИ</div>
               <h1 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(36px,5vw,64px)',fontWeight:900,color:'#FFFFFF',lineHeight:1.1,marginBottom:'20px'}}>
-                Совместимость<br/><span style={{color:'rgba(192,112,255,0.9)'}}>Расклад</span><br/>на любой вопрос
+                Таро<br/><span style={{color:'rgba(192,112,255,0.9)'}}>Расклад</span><br/>на любой вопрос
               </h1>
               <p style={{fontFamily:'"Lora",serif',fontSize:'17px',lineHeight:1.85,color:'rgba(210,200,245,0.65)',marginBottom:'36px'}}>
-                Сатья — Сатья анализирует совместимость пары через нумерологию и астрологию. Узнайте о сильных сторонах союза, зонах роста и потенциале ваших отношений.
+                Сатья — мастер таро с доступом к 78 арканам колоды Rider-Waite. Задайте любой вопрос о любви, карьере, деньгах или духовном пути — карты откроют скрытое.
               </p>
               <div style={{display:'flex',gap:'14px',flexWrap:'wrap',marginBottom:'32px'}}>
                 <Link href="/auth/register" style={{padding:'14px 32px',borderRadius:'8px',background:'linear-gradient(135deg,rgba(192,112,255,0.9),rgba(192,112,255,0.65))',fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:'#0C0818',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 24px rgba(192,112,255,0.35)'}}>
@@ -73,7 +73,9 @@ export default function TarotPage() {
                 </Link>
               </div>
               <div style={{display:'flex',gap:'28px'}}>
-                {[['78','арканов'],['3-5','карт в раскладе'],['5','бесплатных сообщений']].map(([v,l])=>(
+                {[['2','человека в анализе'],
+    ['78%','средняя совместимость'],
+    ['5','бесплатных']].map(([v,l])=>(
                   <div key={l}>
                     <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:800,color:'rgba(192,112,255,0.9)'}}>{v}</div>
                     <div style={{fontFamily:'"Lora",serif',fontSize:'12px',fontStyle:'italic',color:'rgba(200,185,240,0.35)'}}>{l}</div>
@@ -98,7 +100,7 @@ export default function TarotPage() {
                   }}>
                     {i===2 && <div style={{textAlign:'center'}}>
                       <div style={{fontSize:'72px',marginBottom:'16px'}}>💫</div>
-                      <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:900,color:'rgba(192,112,255,0.9)'}}>Совместимость</div>
+                      <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:900,color:'rgba(192,112,255,0.9)'}}>Таро</div>
                       <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(192,112,255,0.5)',marginTop:'6px'}}>Анализ двух людей</div>
                     </div>}
                   </div>
@@ -186,7 +188,7 @@ export default function TarotPage() {
             <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(24px,3.5vw,40px)',fontWeight:900,color:'#FFFFFF',marginBottom:'40px',textAlign:'center'}}>Что говорят пользователи</h2>
             <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'16px'}}>
               {reviews.map((r,i)=>(
-                <div key={i} style={{padding:'24px',background:'rgba(255,255,255,0.025)',border:'1px solid rgba(192,112,255,0.1)',borderRadius:'14px'}}>
+                <div key={i} style={{padding:'24px',background:'rgba(255,255,255,0.025)',border:'1px solid rgba(201,168,76,0.1)',borderRadius:'14px'}}>
                   <div style={{color:'rgba(192,112,255,0.8)',fontSize:'16px',marginBottom:'12px'}}>★★★★★</div>
                   <p style={{fontFamily:'"Lora",serif',fontSize:'14px',lineHeight:1.75,color:'rgba(220,210,245,0.7)',fontStyle:'italic',marginBottom:'16px'}}>"{r.text}"</p>
                   <div style={{fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'rgba(192,112,255,0.7)'}}>{r.name}</div>
