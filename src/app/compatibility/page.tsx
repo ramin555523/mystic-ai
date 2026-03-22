@@ -43,10 +43,14 @@ export default function CompatibilityPage() {
             MYSTIC<span style={{fontSize:'12px',fontWeight:400,verticalAlign:'super',marginLeft:'2px'}}>AI</span>
           </Link>
           <div style={{display:'flex',gap:'28px',alignItems:'center'}}>
-            {[['Таро','/tarot'],['Астрология','/astrology'],['Нумерология','/numerology'],['Совместимость','/compatibility'],['Премиум','/premium']].map(([l,h])=>(
-              <Link key={l} href={h} className="nav-a" style={{color:h==='/compatibility'?'rgba(192,112,255,0.9)':undefined}}>{l}</Link>
+            {[['Таро','/tarot'],['Астрология','/astrology'],['Нумерология','/numerology'],['Совместимость','/compatibility']].map(([l,h])=>(
+              <Link key={l} href={h} className="nav-a" style={{color:h==='/compatibility'?'rgba(192,112,255,0.9)':undefined}}><span>{l}</span></Link>
             ))}
-            <a href="/#pricing" className="nav-a">Тарифы</a>
+            <Link href="/premium" style={{padding:'6px 14px',borderRadius:'6px',background:'rgba(150,80,255,0.08)',border:'1px solid rgba(150,80,255,0.2)',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'rgba(200,160,255,0.9)',textDecoration:'none',transition:'all 0.2s'}}
+              onMouseEnter={e=>{const el=e.currentTarget as HTMLAnchorElement;el.style.background='rgba(150,80,255,0.15)';el.style.borderColor='rgba(150,80,255,0.5)'}}
+              onMouseLeave={e=>{const el=e.currentTarget as HTMLAnchorElement;el.style.background='rgba(150,80,255,0.08)';el.style.borderColor='rgba(150,80,255,0.2)'}}>
+              ✦ Премиум
+            </Link>            <a href="/#pricing" className="nav-a">Тарифы</a>
             <a href="/#reviews" className="nav-a">Отзывы</a>
             <a href="/#faq" className="nav-a">Вопросы</a>
           </div>
@@ -72,9 +76,7 @@ export default function CompatibilityPage() {
                 <Link href="/auth/register" style={{padding:'14px 32px',borderRadius:'8px',background:'linear-gradient(135deg,rgba(192,112,255,0.9),rgba(192,112,255,0.65))',fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:'#0C0818',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 24px rgba(192,112,255,0.35)'}}>
                   Начать бесплатно
                 </Link>
-                <Link href="#how" style={{padding:'14px 28px',borderRadius:'8px',border:'1px solid rgba(192,112,255,0.3)',fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:'rgba(192,112,255,0.8)',textDecoration:'none'}}>
-                  Как это работает
-                </Link>
+                <button onClick={()=>{const el=document.getElementById('how');if(el){el.scrollIntoView({behavior:'smooth'})}}} style={{padding:'14px 28px',borderRadius:'8px',border:'1px solid rgba(200,185,240,0.2)',background:'transparent',fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:'rgba(200,185,240,0.7)',cursor:'pointer'}}>Как это работает</button>
               </div>
               <div style={{display:'flex',gap:'28px'}}>
                 {[['2','человека в анализе'],

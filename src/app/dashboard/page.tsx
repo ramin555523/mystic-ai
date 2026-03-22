@@ -201,7 +201,7 @@ export default function Dashboard() {
           <a href="/#pricing" style={{display:'block',padding:'18px 24px',borderRadius:'12px',background:'linear-gradient(135deg,rgba(130,100,255,0.2),rgba(100,70,220,0.1))',border:'1px solid rgba(130,100,255,0.35)',textDecoration:'none',transition:'all 0.3s'}}>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'4px'}}>
               <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:800,color:'rgba(180,150,255,0.95)'}}>Initiate</div>
-              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:800,color:'#EDE8F5'}}>£9.99<span style={{fontSize:'13px',fontWeight:400,color:'rgba(200,185,240,0.4)'}}>/мес</span></div>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:800,color:'#EDE8F5'}}>$9.99<span style={{fontSize:'13px',fontWeight:400,color:'rgba(200,185,240,0.4)'}}>/мес</span></div>
             </div>
             <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.45)'}}>Безлимит + Карта дня + Луна + Гороскоп</div>
           </a>
@@ -209,7 +209,7 @@ export default function Dashboard() {
             <div style={{position:'absolute',top:'10px',right:'12px',padding:'3px 10px',borderRadius:'4px',background:'rgba(120,200,80,0.15)',border:'1px solid rgba(120,200,80,0.35)',fontFamily:'"Playfair Display",serif',fontSize:'10px',fontWeight:700,color:'rgba(150,230,100,0.9)',letterSpacing:'1px'}}>BEST</div>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'4px'}}>
               <div style={{fontFamily:'"Playfair Display",serif',fontSize:'17px',fontWeight:800,color:'rgba(220,170,255,0.95)'}}>Oracle Pro</div>
-              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:800,color:'#EDE8F5'}}>£16.99<span style={{fontSize:'13px',fontWeight:400,color:'rgba(200,185,240,0.4)'}}>/мес</span></div>
+              <div style={{fontFamily:'"Playfair Display",serif',fontSize:'22px',fontWeight:800,color:'#EDE8F5'}}>$16.99<span style={{fontSize:'13px',fontWeight:400,color:'rgba(200,185,240,0.4)'}}>/мес</span></div>
             </div>
             <div style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.45)'}}>Всё из Initiate + PDF + Human Design + AI-память</div>
           </a>
@@ -448,9 +448,9 @@ export default function Dashboard() {
           <div style={{fontFamily:'"Playfair Display",serif',fontSize:'10px',letterSpacing:'4px',color:'rgba(255,160,60,0.5)',marginBottom:'14px',textTransform:'uppercase'}}>Премиум Отчёты</div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'12px'}}>
             {[
-              {icon:'🔯',name:'Матрица Судьбы',desc:'Кармические задачи и предназначение',price:'£34.99',pages:'15-18 стр',color:'rgba(192,112,255,1)'},
-              {icon:'⭐',name:'Натальная Карта',desc:'Полный астрологический портрет',price:'£34.99',pages:'15-18 стр',color:'rgba(100,180,255,1)'},
-              {icon:'🌟',name:'Годовой Прогноз',desc:'Все сферы жизни по месяцам',price:'£89.99',pages:'30-40 стр',color:'rgba(255,160,60,1)'},
+              {icon:'🔯',name:'Матрица Судьбы',desc:'Кармические задачи и предназначение',price:'$34.99',pages:'15-18 стр',color:'rgba(192,112,255,1)'},
+              {icon:'⭐',name:'Натальная Карта',desc:'Полный астрологический портрет',price:'$34.99',pages:'15-18 стр',color:'rgba(100,180,255,1)'},
+              {icon:'🌟',name:'Годовой Прогноз',desc:'Все сферы жизни по месяцам',price:'$89.99',pages:'30-40 стр',color:'rgba(255,160,60,1)'},
             ].map((r,i)=>(
               <Link key={i} href="/reports" style={{
                 textDecoration:'none',display:'block',padding:'18px',
@@ -493,7 +493,7 @@ export default function Dashboard() {
               </div>
             </div>
             <a href="/#pricing" target="_blank" rel="noreferrer" style={{padding:'13px 28px',borderRadius:'8px',background:'linear-gradient(135deg,#6030B0,#9060E0,#C080FF)',fontFamily:'"Playfair Display",serif',fontSize:'13px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'1px',whiteSpace:'nowrap',boxShadow:'0 4px 20px rgba(100,40,200,0.3)'}}>
-              Подписаться — от £9.99/мес
+              Подписаться — от $9.99/мес
             </a>
           </div>
         )}

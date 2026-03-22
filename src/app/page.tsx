@@ -179,11 +179,11 @@ export default function Home() {
               {dropdownOpen && (
                 <div style={{position:'absolute',top:'calc(100% + 10px)',left:'50%',transform:'translateX(-50%)',width:'320px',background:'rgba(10,6,24,0.98)',border:'1px solid rgba(150,80,255,0.2)',borderRadius:'14px',overflow:'hidden',boxShadow:'0 20px 60px rgba(0,0,0,0.6)',zIndex:200}}>
                   <div style={{padding:'12px 16px 8px',borderBottom:'1px solid rgba(255,255,255,0.06)',fontFamily:'"Playfair Display",serif',fontSize:'11px',letterSpacing:'3px',color:'rgba(180,140,255,0.5)',textTransform:'uppercase'}}>Персональные PDF-отчёты</div>
-                  {[{icon:'🔯',name:'Матрица Судьбы',desc:'Кармические задачи и предназначение',price:'$34.99',color:'rgba(192,112,255,1)'},
-                    {icon:'⭐',name:'Натальная Карта',desc:'Полный астрологический портрет',price:'$34.99',color:'rgba(100,180,255,1)'},
-                    {icon:'🌟',name:'Годовой Прогноз',desc:'Прогноз по всем сферам на год',price:'$89.99',color:'rgba(255,160,60,1)'},
+                  {[{icon:'🔯',name:'Матрица Судьбы',desc:'Кармические задачи и предназначение',price:'$34.99',color:'rgba(192,112,255,1)',anchor:'#report-destiny'},
+                    {icon:'⭐',name:'Натальная Карта',desc:'Полный астрологический портрет',price:'$34.99',color:'rgba(100,180,255,1)',anchor:'#report-natal'},
+                    {icon:'🌟',name:'Годовой Прогноз',desc:'Прогноз по всем сферам на год',price:'$89.99',color:'rgba(255,160,60,1)',anchor:'#report-yearly'},
                   ].map((item,i)=>(
-                    <Link key={i} href="#premium-reports" onClick={()=>setDropdownOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',padding:'12px 16px',borderBottom:i<2?'1px solid rgba(255,255,255,0.05)':'none',textDecoration:'none',transition:'background 0.2s'}}
+                    <Link key={i} href={item.anchor} onClick={()=>setDropdownOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',padding:'12px 16px',borderBottom:i<2?'1px solid rgba(255,255,255,0.05)':'none',textDecoration:'none',transition:'background 0.2s'}}
                       onMouseEnter={e=>(e.currentTarget as HTMLAnchorElement).style.background='rgba(255,255,255,0.04)'}
                       onMouseLeave={e=>(e.currentTarget as HTMLAnchorElement).style.background='transparent'}>
                       <div style={{width:'38px',height:'38px',borderRadius:'10px',flexShrink:0,background:item.color.replace('1)','0.12)'),border:`1px solid ${item.color.replace('1)','0.25)')}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px'}}>{item.icon}</div>
@@ -351,13 +351,13 @@ export default function Home() {
             </div>
             <div style={{display:'flex',flexDirection:'column',gap:'20px'}}>
               {[
-                {icon:'🔯',name:'Матрица Судьбы',price:'$34.99',pages:'15-18 стр',color:'rgba(192,112,255,1)',
+                {id:'report-destiny',icon:'🔯',name:'Матрица Судьбы',price:'$34.99',pages:'15-18 стр',color:'rgba(192,112,255,1)',
                   desc:'Кармические задачи, таланты и предназначение через числовой код даты рождения.',
                   includes:['Центральное число и главная жизненная миссия','Кармические задачи: что нужно проработать','Природные таланты и скрытые ресурсы','Паттерны в любви и отношениях','Финансовый поток и путь к достатку','Карьера: где вы можете преуспеть','Персональные аффирмации и практики']},
-                {icon:'⭐',name:'Натальная Карта',price:'$34.99',pages:'15-18 стр',color:'rgba(100,180,255,1)',
+                {id:'report-natal',icon:'⭐',name:'Натальная Карта',price:'$34.99',pages:'15-18 стр',color:'rgba(100,180,255,1)',
                   desc:'Полный астрологический портрет личности: характер, эмоции, любовь, карьера и кармическая миссия.',
                   includes:['Солнечный знак — ядро характера','Лунный знак — эмоциональная природа','Венера и Марс — любовь и действие','Юпитер и Сатурн — удача и испытания','Кармические узлы и жизненная миссия','Текущие транзиты и их влияние','Рекомендации по всем сферам жизни']},
-                {icon:'🌟',name:'Годовой Прогноз',price:'$89.99',pages:'30-40 стр',color:'rgba(255,160,60,1)',featured:true,
+                {id:'report-yearly',icon:'🌟',name:'Годовой Прогноз',price:'$89.99',pages:'30-40 стр',color:'rgba(255,160,60,1)',featured:true,
                   desc:'Ультра-премиум: астрология + нумерология + Матрица Судьбы. Подробный прогноз по каждому месяцу года.',
                   includes:['Общая энергия и тема года','Любовь и отношения — прогноз','Карьера и финансы — лучшее время','Здоровье и жизненная энергия','Прогноз по каждому из 12 месяцев','Матрица Судьбы в контексте года','Нумерологический годовой цикл','Духовные практики и аффирмации']},
               ].map((r,i)=>(
