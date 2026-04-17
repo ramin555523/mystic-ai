@@ -111,7 +111,7 @@ function Paywall({ module, cfg, onClose }: { module: string; cfg: typeof MODULE_
               color: 'rgba(150,230,100,0.9)', letterSpacing: '1px',
             }}>ЛУЧШИЙ ВЫБОР</div>
             <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '22px', fontWeight: 800, color: 'rgba(200,170,255,0.95)', marginBottom: '6px' }}>
-              Initiate — £9.99/мес
+              Initiate — $9.99/мес
             </div>
             <div style={{ fontFamily: '"Lora",serif', fontSize: '14px', fontStyle: 'italic', color: 'rgba(200,185,240,0.55)', marginBottom: '4px' }}>
               Все 4 консультанта · Безлимитно · Карта дня · Луна · Гороскоп
@@ -127,7 +127,7 @@ function Paywall({ module, cfg, onClose }: { module: string; cfg: typeof MODULE_
             textDecoration: 'none',
           }}>
             <div style={{ fontFamily: '"Playfair Display",serif', fontSize: '18px', fontWeight: 800, color: 'rgba(220,170,255,0.9)', marginBottom: '4px' }}>
-              Oracle Pro — £16.99/мес
+              Oracle Pro — $16.99/мес
             </div>
             <div style={{ fontFamily: '"Lora",serif', fontSize: '13px', fontStyle: 'italic', color: 'rgba(200,185,240,0.45)' }}>
               Всё из Initiate + PDF-отчёты + Human Design + AI-память
@@ -169,7 +169,7 @@ function UpsellHint({ remaining, color, onUpgrade }: { remaining: number; color:
           {remaining === 1 ? '⚡ Последнее бесплатное сообщение' : `Осталось ${remaining} бесплатных сообщения`}
         </div>
         <div style={{ fontFamily: '"Lora",serif', fontSize: '12px', fontStyle: 'italic', color: 'rgba(200,185,240,0.35)', marginTop: '2px' }}>
-          {remaining === 1 ? 'Получите полный ответ с подпиской £9.99/мес' : 'Подписка даёт безлимитный доступ'}
+          {remaining === 1 ? 'Получите полный ответ с подпиской $9.99/мес' : 'Подписка даёт безлимитный доступ'}
         </div>
       </div>
       <button onClick={onUpgrade} style={{
@@ -453,13 +453,13 @@ export default function ChatPage({ module }: { module: ModuleKey }) {
                   background: 'linear-gradient(135deg,rgba(80,30,160,0.8),rgba(120,60,220,0.6))',
                   fontFamily: '"Playfair Display",serif', fontSize: '12px', fontWeight: 700,
                   color: '#EDE8F5', letterSpacing: '0.5px',
-                }}>Initiate — £9.99/мес</Link>
+                }}>Initiate — $9.99/мес</Link>
                 <Link href="/auth/register" style={{
                   padding: '10px 22px', borderRadius: '8px', textDecoration: 'none',
                   background: 'linear-gradient(135deg,rgba(150,80,220,0.6),rgba(200,100,255,0.4))',
                   fontFamily: '"Playfair Display",serif', fontSize: '12px', fontWeight: 700,
                   color: '#EDE8F5', letterSpacing: '0.5px',
-                }}>Oracle Pro — £16.99/мес</Link>
+                }}>Oracle Pro — $16.99/мес</Link>
               </div>
             </div>
           ) : (

@@ -118,7 +118,7 @@ export default function Settings() {
                   <div style={{padding:'16px',borderRadius:'10px',background:'rgba(150,100,255,0.06)',border:'1px solid rgba(150,100,255,0.2)'}}>
                     <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'6px'}}>
                       <div style={{fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:700,color:'#EDE8F5'}}>Initiate</div>
-                      <div style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:800,color:'rgba(150,120,255,0.9)'}}>£9.99<span style={{fontSize:'13px',fontWeight:400,color:'rgba(200,185,240,0.4)'}}>/мес</span></div>
+                      <div style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:800,color:'rgba(150,120,255,0.9)'}}>$9.99<span style={{fontSize:'13px',fontWeight:400,color:'rgba(200,185,240,0.4)'}}>/мес</span></div>
                     </div>
                     <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.4)',marginBottom:'12px'}}>Безлимитные консультации · Карта дня · Луна · Гороскоп</p>
                     <Link href="/#pricing" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'linear-gradient(135deg,#6030B0,#9060E0)',fontFamily:'"Playfair Display",serif',fontSize:'12px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'1px'}}>Подписаться</Link>
@@ -126,7 +126,7 @@ export default function Settings() {
                   <div style={{padding:'16px',borderRadius:'10px',background:'rgba(200,140,255,0.06)',border:'1px solid rgba(200,140,255,0.2)'}}>
                     <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'6px'}}>
                       <div style={{fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:700,color:'#EDE8F5'}}>Oracle Pro</div>
-                      <div style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:800,color:'rgba(200,150,255,0.9)'}}>£16.99<span style={{fontSize:'13px',fontWeight:400,color:'rgba(200,185,240,0.4)'}}>/мес</span></div>
+                      <div style={{fontFamily:'"Playfair Display",serif',fontSize:'20px',fontWeight:800,color:'rgba(200,150,255,0.9)'}}>$16.99<span style={{fontSize:'13px',fontWeight:400,color:'rgba(200,185,240,0.4)'}}>/мес</span></div>
                     </div>
                     <p style={{fontFamily:'"Lora",serif',fontSize:'13px',fontStyle:'italic',color:'rgba(200,185,240,0.4)',marginBottom:'12px'}}>Всё из Initiate + PDF · Human Design · AI-память</p>
                     <Link href="/#pricing" style={{display:'block',padding:'10px',textAlign:'center',borderRadius:'8px',background:'linear-gradient(135deg,#8030C0,#C060F0)',fontFamily:'"Playfair Display",serif',fontSize:'12px',fontWeight:700,color:'#EDE8F5',textDecoration:'none',letterSpacing:'1px'}}>Подписаться</Link>
