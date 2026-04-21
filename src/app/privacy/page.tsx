@@ -26,7 +26,7 @@ export default function PrivacyPage() {
           <ul>
             <li>Email address and name (for account creation)</li>
             <li>Date of birth and name (for consultation purposes only)</li>
-            <li>Payment information (processed by Paddle, we do not store card details)</li>
+            <li>Payment information (processed by Stripe, we do not store card details)</li>
             <li>Chat history with our AI consultants</li>
             <li>Usage data and analytics</li>
           </ul>

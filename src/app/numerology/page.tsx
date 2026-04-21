@@ -71,7 +71,7 @@ export default function NumerologyPage() {
                 Нумерология<br/><span style={{color:'rgba(255,160,80,0.9)'}}>Числа</span><br/>вашей судьбы
               </h1>
               <p style={{fontFamily:'"Lora",serif',fontSize:'17px',lineHeight:1.85,color:'rgba(210,200,245,0.65)',marginBottom:'36px'}}>
-                Мирра — мастер таро с доступом к 78 арканам колоды Rider-Waite. Задайте любой вопрос о любви, карьере, деньгах или духовном пути — карты откроют скрытое.
+                Мирра — мастер нумерологии с глубоким знанием системы Пифагора. Раскроет вибрационный код вашего имени и даты рождения — числа судьбы, личного года и совместимости.
               </p>
               <div style={{display:'flex',gap:'14px',flexWrap:'wrap',marginBottom:'32px'}}>
                 <Link href="/auth/register" style={{padding:'14px 32px',borderRadius:'8px',background:'linear-gradient(135deg,rgba(255,160,80,0.9),rgba(255,160,80,0.65))',fontFamily:'"Playfair Display",serif',fontSize:'14px',fontWeight:700,color:'#0C0818',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 24px rgba(255,160,80,0.35)'}}>
@@ -169,7 +169,7 @@ export default function NumerologyPage() {
         <section style={{padding:'80px 52px',background:'rgba(255,255,255,0.02)'}} className="pad">
           <div style={{maxWidth:'600px',margin:'0 auto',textAlign:'center'}}>
             <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(24px,3.5vw,40px)',fontWeight:900,color:'#FFFFFF',marginBottom:'12px'}}>Стоимость</h2>
-            <p style={{fontFamily:'"Lora",serif',fontSize:'16px',fontStyle:'italic',color:'rgba(200,185,240,0.45)',marginBottom:'40px'}}>Первые 5 сообщений с Selenой — бесплатно</p>
+            <p style={{fontFamily:'"Lora",serif',fontSize:'16px',fontStyle:'italic',color:'rgba(200,185,240,0.45)',marginBottom:'40px'}}>Первые 5 сообщений с Миррой — бесплатно</p>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px',marginBottom:'24px'}}>
               <div style={{padding:'28px',background:'rgba(255,160,80,0.05)',border:'1px solid rgba(255,160,80,0.2)',borderRadius:'14px'}}>
                 <div style={{fontFamily:'"Playfair Display",serif',fontSize:'14px',letterSpacing:'2px',color:'rgba(255,160,80,0.6)',marginBottom:'8px',textTransform:'uppercase'}}>Initiate</div>
@@ -226,7 +226,7 @@ export default function NumerologyPage() {
           <div style={{maxWidth:'600px',margin:'0 auto'}}>
             <div style={{fontSize:'56px',marginBottom:'24px'}}>🔢</div>
             <h2 style={{fontFamily:'"Playfair Display",serif',fontSize:'clamp(28px,4vw,48px)',fontWeight:900,color:'#FFFFFF',marginBottom:'16px'}}>Карты уже ждут вас</h2>
-            <p style={{fontFamily:'"Lora",serif',fontSize:'17px',fontStyle:'italic',color:'rgba(200,185,240,0.45)',marginBottom:'36px'}}>Первые 5 сообщений с Selenой — бесплатно. Без карты.</p>
+            <p style={{fontFamily:'"Lora",serif',fontSize:'17px',fontStyle:'italic',color:'rgba(200,185,240,0.45)',marginBottom:'36px'}}>Первые 5 сообщений с Миррой — бесплатно. Без карты.</p>
             <Link href="/auth/register" style={{display:'inline-block',padding:'16px 40px',borderRadius:'8px',background:'linear-gradient(135deg,rgba(255,160,80,0.9),rgba(255,160,80,0.65))',fontFamily:'"Playfair Display",serif',fontSize:'16px',fontWeight:700,color:'#0C0818',textDecoration:'none',letterSpacing:'0.5px',boxShadow:'0 4px 30px rgba(255,160,80,0.35)'}}>
               Начать бесплатно →
             </Link>
